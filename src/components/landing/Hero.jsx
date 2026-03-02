@@ -30,16 +30,8 @@ export default function Hero() {
           Democratizing science fair winning strategies with real-time multimodal AI coaches tuned by Regeneron ISEF grand award winners.
         </motion.p>
 
-        {/* Supporting paragraph */}
-        <motion.p
-          variants={fadeInUp}
-          className="text-base text-text-muted leading-relaxed max-w-xl mx-auto mt-6"
-        >
-          Realistic judging simulations preparing you to be an ISEF winner, without fees of science fair coaches or years of competition experience.
-        </motion.p>
-
         {/* CTA */}
-        <motion.div variants={fadeInUp} className="mt-14">
+        <motion.div variants={fadeInUp} className="mt-10">
           <Link
             to="/app"
             className="inline-flex items-center gap-3 rounded-full glass-cta px-10 py-4 text-base font-semibold text-white"
@@ -49,7 +41,7 @@ export default function Hero() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
             </svg>
           </Link>
-          <p className="text-sm text-text-muted mt-4">No sign-up required.</p>
+          <p className="text-md text-text-muted max-w-2xl mx-auto mt-8">Realistic judging simulations preparing you to be an ISEF winner, without the cost of science fair coaches or years of competition experience.</p>
         </motion.div>
       </motion.div>
     </section>

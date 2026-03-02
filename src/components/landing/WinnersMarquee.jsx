@@ -40,7 +40,7 @@ export default function WinnersMarquee() {
           variants={fadeInUp}
           className="text-lg text-text-secondary mt-4"
         >
-          Trusted by students who've been there.
+          Tested and tuned by winners who've been there, and done that.
         </motion.p>
       </motion.div>
 
