@@ -7,6 +7,7 @@ export default function TopBar({
   currentPhase,
   timerFormatted,
   isOvertime,
+  isInterrupted,
   wpm,
   onNextPhase,
   onEndSession,
@@ -59,8 +60,14 @@ export default function TopBar({
 
       {(currentPhase === PHASES.PITCHING || currentPhase === PHASES.QA) && (
         <div className="flex items-center gap-3">
+          {isInterrupted && (
+            <span className="inline-flex items-center rounded-md bg-accent/20 px-2.5 py-1
+                            text-xs font-semibold text-accent animate-pulse">
+              PAUSED
+            </span>
+          )}
           <TimerDisplay formatted={timerFormatted} isOvertime={isOvertime} />
-          <PaceIndicator wpm={wpm} />
+          {!isInterrupted && <PaceIndicator wpm={wpm} />}
         </div>
       )}
 

@@ -1,17 +1,24 @@
 import { useRef, useEffect } from 'react'
+import useSessionStore from '../../stores/useSessionStore'
 
 const MAX_VISIBLE_LINES = 4
 
 export default function TranscriptOverlay({ transcript }) {
   const containerRef = useRef(null)
+  const conversationHistory = useSessionStore((s) => s.conversationHistory)
+
+  // Get recent judge messages to interleave
+  const recentJudgeMessages = conversationHistory
+    .filter((msg) => msg.role === 'judge')
+    .slice(-2)
 
   useEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight
     }
-  }, [transcript.length])
+  }, [transcript.length, conversationHistory.length])
 
-  if (transcript.length === 0) return null
+  if (transcript.length === 0 && recentJudgeMessages.length === 0) return null
 
   const visibleSegments = transcript.slice(-MAX_VISIBLE_LINES)
 

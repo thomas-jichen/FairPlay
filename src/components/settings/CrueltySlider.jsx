@@ -1,7 +1,9 @@
+import { CRUELTY_CONFIG } from '../../constants/crueltyConfig'
+
 const CRUELTY_LABELS = ['', 'Gentle', 'Moderate', 'Challenging', 'Tough', 'Ruthless']
 
-export default function CrueltySlider({ value, onChange, visible }) {
-  if (!visible) return null
+export default function CrueltySlider({ value, onChange }) {
+  const config = CRUELTY_CONFIG[value]
 
   return (
     <div className="space-y-2">
@@ -26,6 +28,10 @@ export default function CrueltySlider({ value, onChange, visible }) {
         <span>Gentle</span>
         <span className="text-accent/70">3 suggested</span>
         <span>Ruthless</span>
+      </div>
+      <div className="mt-1 rounded-md bg-surface-tertiary border border-border-default px-3 py-2
+                      text-xs text-text-secondary">
+        Expected Q&A: <span className="font-semibold text-accent">{config.qaDurationMinutes} min</span>
       </div>
     </div>
   )

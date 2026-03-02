@@ -7,24 +7,40 @@ import useCountdown from '../hooks/useCountdown'
 import useRecorder from '../hooks/useRecorder'
 import useSpeechRecognition from '../hooks/useSpeechRecognition'
 import useSpeechPace from '../hooks/useSpeechPace'
+import useChime from '../hooks/useChime'
+import useInterruptionEngine from '../hooks/useInterruptionEngine'
+import useQAEngine from '../hooks/useQAEngine'
+import useAnswerDetection from '../hooks/useAnswerDetection'
 import { PHASES } from '../constants/phases'
+import { CRUELTY_CONFIG } from '../constants/crueltyConfig'
+import { getRubricType } from '../constants/rubrics'
+import { buildSystemPrompt } from '../constants/judgePrompt'
+import { summarizeJudgeContext } from '../services/judgeService'
 import WebcamFeed from '../components/pitch/WebcamFeed'
 import TopBar from '../components/pitch/TopBar'
 import CountdownOverlay from '../components/pitch/CountdownOverlay'
 import TranscriptOverlay from '../components/pitch/TranscriptOverlay'
+import JudgeQuestionBar from '../components/pitch/JudgeQuestionBar'
+import PosterThumbnail from '../components/pitch/PosterThumbnail'
 
 export default function PitchPage() {
   const navigate = useNavigate()
   const hasStartedCountdown = useRef(false)
 
   const pitchDuration = useSessionStore((s) => s.pitchDuration)
-  const qaDuration = useSessionStore((s) => s.qaDuration)
   const category = useSessionStore((s) => s.category)
   const currentPhase = useSessionStore((s) => s.currentPhase)
   const setPhase = useSessionStore((s) => s.setPhase)
   const resetSession = useSessionStore((s) => s.resetSession)
   const transcript = useSessionStore((s) => s.transcript)
   const currentWPM = useSessionStore((s) => s.currentWPM)
+  const crueltyLevel = useSessionStore((s) => s.crueltyLevel)
+  const interruptDuringPitch = useSessionStore((s) => s.interruptDuringPitch)
+  const isInterrupted = useSessionStore((s) => s.isInterrupted)
+  const currentJudgeQuestion = useSessionStore((s) => s.currentJudgeQuestion)
+  const uploadedFile = useSessionStore((s) => s.uploadedFile)
+
+  const qaDuration = CRUELTY_CONFIG[crueltyLevel].qaDurationMinutes
 
   // Redirect if no category selected
   useEffect(() => {
@@ -36,8 +52,9 @@ export default function PitchPage() {
   const webcam = useWebcam()
   const recorder = useRecorder(webcam.streamRef)
   const speech = useSpeechRecognition()
+  const chime = useChime()
 
-  const isPaceActive = currentPhase === PHASES.PITCHING || currentPhase === PHASES.QA
+  const isPaceActive = (currentPhase === PHASES.PITCHING || currentPhase === PHASES.QA) && !isInterrupted
   useSpeechPace(isPaceActive)
 
   const timerDuration =
@@ -47,6 +64,41 @@ export default function PitchPage() {
 
   const timer = useTimer(timerDuration)
   const countdown = useCountdown(3)
+
+  // Build system prompt when entering countdown (with context summarization)
+  useEffect(() => {
+    if (currentPhase === PHASES.COUNTDOWN && !useSessionStore.getState().judgeSystemPrompt) {
+      const store = useSessionStore.getState()
+
+      const buildPrompt = async () => {
+        let contextSummary = null
+
+        if (store.abstractText || store.posterText) {
+          try {
+            contextSummary = await summarizeJudgeContext({
+              abstractText: store.abstractText,
+              posterText: store.posterText,
+            })
+            store.setContextSummary(contextSummary)
+          } catch (err) {
+            console.warn('Context summarization failed, using raw text:', err)
+          }
+        }
+
+        const prompt = buildSystemPrompt({
+          category: store.category,
+          abstractText: store.abstractText,
+          posterText: store.posterText,
+          crueltyLevel: store.crueltyLevel,
+          rubricType: getRubricType(store.category),
+          contextSummary,
+        })
+        store.setJudgeSystemPrompt(prompt)
+      }
+
+      buildPrompt()
+    }
+  }, [currentPhase])
 
   // Start 3-2-1 countdown when camera is ready
   useEffect(() => {
@@ -69,20 +121,93 @@ export default function PitchPage() {
     }
   }, [countdown.isDone, currentPhase, setPhase, timer, pitchDuration, recorder, speech])
 
+  // Q&A engine
+  const qaEngine = useQAEngine({
+    active: currentPhase === PHASES.QA,
+    onQuestion: (question, type, questionNumber) => {
+      const store = useSessionStore.getState()
+      store.setCurrentJudgeQuestion({ text: question.text, type, questionNumber })
+      store.addConversationMessage({
+        role: 'judge',
+        text: question.text,
+        timestamp: Date.now(),
+        phase: 'qa',
+      })
+    },
+    onComplete: () => {
+      handleNextPhase()
+    },
+    chime,
+  })
+
+  // Track overtime for Q&A soft cutoff
+  useEffect(() => {
+    if (currentPhase === PHASES.QA && timer.isOvertime) {
+      qaEngine.setOvertime()
+    }
+  }, [currentPhase, timer.isOvertime, qaEngine])
+
+  // Interruption engine
+  useInterruptionEngine({
+    enabled: currentPhase === PHASES.PITCHING && interruptDuringPitch && !isInterrupted,
+    crueltyLevel,
+    onInterrupt: (question) => {
+      timer.pause()
+      chime.playChime()
+      const store = useSessionStore.getState()
+      store.setIsInterrupted(true)
+      store.setCurrentJudgeQuestion({ text: question, type: 'interruption' })
+      store.addConversationMessage({
+        role: 'judge',
+        text: question,
+        timestamp: Date.now(),
+        phase: 'pitching',
+      })
+    },
+  })
+
+  // Answer detection — active during interruptions or Q&A with active question
+  const answerDetectionActive =
+    isInterrupted ||
+    (currentPhase === PHASES.QA &&
+      currentJudgeQuestion !== null &&
+      currentJudgeQuestion.type !== 'opener' &&
+      currentJudgeQuestion.type !== 'closing')
+
+  useAnswerDetection({
+    active: answerDetectionActive,
+    onAnswerComplete: (answerText) => {
+      if (isInterrupted) {
+        // Resume pitch after interruption
+        const store = useSessionStore.getState()
+        store.addConversationMessage({
+          role: 'student',
+          text: answerText,
+          timestamp: Date.now(),
+          phase: 'pitching',
+        })
+        store.setIsInterrupted(false)
+        store.setCurrentJudgeQuestion(null)
+        timer.start()
+      } else if (currentPhase === PHASES.QA) {
+        qaEngine.handleAnswerComplete(answerText)
+      }
+    },
+  })
+
   const handleNextPhase = useCallback(() => {
     if (currentPhase === PHASES.PITCHING) {
       timer.pause()
       setPhase(PHASES.QA)
       timer.reset(qaDuration * 60)
       setTimeout(() => timer.start(), 50)
-
       speech.setPhase('qa')
     } else if (currentPhase === PHASES.QA) {
       timer.pause()
       setPhase(PHASES.REVIEW)
-
       recorder.stopRecording()
       speech.stopListening()
+      useSessionStore.getState().setCurrentJudgeQuestion(null)
     }
   }, [currentPhase, qaDuration, timer, setPhase, recorder, speech])
 
@@ -95,6 +220,8 @@ export default function PitchPage() {
   }, [webcam, recorder, speech, resetSession, navigate])
 
   if (!category) return null
+
+  const showPitchOrQA = currentPhase === PHASES.PITCHING || currentPhase === PHASES.QA
 
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-black">
@@ -111,12 +238,27 @@ export default function PitchPage() {
         currentPhase={currentPhase}
         timerFormatted={timer.formatted}
         isOvertime={timer.isOvertime}
+        isInterrupted={isInterrupted}
         wpm={currentWPM}
         onNextPhase={handleNextPhase}
         onEndSession={handleEndSession}
       />
 
-      {isPaceActive && (
+      {currentJudgeQuestion && (
+        <JudgeQuestionBar
+          question={currentJudgeQuestion.text}
+          type={currentJudgeQuestion.type}
+          questionNumber={currentJudgeQuestion.questionNumber || 0}
+          isVisible={true}
+          isListening={answerDetectionActive}
+        />
+      )}
+
+      {uploadedFile && showPitchOrQA && (
+        <PosterThumbnail uploadedFile={uploadedFile} />
+      )}
+
+      {showPitchOrQA && (
         <TranscriptOverlay transcript={transcript} />
       )}
 

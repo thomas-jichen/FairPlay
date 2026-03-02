@@ -1,4 +1,6 @@
 import { useRef, useState } from 'react'
+import useSessionStore from '../../stores/useSessionStore'
+import usePdfExtract from '../../hooks/usePdfExtract'
 
 const ACCEPTED_TYPES = [
   'application/pdf',
@@ -17,12 +19,12 @@ function formatSize(bytes) {
 export default function FileUpload({ uploadedFile, onFileChange }) {
   const inputRef = useRef(null)
   const [isDragging, setIsDragging] = useState(false)
+  const setPosterText = useSessionStore((s) => s.setPosterText)
+  const { extractText, isExtracting } = usePdfExtract()
 
-  function handleFile(file) {
+  async function handleFile(file) {
     if (!file) return
-    if (!ACCEPTED_TYPES.includes(file.type)) {
-      return
-    }
+    if (!ACCEPTED_TYPES.includes(file.type)) return
 
     const isImage = file.type.startsWith('image/')
     const preview = isImage ? URL.createObjectURL(file) : null
@@ -34,6 +36,13 @@ export default function FileUpload({ uploadedFile, onFileChange }) {
       type: file.type,
       preview,
     })
+
+    if (file.type === 'application/pdf') {
+      const text = await extractText(file)
+      setPosterText(text || '[PDF uploaded — text extraction failed]')
+    } else if (isImage) {
+      setPosterText('[Image poster uploaded — text extraction not available]')
+    }
   }
 
   function handleDrop(e) {
@@ -52,6 +61,7 @@ export default function FileUpload({ uploadedFile, onFileChange }) {
       URL.revokeObjectURL(uploadedFile.preview)
     }
     onFileChange(null)
+    setPosterText('')
   }
 
   return (
@@ -113,6 +123,7 @@ export default function FileUpload({ uploadedFile, onFileChange }) {
             </p>
             <p className="text-xs text-text-muted">
               {formatSize(uploadedFile.size)}
+              {isExtracting && <span className="ml-2 text-accent">Extracting text...</span>}
             </p>
           </div>
           <button

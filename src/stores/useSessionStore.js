@@ -2,29 +2,37 @@ import { create } from 'zustand'
 import { PHASES } from '../constants/phases'
 
 const useSessionStore = create((set) => ({
-  // Settings
+  // Settings (preserved across sessions)
   pitchDuration: 3,
-  qaDuration: 3,
   category: null,
   uploadedFile: null,
   interruptDuringPitch: false,
   crueltyLevel: 3,
+  abstractText: '',
+  posterText: '',
 
-  // Runtime state
+  // Runtime state (reset on session end)
   currentPhase: PHASES.SETUP,
   transcript: [],
   currentWPM: 0,
   recordedBlob: null,
   isRecording: false,
   isSpeechActive: false,
+  conversationHistory: [],
+  isInterrupted: false,
+  currentJudgeQuestion: null,
+  isJudgeThinking: false,
+  judgeSystemPrompt: null,
+  contextSummary: null,
 
   // Settings actions
   setPitchDuration: (minutes) => set({ pitchDuration: minutes }),
-  setQaDuration: (minutes) => set({ qaDuration: minutes }),
   setCategory: (category) => set({ category }),
   setUploadedFile: (fileData) => set({ uploadedFile: fileData }),
   setInterruptDuringPitch: (enabled) => set({ interruptDuringPitch: enabled }),
   setCrueltyLevel: (level) => set({ crueltyLevel: level }),
+  setAbstractText: (text) => set({ abstractText: text }),
+  setPosterText: (text) => set({ posterText: text }),
 
   // Runtime actions
   setPhase: (phase) => set({ currentPhase: phase }),
@@ -35,6 +43,15 @@ const useSessionStore = create((set) => ({
   setIsRecording: (val) => set({ isRecording: val }),
   setIsSpeechActive: (val) => set({ isSpeechActive: val }),
 
+  // Judge actions
+  addConversationMessage: (msg) =>
+    set((state) => ({ conversationHistory: [...state.conversationHistory, msg] })),
+  setIsInterrupted: (val) => set({ isInterrupted: val }),
+  setCurrentJudgeQuestion: (q) => set({ currentJudgeQuestion: q }),
+  setIsJudgeThinking: (val) => set({ isJudgeThinking: val }),
+  setJudgeSystemPrompt: (prompt) => set({ judgeSystemPrompt: prompt }),
+  setContextSummary: (summary) => set({ contextSummary: summary }),
+
   // Reset runtime state (settings are preserved)
   resetSession: () => set({
     currentPhase: PHASES.SETUP,
@@ -43,6 +60,12 @@ const useSessionStore = create((set) => ({
     recordedBlob: null,
     isRecording: false,
     isSpeechActive: false,
+    conversationHistory: [],
+    isInterrupted: false,
+    currentJudgeQuestion: null,
+    isJudgeThinking: false,
+    judgeSystemPrompt: null,
+    contextSummary: null,
   }),
 }))
 

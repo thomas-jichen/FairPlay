@@ -3,6 +3,7 @@ import useSessionStore from '../stores/useSessionStore'
 import DurationSlider from '../components/settings/DurationSlider'
 import CategorySelect from '../components/settings/CategorySelect'
 import FileUpload from '../components/settings/FileUpload'
+import AbstractInput from '../components/settings/AbstractInput'
 import InterruptionToggle from '../components/settings/InterruptionToggle'
 import CrueltySlider from '../components/settings/CrueltySlider'
 
@@ -11,12 +12,12 @@ export default function SettingsPage() {
 
   const pitchDuration = useSessionStore((s) => s.pitchDuration)
   const setPitchDuration = useSessionStore((s) => s.setPitchDuration)
-  const qaDuration = useSessionStore((s) => s.qaDuration)
-  const setQaDuration = useSessionStore((s) => s.setQaDuration)
   const category = useSessionStore((s) => s.category)
   const setCategory = useSessionStore((s) => s.setCategory)
   const uploadedFile = useSessionStore((s) => s.uploadedFile)
   const setUploadedFile = useSessionStore((s) => s.setUploadedFile)
+  const abstractText = useSessionStore((s) => s.abstractText)
+  const setAbstractText = useSessionStore((s) => s.setAbstractText)
   const interruptDuringPitch = useSessionStore((s) => s.interruptDuringPitch)
   const setInterruptDuringPitch = useSessionStore((s) => s.setInterruptDuringPitch)
   const crueltyLevel = useSessionStore((s) => s.crueltyLevel)
@@ -52,17 +53,14 @@ export default function SettingsPage() {
           hint="ISEF suggests 2-4 min"
         />
 
-        <DurationSlider
-          label="Q&A Duration"
-          value={qaDuration}
-          onChange={setQaDuration}
-          min={1}
-          max={5}
-        />
-
         <FileUpload
           uploadedFile={uploadedFile}
           onFileChange={setUploadedFile}
+        />
+
+        <AbstractInput
+          value={abstractText}
+          onChange={setAbstractText}
         />
 
         <InterruptionToggle
@@ -73,7 +71,6 @@ export default function SettingsPage() {
         <CrueltySlider
           value={crueltyLevel}
           onChange={setCrueltyLevel}
-          visible={interruptDuringPitch}
         />
 
         <button
