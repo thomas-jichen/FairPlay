@@ -12,6 +12,11 @@ const useSessionStore = create((set) => ({
 
   // Runtime state
   currentPhase: PHASES.SETUP,
+  transcript: [],
+  currentWPM: 0,
+  recordedBlob: null,
+  isRecording: false,
+  isSpeechActive: false,
 
   // Settings actions
   setPitchDuration: (minutes) => set({ pitchDuration: minutes }),
@@ -23,10 +28,21 @@ const useSessionStore = create((set) => ({
 
   // Runtime actions
   setPhase: (phase) => set({ currentPhase: phase }),
+  addTranscriptSegment: (segment) =>
+    set((state) => ({ transcript: [...state.transcript, segment] })),
+  setCurrentWPM: (wpm) => set({ currentWPM: wpm }),
+  setRecordedBlob: (blob) => set({ recordedBlob: blob }),
+  setIsRecording: (val) => set({ isRecording: val }),
+  setIsSpeechActive: (val) => set({ isSpeechActive: val }),
 
   // Reset runtime state (settings are preserved)
   resetSession: () => set({
     currentPhase: PHASES.SETUP,
+    transcript: [],
+    currentWPM: 0,
+    recordedBlob: null,
+    isRecording: false,
+    isSpeechActive: false,
   }),
 }))
 

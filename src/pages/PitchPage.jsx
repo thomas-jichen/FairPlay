@@ -4,10 +4,14 @@ import useSessionStore from '../stores/useSessionStore'
 import useWebcam from '../hooks/useWebcam'
 import useTimer from '../hooks/useTimer'
 import useCountdown from '../hooks/useCountdown'
+import useRecorder from '../hooks/useRecorder'
+import useSpeechRecognition from '../hooks/useSpeechRecognition'
+import useSpeechPace from '../hooks/useSpeechPace'
 import { PHASES } from '../constants/phases'
 import WebcamFeed from '../components/pitch/WebcamFeed'
 import TopBar from '../components/pitch/TopBar'
 import CountdownOverlay from '../components/pitch/CountdownOverlay'
+import TranscriptOverlay from '../components/pitch/TranscriptOverlay'
 
 export default function PitchPage() {
   const navigate = useNavigate()
@@ -19,6 +23,8 @@ export default function PitchPage() {
   const currentPhase = useSessionStore((s) => s.currentPhase)
   const setPhase = useSessionStore((s) => s.setPhase)
   const resetSession = useSessionStore((s) => s.resetSession)
+  const transcript = useSessionStore((s) => s.transcript)
+  const currentWPM = useSessionStore((s) => s.currentWPM)
 
   // Redirect if no category selected
   useEffect(() => {
@@ -28,6 +34,11 @@ export default function PitchPage() {
   }, [category, navigate])
 
   const webcam = useWebcam()
+  const recorder = useRecorder(webcam.streamRef)
+  const speech = useSpeechRecognition()
+
+  const isPaceActive = currentPhase === PHASES.PITCHING || currentPhase === PHASES.QA
+  useSpeechPace(isPaceActive)
 
   const timerDuration =
     currentPhase === PHASES.PITCHING ? pitchDuration * 60
@@ -46,14 +57,17 @@ export default function PitchPage() {
     }
   }, [webcam.isActive, currentPhase, setPhase, countdown])
 
-  // When countdown finishes, begin pitching
+  // When countdown finishes, begin pitching + start recording/speech
   useEffect(() => {
     if (countdown.isDone && currentPhase === PHASES.COUNTDOWN) {
       setPhase(PHASES.PITCHING)
       timer.reset(pitchDuration * 60)
       setTimeout(() => timer.start(), 50)
+
+      recorder.startRecording()
+      speech.startListening('pitching')
     }
-  }, [countdown.isDone, currentPhase, setPhase, timer, pitchDuration])
+  }, [countdown.isDone, currentPhase, setPhase, timer, pitchDuration, recorder, speech])
 
   const handleNextPhase = useCallback(() => {
     if (currentPhase === PHASES.PITCHING) {
@@ -61,17 +75,24 @@ export default function PitchPage() {
       setPhase(PHASES.QA)
       timer.reset(qaDuration * 60)
       setTimeout(() => timer.start(), 50)
+
+      speech.setPhase('qa')
     } else if (currentPhase === PHASES.QA) {
       timer.pause()
       setPhase(PHASES.REVIEW)
+
+      recorder.stopRecording()
+      speech.stopListening()
     }
-  }, [currentPhase, qaDuration, timer, setPhase])
+  }, [currentPhase, qaDuration, timer, setPhase, recorder, speech])
 
   const handleEndSession = useCallback(() => {
     webcam.stopCamera()
+    recorder.stopRecording()
+    speech.stopListening()
     resetSession()
     navigate('/')
-  }, [webcam, resetSession, navigate])
+  }, [webcam, recorder, speech, resetSession, navigate])
 
   if (!category) return null
 
@@ -90,9 +111,21 @@ export default function PitchPage() {
         currentPhase={currentPhase}
         timerFormatted={timer.formatted}
         isOvertime={timer.isOvertime}
+        wpm={currentWPM}
         onNextPhase={handleNextPhase}
         onEndSession={handleEndSession}
       />
+
+      {isPaceActive && (
+        <TranscriptOverlay transcript={transcript} />
+      )}
+
+      {!speech.isSupported && currentPhase === PHASES.SETUP && (
+        <div className="absolute bottom-6 left-6 z-20 rounded-lg bg-yellow-500/10 border border-yellow-500/30
+                        px-4 py-2 text-sm text-yellow-400">
+          Speech recognition is not supported in this browser. Transcript and pace tracking will be unavailable.
+        </div>
+      )}
     </div>
   )
 }

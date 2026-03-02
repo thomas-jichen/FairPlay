@@ -1,7 +1,7 @@
-node_modules
-dist
+node_modules/
+.claude/
+dist/
 .env
 .env.*
 *.local
 .DS_Store
-.claude

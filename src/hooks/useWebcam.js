@@ -15,7 +15,7 @@ export default function useWebcam() {
           width: { ideal: 1280 },
           height: { ideal: 720 },
         },
-        audio: false,
+        audio: true,
       })
       streamRef.current = stream
       if (videoRef.current) {
@@ -24,13 +24,13 @@ export default function useWebcam() {
       setIsActive(true)
     } catch (err) {
       if (err.name === 'NotAllowedError') {
-        setError('Camera access was denied. Please allow camera access and try again.')
+        setError('Camera and microphone access was denied. Please allow access and try again.')
       } else if (err.name === 'NotFoundError') {
-        setError('No camera found. Please connect a camera and try again.')
+        setError('No camera or microphone found. Please connect them and try again.')
       } else if (err.name === 'NotReadableError') {
-        setError('Camera is in use by another application. Please close it and try again.')
+        setError('Camera or microphone is in use by another application. Please close it and try again.')
       } else {
-        setError(err.message || 'Failed to access camera.')
+        setError(err.message || 'Failed to access camera and microphone.')
       }
       setIsActive(false)
     }
@@ -57,6 +57,7 @@ export default function useWebcam() {
 
   return {
     videoRef,
+    streamRef,
     isActive,
     error,
     startCamera,

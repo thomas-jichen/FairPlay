@@ -1,11 +1,13 @@
 import PhaseIndicator from './PhaseIndicator'
 import TimerDisplay from './TimerDisplay'
+import PaceIndicator from './PaceIndicator'
 import { PHASES } from '../../constants/phases'
 
 export default function TopBar({
   currentPhase,
   timerFormatted,
   isOvertime,
+  wpm,
   onNextPhase,
   onEndSession,
 }) {
@@ -56,7 +58,10 @@ export default function TopBar({
       <PhaseIndicator currentPhase={currentPhase} />
 
       {(currentPhase === PHASES.PITCHING || currentPhase === PHASES.QA) && (
-        <TimerDisplay formatted={timerFormatted} isOvertime={isOvertime} />
+        <div className="flex items-center gap-3">
+          <TimerDisplay formatted={timerFormatted} isOvertime={isOvertime} />
+          <PaceIndicator wpm={wpm} />
+        </div>
       )}
 
       <div className="flex items-center gap-3">
