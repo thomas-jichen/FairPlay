@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-accent: #06b6d4;
+  --color-accent-light: #22d3ee;
+  --color-accent-dark: #0891b2;
+  --color-accent-muted: rgba(6, 182, 212, 0.15);
+
+  --color-surface-primary: #0a0a0f;
+  --color-surface-secondary: #111118;
+  --color-surface-tertiary: #1a1a24;
+  --color-surface-elevated: #22222e;
+
+  --color-border-default: #2a2a3a;
+  --color-border-accent: rgba(6, 182, 212, 0.3);
+
+  --color-text-primary: #f0f0f5;
+  --color-text-secondary: #9999aa;
+  --color-text-muted: #666677;
+}
+
+@layer base {
+  body {
+    font-family: "Inter", "system-ui", sans-serif;
+    background-color: var(--color-surface-primary);
+    color: var(--color-text-primary);
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+    height: 6px;
+  }
+
+  input[type="range"]::-webkit-slider-track {
+    background: var(--color-surface-tertiary);
+    border-radius: 3px;
+    height: 6px;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    margin-top: -6px;
+    box-shadow: 0 0 8px rgba(6, 182, 212, 0.4);
+  }
+
+  input[type="range"]::-moz-range-track {
+    background: var(--color-surface-tertiary);
+    border-radius: 3px;
+    height: 6px;
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    border: none;
+    box-shadow: 0 0 8px rgba(6, 182, 212, 0.4);
+  }
+}
