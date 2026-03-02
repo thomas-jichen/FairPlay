@@ -21,8 +21,8 @@ export default function TopBar({
           <button
             type="button"
             onClick={onNextPhase}
-            className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white
-                       hover:bg-accent-light transition-colors"
+            className="rounded-full bg-accent/90 hover:bg-accent px-5 py-2 text-sm font-semibold text-white shadow-[0_0_15px_rgba(14,187,187,0.3)]
+                       backdrop-blur-md border border-white/20 transition-all duration-300 hover:scale-105 active:scale-95"
           >
             End Pitch
           </button>
@@ -32,8 +32,8 @@ export default function TopBar({
           <button
             type="button"
             onClick={onNextPhase}
-            className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white
-                       hover:bg-accent-light transition-colors"
+            className="rounded-full bg-accent/90 hover:bg-accent px-5 py-2 text-sm font-semibold text-white shadow-[0_0_15px_rgba(14,187,187,0.3)]
+                       backdrop-blur-md border border-white/20 transition-all duration-300 hover:scale-105 active:scale-95"
           >
             End Q&A
           </button>
@@ -43,9 +43,8 @@ export default function TopBar({
           <button
             type="button"
             onClick={onEndSession}
-            className="rounded-lg border border-border-default bg-surface-tertiary
-                       px-4 py-2 text-sm font-medium text-text-secondary
-                       hover:text-text-primary transition-colors"
+            className="rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20
+                       px-5 py-2 text-sm font-medium text-white shadow-lg transition-all duration-300 hover:scale-105 active:scale-95"
           >
             Back to Settings
           </button>
@@ -56,31 +55,46 @@ export default function TopBar({
   }
 
   return (
-    <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between
-                    px-6 py-4 bg-gradient-to-b from-black/60 to-transparent">
-      <PhaseIndicator currentPhase={currentPhase} />
+    <div className="w-full flex items-center justify-between gap-4">
+      {/* Left side: Phase Indicator */}
+      <div className="flex-1 flex justify-start">
+        <div className="glass-pill pl-2 pr-4 py-1.5 flex items-center">
+          <PhaseIndicator currentPhase={currentPhase} />
+        </div>
+      </div>
 
+      {/* Center: Timer & Feedback Metrics */}
       {(currentPhase === PHASES.PITCHING || currentPhase === PHASES.QA) && (
-        <div className="flex items-center gap-3">
+        <div className="glass-pill px-6 py-2.5 flex items-center gap-6 shadow-2xl shadow-black/50 border-white/20 bg-black/40">
           {isInterrupted && (
-            <span className="inline-flex items-center rounded-md bg-accent/20 px-2.5 py-1
-                            text-xs font-semibold text-accent animate-pulse">
+            <span className="inline-flex items-center rounded-full bg-red-500/20 border border-red-500/30 px-3 py-1 text-xs font-bold tracking-wide uppercase text-red-400 animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.4)]">
               PAUSED
             </span>
           )}
           <TimerDisplay formatted={timerFormatted} isOvertime={isOvertime} />
-          {!isInterrupted && <PaceIndicator wpm={wpm} />}
-          {!isInterrupted && feedbackScores && (
-            <FeedbackPills
-              confidence={feedbackScores.confidence}
-              engagement={feedbackScores.engagement}
-              approachability={feedbackScores.approachability}
-            />
+
+          {!isInterrupted && (
+            <>
+              <div className="w-px h-6 bg-white/10" />
+              <PaceIndicator wpm={wpm} />
+
+              {feedbackScores && (
+                <>
+                  <div className="w-px h-6 bg-white/10" />
+                  <FeedbackPills
+                    confidence={feedbackScores.confidence}
+                    engagement={feedbackScores.engagement}
+                    approachability={feedbackScores.approachability}
+                  />
+                </>
+              )}
+            </>
           )}
         </div>
       )}
 
-      <div className="flex items-center gap-3">
+      {/* Right side: Actions */}
+      <div className="flex-1 flex justify-end">
         {renderAction()}
       </div>
     </div>

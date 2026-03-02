@@ -1,27 +1,79 @@
 import { ISEF_CATEGORIES } from '../../constants/categories'
 import { CRUELTY_CONFIG } from '../../constants/crueltyConfig'
+import { useEffect, useState } from 'react'
 
 function ScoreCircle({ score }) {
-  const radius = 54
+  const radius = 64
   const circumference = 2 * Math.PI * radius
-  const progress = (score / 100) * circumference
-  const color = score >= 80 ? '#22c55e' : score >= 60 ? '#eab308' : '#ef4444'
+
+  // Animate from 0 to score
+  const [displayScore, setDisplayScore] = useState(0)
+
+  useEffect(() => {
+    let startTime
+    const duration = 1500 // 1.5s
+
+    const animate = (time) => {
+      if (!startTime) startTime = time
+      const progress = Math.min((time - startTime) / duration, 1)
+      const easeOutQuart = 1 - Math.pow(1 - progress, 4)
+
+      setDisplayScore(Math.floor(easeOutQuart * score))
+
+      if (progress < 1) {
+        requestAnimationFrame(animate)
+      }
+    }
+
+    requestAnimationFrame(animate)
+  }, [score])
+
+  const progressoffset = circumference - ((displayScore / 100) * circumference)
+  const colorClass = displayScore >= 80 ? 'text-emerald-400' : displayScore >= 60 ? 'text-amber-400' : 'text-red-400'
+  const glowColor = displayScore >= 80 ? 'rgba(52,211,153,0.5)' : displayScore >= 60 ? 'rgba(251,191,36,0.5)' : 'rgba(248,113,113,0.5)'
 
   return (
-    <svg width="128" height="128" viewBox="0 0 128 128" className="shrink-0">
-      <circle cx="64" cy="64" r={radius} fill="none"
-              stroke="var(--color-surface-tertiary, #333)" strokeWidth="8" />
-      <circle cx="64" cy="64" r={radius} fill="none"
-              stroke={color} strokeWidth="8" strokeLinecap="round"
-              strokeDasharray={circumference}
-              strokeDashoffset={circumference - progress}
-              transform="rotate(-90 64 64)"
-              className="transition-all duration-1000 ease-out" />
-      <text x="64" y="58" textAnchor="middle"
-            fill="currentColor" fontSize="28" fontWeight="bold" className="text-text-primary">{score}</text>
-      <text x="64" y="78" textAnchor="middle"
-            fill="currentColor" fontSize="14" className="text-text-muted">/ 100</text>
-    </svg>
+    <div className="relative flex items-center justify-center">
+      {/* Outer ambient glow */}
+      <div
+        className="absolute inset-0 rounded-full blur-2xl transition-all duration-700 opacity-40 scale-110"
+        style={{ backgroundColor: glowColor }}
+      />
+
+      {/* Background glass circle */}
+      <div className="absolute inset-2 rounded-full border border-white/5 bg-black/40 backdrop-blur-md shadow-inner" />
+
+      <svg width="160" height="160" viewBox="0 0 160 160" className="relative z-10 shrink-0 transform -rotate-90">
+        {/* Track */}
+        <circle
+          cx="80" cy="80" r={radius}
+          fill="none"
+          stroke="rgba(255,255,255,0.05)"
+          strokeWidth="6"
+        />
+        {/* Progress */}
+        <circle
+          cx="80" cy="80" r={radius}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="6"
+          strokeLinecap="round"
+          strokeDasharray={circumference}
+          strokeDashoffset={progressoffset}
+          className={`transition-all duration-200 ease-out ${colorClass}`}
+          style={{ filter: `drop-shadow(0 0 8px ${glowColor})` }}
+        />
+      </svg>
+
+      <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
+        <span className={`text-4xl font-bold tracking-tighter tabular-nums ${colorClass} drop-shadow-md`}>
+          {displayScore}
+        </span>
+        <span className="text-xs font-semibold text-text-muted mt-1 uppercase tracking-widest">
+          Score
+        </span>
+      </div>
+    </div>
   )
 }
 
@@ -30,19 +82,29 @@ export default function ScoreHeader({ overallScore, trackType, category, cruelty
   const judgeLabel = CRUELTY_CONFIG[crueltyLevel]?.label || 'Standard'
 
   return (
-    <div className="border-b border-border-default bg-surface-secondary py-8">
-      <div className="mx-auto max-w-7xl px-6 flex items-center gap-8">
-        <ScoreCircle score={overallScore} />
-        <div>
-          <h1 className="text-2xl font-bold text-text-primary">Session Review</h1>
-          <div className="mt-2 flex flex-wrap items-center gap-3">
-            <span className="rounded-full bg-accent/15 px-3 py-1 text-sm font-medium text-accent">
+    <div className="border-b border-white/5 bg-black/20 backdrop-blur-3xl py-12 relative overflow-hidden">
+      {/* Subtle top gradient */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 flex flex-col md:flex-row items-center gap-10">
+        <div className="shrink-0 animate-[scale-in_0.8s_ease-out_both]">
+          <ScoreCircle score={overallScore} />
+        </div>
+
+        <div className="flex flex-col items-center md:items-start text-center md:text-left">
+          <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight drop-shadow-sm mb-4">
+            Session Review
+          </h1>
+
+          <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/10 border border-accent/20 px-4 py-1.5 text-sm font-semibold tracking-wide text-accent shadow-[0_0_15px_rgba(14,187,187,0.15)]">
+              <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
               {categoryLabel}
             </span>
-            <span className="rounded-full bg-surface-tertiary px-3 py-1 text-sm text-text-secondary">
+            <span className="inline-flex items-center rounded-full bg-white/5 border border-white/10 px-4 py-1.5 text-sm font-medium tracking-wide text-text-secondary">
               {trackType === 'science' ? 'Science' : 'Engineering'} Track
             </span>
-            <span className="rounded-full bg-surface-tertiary px-3 py-1 text-sm text-text-secondary">
+            <span className="inline-flex items-center rounded-full bg-white/5 border border-white/10 px-4 py-1.5 text-sm font-medium tracking-wide text-text-secondary">
               {judgeLabel} Judge
             </span>
           </div>

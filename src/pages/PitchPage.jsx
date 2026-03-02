@@ -75,8 +75,8 @@ export default function PitchPage() {
 
   const timerDuration =
     currentPhase === PHASES.PITCHING ? pitchDuration * 60
-    : currentPhase === PHASES.QA ? qaDuration * 60
-    : 0
+      : currentPhase === PHASES.QA ? qaDuration * 60
+        : 0
 
   const timer = useTimer(timerDuration)
   const countdown = useCountdown(3)
@@ -239,13 +239,17 @@ export default function PitchPage() {
   if (!category) return null
 
   if (currentPhase === PHASES.REVIEW) {
-    return <ReviewScreen />
+    return (
+      <div className="animate-fade-in bg-surface-primary min-h-screen">
+        <ReviewScreen />
+      </div>
+    )
   }
 
   const showPitchOrQA = currentPhase === PHASES.PITCHING || currentPhase === PHASES.QA
 
   return (
-    <div className="relative h-screen w-screen overflow-hidden bg-black">
+    <div className="relative h-screen w-screen overflow-hidden bg-black animate-fade-in font-sans">
       <WebcamFeed
         videoRef={webcam.videoRef}
         isActive={webcam.isActive}
@@ -253,41 +257,70 @@ export default function PitchPage() {
         onRequestCamera={webcam.startCamera}
       />
 
-      <CountdownOverlay count={countdown.count} />
+      {/* Floating UI Overlays layer */}
+      <div className="absolute inset-0 pointer-events-none p-4 md:p-6 flex flex-col justify-between z-10">
 
-      <TopBar
-        currentPhase={currentPhase}
-        timerFormatted={timer.formatted}
-        isOvertime={timer.isOvertime}
-        isInterrupted={isInterrupted}
-        wpm={currentWPM}
-        feedbackScores={feedbackScores}
-        onNextPhase={handleNextPhase}
-        onEndSession={handleEndSession}
-      />
+        {/* Top layer: TopBar */}
+        <div className="w-full max-w-7xl mx-auto flex justify-center pointer-events-auto">
+          <TopBar
+            currentPhase={currentPhase}
+            timerFormatted={timer.formatted}
+            isOvertime={timer.isOvertime}
+            isInterrupted={isInterrupted}
+            wpm={currentWPM}
+            feedbackScores={feedbackScores}
+            onNextPhase={handleNextPhase}
+            onEndSession={handleEndSession}
+          />
+        </div>
 
-      {currentJudgeQuestion && (
-        <JudgeQuestionBar
-          question={currentJudgeQuestion.text}
-          type={currentJudgeQuestion.type}
-          questionNumber={currentJudgeQuestion.questionNumber || 0}
-          isVisible={true}
-          isListening={answerDetectionActive}
-        />
-      )}
+        {/* Center layer: Countdown */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <CountdownOverlay count={countdown.count} />
+        </div>
 
-      {uploadedFile && showPitchOrQA && (
-        <PosterThumbnail uploadedFile={uploadedFile} />
-      )}
+        {/* Notifications Layer (Top Middle) */}
+        <div className="absolute top-28 left-0 right-0 flex justify-center pointer-events-none z-20 px-4">
+          {currentJudgeQuestion && (
+            <div className="w-full max-w-3xl pointer-events-auto origin-top" style={{ animation: 'slide-down-fade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}>
+              <JudgeQuestionBar
+                question={currentJudgeQuestion.text}
+                type={currentJudgeQuestion.type}
+                questionNumber={currentJudgeQuestion.questionNumber || 0}
+                isVisible={true}
+                isListening={answerDetectionActive}
+              />
+            </div>
+          )}
+        </div>
 
-      {showPitchOrQA && (
-        <TranscriptOverlay transcript={transcript} />
-      )}
+        {/* Bottom layer: Transcript and Poster */}
+        <div className="w-full max-w-7xl mx-auto flex justify-between items-end gap-6 pointer-events-none">
+          {/* Bottom Left: Poster */}
+          <div className="pointer-events-auto">
+            {uploadedFile && showPitchOrQA && (
+              <PosterThumbnail uploadedFile={uploadedFile} />
+            )}
+          </div>
+
+          {/* Bottom Center: Transcript */}
+          <div className="flex-1 flex justify-center pb-4 max-w-3xl pointer-events-auto">
+            {showPitchOrQA && (
+              <TranscriptOverlay transcript={transcript} />
+            )}
+          </div>
+
+          {/* Spacer for right-alignment balance */}
+          <div className="w-[180px] hidden md:block"></div>
+        </div>
+
+      </div>
 
       {!speech.isSupported && currentPhase === PHASES.SETUP && (
-        <div className="absolute bottom-6 left-6 z-20 rounded-lg bg-yellow-500/10 border border-yellow-500/30
-                        px-4 py-2 text-sm text-yellow-400">
-          Speech recognition is not supported in this browser. Transcript and pace tracking will be unavailable.
+        <div className="absolute top-20 left-1/2 -translate-x-1/2 z-50 glass-pill px-6 py-3 border-yellow-500/30">
+          <p className="text-sm font-medium text-yellow-400">
+            Speech recognition is not supported in this browser. Transcript and pace tracking will be unavailable.
+          </p>
         </div>
       )}
     </div>

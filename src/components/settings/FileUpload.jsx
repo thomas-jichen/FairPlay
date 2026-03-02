@@ -65,10 +65,10 @@ export default function FileUpload({ uploadedFile, onFileChange }) {
   }
 
   return (
-    <div className="space-y-2">
-      <label className="text-sm font-medium text-text-secondary">
+    <div className="space-y-3">
+      <label className="flex items-center text-sm font-medium text-text-primary tracking-wide">
         Project Materials
-        <span className="ml-2 text-xs text-text-muted">(optional)</span>
+        <span className="ml-2 px-2 py-0.5 rounded-md bg-white/5 text-[10px] uppercase tracking-wider text-text-muted border border-white/10">Optional</span>
       </label>
 
       {!uploadedFile ? (
@@ -77,59 +77,71 @@ export default function FileUpload({ uploadedFile, onFileChange }) {
           onDragOver={handleDragOver}
           onDragLeave={() => setIsDragging(false)}
           onClick={() => inputRef.current?.click()}
-          className={`flex flex-col items-center justify-center rounded-lg border-2 border-dashed
-            px-6 py-8 cursor-pointer transition-colors
+          className={`relative overflow-hidden group flex flex-col items-center justify-center rounded-2xl border-2 border-dashed
+            px-6 py-10 cursor-pointer transition-all duration-300 ease-out
             ${isDragging
-              ? 'border-accent bg-accent-muted'
-              : 'border-border-default hover:border-accent/50 bg-surface-secondary'
+              ? 'border-accent bg-accent/10 shadow-[inset_0_0_20px_rgba(14,187,187,0.15)] scale-[1.02]'
+              : 'border-white/20 bg-black/20 hover:border-accent/50 hover:bg-black/30'
             }`}
         >
-          <svg
-            className="h-8 w-8 text-text-muted mb-3"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={1.5}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
-            />
-          </svg>
-          <p className="text-sm text-text-secondary">
-            Drop a file here or click to browse
+          {/* Subtle animated background glow on hover */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-accent/0 via-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+          <div className={`relative z-10 transition-transform duration-300 ${isDragging ? 'scale-110 translate-y-[-4px]' : 'group-hover:scale-110 group-hover:translate-y-[-4px]'}`}>
+            <svg
+              className={`h-10 w-10 mb-4 transition-colors duration-300 ${isDragging ? 'text-accent drop-shadow-[0_0_8px_rgba(14,187,187,0.5)]' : 'text-text-muted group-hover:text-accent-light'}`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={1.5}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
+            </svg>
+          </div>
+
+          <p className="relative z-10 text-sm font-medium text-text-primary mb-1">
+            Drop your poster or slide here
           </p>
-          <p className="text-xs text-text-muted mt-1">
-            PDF or images (PNG, JPEG, WebP)
+          <p className="relative z-10 text-xs text-text-muted">
+            PDF or high-res image (PNG, WebP)
           </p>
         </div>
       ) : (
-        <div className="flex items-center gap-4 rounded-lg border border-border-default bg-surface-secondary p-4">
+        <div className="group relative flex items-center gap-4 rounded-2xl border border-white/10 bg-surface-secondary/50 backdrop-blur-sm p-4 overflow-hidden transition-all duration-300 hover:bg-surface-elevated hover:border-white/20 hover:shadow-lg">
+          {/* Success glow strip */}
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-accent-light to-accent rounded-l-2xl" />
+
           {uploadedFile.preview ? (
             <img
               src={uploadedFile.preview}
               alt="Upload preview"
-              className="h-16 w-16 rounded object-cover border border-border-default"
+              className="h-16 w-16 rounded-xl object-cover border border-white/10 shadow-sm"
             />
           ) : (
-            <div className="flex h-16 w-16 items-center justify-center rounded bg-surface-tertiary text-accent text-xs font-mono font-bold">
+            <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-accent/10 border border-accent/20 text-accent text-sm font-bold shadow-[0_0_15px_rgba(14,187,187,0.1)]">
               PDF
             </div>
           )}
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-text-primary truncate">
+          <div className="flex-1 min-w-0 py-1">
+            <p className="text-sm font-medium text-white truncate drop-shadow-sm">
               {uploadedFile.name}
             </p>
-            <p className="text-xs text-text-muted">
-              {formatSize(uploadedFile.size)}
-              {isExtracting && <span className="ml-2 text-accent">Extracting text...</span>}
-            </p>
+            <div className="flex items-center mt-1">
+              <p className="text-xs text-text-muted">
+                {formatSize(uploadedFile.size)}
+              </p>
+              {isExtracting && (
+                <div className="ml-3 flex items-center text-xs text-accent animate-pulse">
+                  <div className="w-3 h-3 border-2 border-accent border-t-transparent rounded-full animate-spin mr-1.5" />
+                  Extracting text
+                </div>
+              )}
+            </div>
           </div>
           <button
             type="button"
             onClick={handleRemove}
-            className="text-text-muted hover:text-red-400 transition-colors p-1"
+            className="rounded-full p-2 text-text-muted hover:bg-red-500/10 hover:text-red-400 transition-all duration-200"
             aria-label="Remove file"
           >
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

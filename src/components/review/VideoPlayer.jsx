@@ -39,30 +39,44 @@ export default function VideoPlayer({ recordedBlob, conversationHistory }) {
 
   if (!recordedBlob) {
     return (
-      <div className="rounded-lg border border-border-default bg-surface-secondary p-6 text-center">
-        <p className="text-sm text-text-muted">No video recording available</p>
+      <div className="glass-panel rounded-2xl p-10 text-center border-dashed border-white/20">
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-white/5 mb-4">
+          <svg className="h-6 w-6 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <p className="text-sm font-medium text-text-muted tracking-wide">No video recording available</p>
       </div>
     )
   }
 
   return (
-    <div className="rounded-lg border border-border-default bg-surface-secondary overflow-hidden">
-      <h3 className="text-sm font-semibold text-text-primary px-4 pt-4 pb-2">Session Recording</h3>
-      <div className="relative">
+    <div className="glass-panel rounded-2xl overflow-hidden border-white/10 shadow-2xl relative group">
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-transparent h-16 pointer-events-none z-10" />
+      <h3 className="absolute top-4 left-5 text-sm font-semibold tracking-wide text-white drop-shadow-md z-20">Session Recording</h3>
+
+      <div className="relative bg-black aspect-video flex items-center justify-center">
         <video
           ref={videoRef}
           src={videoUrl}
           controls
           onTimeUpdate={() => setCurrentTime(videoRef.current?.currentTime || 0)}
-          className="w-full"
+          className="w-full h-full object-cover"
           style={{ transform: 'scaleX(-1)' }}
         />
+
+        {/* Floating Judge Question Overlay inside Video (Top Middle) */}
         {activeQuestion && (
-          <div className="absolute bottom-12 left-2 right-2 rounded-lg bg-black/75 backdrop-blur-sm
-                          px-4 py-2 text-sm text-white transition-opacity duration-300"
-               style={{ transform: 'scaleX(-1)' }}>
-            <span className="text-xs text-cyan-400 font-semibold mr-2">Judge:</span>
-            {activeQuestion.text}
+          <div className="absolute top-16 left-1/2 -translate-x-1/2 w-[90%] max-w-lg z-20 animate-slide-down">
+            <div className="glass-panel rounded-xl px-5 py-3 border-white/20 bg-black/60 backdrop-blur-md shadow-2xl">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="flex h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_8px_rgba(14,187,187,0.8)]" />
+                <span className="text-[10px] uppercase tracking-widest font-bold text-accent">Judge Question</span>
+              </div>
+              <p className="text-sm font-medium text-white shadow-sm" style={{ transform: 'scaleX(1)' }}>
+                {activeQuestion.text}
+              </p>
+            </div>
           </div>
         )}
       </div>
