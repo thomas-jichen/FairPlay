@@ -10,7 +10,7 @@ function SectionRow({ section }) {
         { bg: 'bg-red-500', text: 'text-red-600' }
 
   return (
-    <div className={`glass-panel rounded-3xl p-6 transition-all duration-300 ${expanded ? 'shadow-lg border-white/60 bg-white/50' : 'hover:bg-white/40'}`}>
+    <div className={`bg-white/40 rounded-2xl p-5 border transition-all duration-300 ${expanded ? 'shadow-md border-white/60 bg-white/60' : 'border-white/40 hover:bg-white/50'}`}>
       <div
         className="flex items-center justify-between cursor-pointer group"
         onClick={() => setExpanded(!expanded)}
@@ -62,9 +62,9 @@ function SectionRow({ section }) {
 
 export default function RubricBreakdown({ rubricScores }) {
   return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-3 px-1">
-        <h2 className="text-xl font-semibold text-text-primary tracking-tight">Category Breakdown</h2>
+    <div className="glass-panel rounded-3xl p-8 space-y-6">
+      <div className="border-b border-black/[0.05] pb-4">
+        <h2 className="text-lg font-medium tracking-tight text-text-primary">Category Breakdown</h2>
       </div>
       <div className="space-y-3">
         {rubricScores.map((section) => (

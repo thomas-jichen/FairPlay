@@ -240,7 +240,7 @@ export default function PitchPage() {
 
   if (currentPhase === PHASES.REVIEW) {
     return (
-      <div className="animate-fade-in bg-surface-primary min-h-screen">
+      <div className="animate-fade-in min-h-screen w-full relative z-10">
         <ReviewScreen />
       </div>
     )

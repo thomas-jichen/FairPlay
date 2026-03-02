@@ -4,7 +4,7 @@ function FeedbackCard({ title, children, defaultExpanded = false, icon }) {
   const [expanded, setExpanded] = useState(defaultExpanded)
 
   return (
-    <div className={`glass-panel rounded-3xl transition-all duration-300 overflow-hidden ${expanded ? 'shadow-lg border-white/60 bg-white/50' : 'hover:bg-white/40'}`}>
+    <div className={`bg-white/40 rounded-2xl border transition-all duration-300 overflow-hidden ${expanded ? 'shadow-md border-white/60 bg-white/60' : 'border-white/40 hover:bg-white/50'}`}>
       <button
         onClick={() => setExpanded(!expanded)}
         className="w-full flex items-center justify-between p-6 text-left group"
@@ -37,11 +37,10 @@ function FeedbackCard({ title, children, defaultExpanded = false, icon }) {
 
 export default function FeedbackCards({ feedback }) {
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-3 px-1">
-        <h2 className="text-2xl font-semibold text-text-primary tracking-tight">Detailed Insights</h2>
+    <div className="glass-panel rounded-3xl p-8 space-y-6">
+      <div className="border-b border-black/[0.05] pb-4">
+        <h2 className="text-lg font-medium tracking-tight text-text-primary">Detailed Insights</h2>
       </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <FeedbackCard
           title="Key Strengths"

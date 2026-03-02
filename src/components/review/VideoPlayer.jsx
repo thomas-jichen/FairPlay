@@ -52,10 +52,12 @@ export default function VideoPlayer({ recordedBlob, conversationHistory }) {
   }
 
   return (
-    <div className="glass-panel rounded-[32px] overflow-hidden shadow-lg relative group">
-      <h3 className="absolute top-5 left-6 text-sm font-semibold tracking-tight text-white drop-shadow-md z-20">Session Recording</h3>
+    <div className="glass-panel rounded-3xl p-8 space-y-6 relative group">
+      <div className="border-b border-black/[0.05] pb-4">
+        <h2 className="text-lg font-medium tracking-tight text-text-primary">Session Recording</h2>
+      </div>
 
-      <div className="relative bg-black aspect-video flex items-center justify-center">
+      <div className="relative bg-black aspect-video flex items-center justify-center rounded-2xl overflow-hidden shadow-sm">
         <video
           ref={videoRef}
           src={videoUrl}

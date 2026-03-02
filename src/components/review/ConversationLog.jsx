@@ -1,27 +1,29 @@
 export default function ConversationLog({ conversationHistory }) {
   if (conversationHistory.length === 0) {
     return (
-      <div className="glass-panel rounded-[32px] p-10 text-center shadow-lg">
-        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-white/60 border border-white mb-5 shadow-sm">
-          <svg className="h-6 w-6 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-          </svg>
+      <div className="glass-panel rounded-3xl p-8 space-y-6 relative">
+        <div className="border-b border-black/[0.05] pb-4">
+          <h2 className="text-lg font-medium tracking-tight text-text-primary">Q&A Transcript</h2>
         </div>
-        <p className="text-sm font-semibold text-text-primary tracking-tight">No Q&A conversation recorded</p>
+        <div className="text-center py-10">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-white/60 border border-white mb-5 shadow-sm">
+            <svg className="h-6 w-6 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+          </div>
+          <p className="text-sm font-semibold text-text-primary tracking-tight">No Q&A conversation recorded</p>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="glass-panel rounded-[32px] p-6 shadow-lg relative overflow-hidden">
-      {/* Top subtle fade gradient */}
-      <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-white/60 via-white/40 to-transparent pointer-events-none z-10" />
-
-      <div className="flex items-center gap-2 mb-6 px-2 relative z-20">
-        <h3 className="text-sm font-semibold tracking-tight text-text-primary uppercase text-text-muted">Q&A Transcript</h3>
+    <div className="glass-panel rounded-3xl p-8 space-y-6 relative overflow-hidden">
+      <div className="border-b border-black/[0.05] pb-4 relative z-20">
+        <h2 className="text-lg font-medium tracking-tight text-text-primary">Q&A Transcript</h2>
       </div>
 
-      <div className="space-y-6 max-h-[500px] overflow-y-auto px-2 pb-8 scrollbar-hide relative z-0">
+      <div className="space-y-6 max-h-[500px] overflow-y-auto pr-4 pb-8 scrollbar-hide relative z-0">
         {conversationHistory.map((msg, i) => {
           const isJudge = msg.role === 'judge'
           return (
