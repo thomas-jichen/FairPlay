@@ -57,9 +57,7 @@ export default function BuiltBy() {
           variants={fadeInUp}
           className="text-lg text-text-secondary italic leading-relaxed max-w-2xl mx-auto mt-16 text-center"
         >
-          <span className="text-text-muted text-2xl leading-none">&ldquo;</span>
           {FOUNDERS_QUOTE}
-          <span className="text-text-muted text-2xl leading-none">&rdquo;</span>
         </motion.blockquote>
       </motion.div>
     </section>

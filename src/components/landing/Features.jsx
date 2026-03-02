@@ -74,7 +74,7 @@ function JudgeMock() {
       </div>
 
       {/* Simulated question bar */}
-      <div className="rounded-2xl bg-white/60 border border-white/80 p-5 backdrop-blur-xl">
+      <div className="rounded-2xl glass-panel-inner p-5">
         <div className="flex items-center gap-3 mb-3">
           <div className="flex h-7 w-7 items-center justify-center rounded-full bg-black/5 border border-black/10">
             <svg className="h-3.5 w-3.5 text-text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -230,7 +230,7 @@ export default function Features() {
       >
         <motion.span
           variants={fadeInUp}
-          className="text-sm font-semibold tracking-widest uppercase text-text-muted"
+          className="glass-pill px-5 py-2 text-sm font-semibold tracking-widest uppercase text-text-muted inline-block"
         >
           How It Works
         </motion.span>
@@ -253,7 +253,7 @@ export default function Features() {
         <FeatureCard
           index={1}
           title="Real-time AI Judge Questioning"
-          description="An adaptive AI judge reads your abstract, analyzes your poster, and asks probing questions in real time — just like a panel of ISEF judges would during your presentation."
+          description="An adaptive AI judge reads your abstract, analyzes your poster, and asks probing questions in real time: just like a panel of ISEF judges would during your presentation."
         >
           <JudgeMock />
         </FeatureCard>
@@ -261,7 +261,7 @@ export default function Features() {
         <FeatureCard
           index={2}
           title="Full Multimodal Context"
-          description="Your abstract, poster text, body language, speaking pace, and mannerisms are all analyzed simultaneously. The AI judge considers everything a real judge would — and more."
+          description="Your abstract, poster text, body language, speaking pace, and mannerisms are all analyzed simultaneously. The AI judge considers everything a real judge would."
           reverse
         >
           <ContextMock />
@@ -270,7 +270,7 @@ export default function Features() {
         <FeatureCard
           index={3}
           title="ISEF Rubric-Calibrated Feedback"
-          description="After your session, receive detailed scoring aligned to official ISEF judging criteria — with specific, actionable feedback on every dimension of your pitch."
+          description="After your session, receive detailed scoring aligned to official ISEF judging criteria with specific, actionable feedback on every dimension of your pitch."
         >
           <RubricMock />
         </FeatureCard>

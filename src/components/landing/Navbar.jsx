@@ -13,9 +13,7 @@ export default function Navbar() {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? 'bg-white/70 backdrop-blur-2xl border-b border-black/[0.06] shadow-[0_1px_3px_rgba(0,0,0,0.04)]'
-          : 'bg-transparent'
+        scrolled ? 'glass-navbar' : 'bg-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -24,7 +22,7 @@ export default function Navbar() {
         </Link>
         <Link
           to="/app"
-          className="rounded-full bg-black px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-black/85 active:scale-[0.97] transition-all"
+          className="rounded-full glass-cta px-5 py-2.5 text-sm font-semibold text-white"
         >
           Try FairPlay
         </Link>
