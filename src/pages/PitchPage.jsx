@@ -7,6 +7,9 @@ import useCountdown from '../hooks/useCountdown'
 import useRecorder from '../hooks/useRecorder'
 import useSpeechRecognition from '../hooks/useSpeechRecognition'
 import useSpeechPace from '../hooks/useSpeechPace'
+import usePostureDetection from '../hooks/usePostureDetection'
+import useToneAnalysis from '../hooks/useToneAnalysis'
+import useFeedbackScores from '../hooks/useFeedbackScores'
 import useChime from '../hooks/useChime'
 import useInterruptionEngine from '../hooks/useInterruptionEngine'
 import useQAEngine from '../hooks/useQAEngine'
@@ -22,6 +25,7 @@ import CountdownOverlay from '../components/pitch/CountdownOverlay'
 import TranscriptOverlay from '../components/pitch/TranscriptOverlay'
 import JudgeQuestionBar from '../components/pitch/JudgeQuestionBar'
 import PosterThumbnail from '../components/pitch/PosterThumbnail'
+import ReviewScreen from '../components/review/ReviewScreen'
 
 export default function PitchPage() {
   const navigate = useNavigate()
@@ -56,6 +60,18 @@ export default function PitchPage() {
 
   const isPaceActive = (currentPhase === PHASES.PITCHING || currentPhase === PHASES.QA) && !isInterrupted
   useSpeechPace(isPaceActive)
+
+  // Phase 4: Real-time feedback
+  const posture = usePostureDetection(webcam.videoRef, isPaceActive)
+  const tone = useToneAnalysis(webcam.streamRef, isPaceActive)
+  const feedbackScores = useFeedbackScores({
+    active: isPaceActive,
+    postureScore: posture.postureScore,
+    gestureScore: posture.gestureScore,
+    eyeContactScore: posture.eyeContactScore,
+    volumeScore: tone.volumeScore,
+    pitchVarianceScore: tone.pitchVarianceScore,
+  })
 
   const timerDuration =
     currentPhase === PHASES.PITCHING ? pitchDuration * 60
@@ -207,9 +223,10 @@ export default function PitchPage() {
       setPhase(PHASES.REVIEW)
       recorder.stopRecording()
       speech.stopListening()
+      webcam.stopCamera()
       useSessionStore.getState().setCurrentJudgeQuestion(null)
     }
-  }, [currentPhase, qaDuration, timer, setPhase, recorder, speech])
+  }, [currentPhase, qaDuration, timer, setPhase, recorder, speech, webcam])
 
   const handleEndSession = useCallback(() => {
     webcam.stopCamera()
@@ -220,6 +237,10 @@ export default function PitchPage() {
   }, [webcam, recorder, speech, resetSession, navigate])
 
   if (!category) return null
+
+  if (currentPhase === PHASES.REVIEW) {
+    return <ReviewScreen />
+  }
 
   const showPitchOrQA = currentPhase === PHASES.PITCHING || currentPhase === PHASES.QA
 
@@ -240,6 +261,7 @@ export default function PitchPage() {
         isOvertime={timer.isOvertime}
         isInterrupted={isInterrupted}
         wpm={currentWPM}
+        feedbackScores={feedbackScores}
         onNextPhase={handleNextPhase}
         onEndSession={handleEndSession}
       />

@@ -24,6 +24,11 @@ const useSessionStore = create((set) => ({
   isJudgeThinking: false,
   judgeSystemPrompt: null,
   contextSummary: null,
+  confidenceScore: 0,
+  engagementScore: 0,
+  approachabilityScore: 0,
+  evaluationResult: null,
+  recordingStartTime: null,
 
   // Settings actions
   setPitchDuration: (minutes) => set({ pitchDuration: minutes }),
@@ -52,6 +57,13 @@ const useSessionStore = create((set) => ({
   setJudgeSystemPrompt: (prompt) => set({ judgeSystemPrompt: prompt }),
   setContextSummary: (summary) => set({ contextSummary: summary }),
 
+  // Feedback score actions
+  setConfidenceScore: (score) => set({ confidenceScore: score }),
+  setEngagementScore: (score) => set({ engagementScore: score }),
+  setApproachabilityScore: (score) => set({ approachabilityScore: score }),
+  setEvaluationResult: (result) => set({ evaluationResult: result }),
+  setRecordingStartTime: (t) => set({ recordingStartTime: t }),
+
   // Reset runtime state (settings are preserved)
   resetSession: () => set({
     currentPhase: PHASES.SETUP,
@@ -66,6 +78,11 @@ const useSessionStore = create((set) => ({
     isJudgeThinking: false,
     judgeSystemPrompt: null,
     contextSummary: null,
+    confidenceScore: 0,
+    engagementScore: 0,
+    approachabilityScore: 0,
+    evaluationResult: null,
+    recordingStartTime: null,
   }),
 }))
 

@@ -1,6 +1,7 @@
 import PhaseIndicator from './PhaseIndicator'
 import TimerDisplay from './TimerDisplay'
 import PaceIndicator from './PaceIndicator'
+import FeedbackPills from './FeedbackPills'
 import { PHASES } from '../../constants/phases'
 
 export default function TopBar({
@@ -9,6 +10,7 @@ export default function TopBar({
   isOvertime,
   isInterrupted,
   wpm,
+  feedbackScores,
   onNextPhase,
   onEndSession,
 }) {
@@ -68,6 +70,13 @@ export default function TopBar({
           )}
           <TimerDisplay formatted={timerFormatted} isOvertime={isOvertime} />
           {!isInterrupted && <PaceIndicator wpm={wpm} />}
+          {!isInterrupted && feedbackScores && (
+            <FeedbackPills
+              confidence={feedbackScores.confidence}
+              engagement={feedbackScores.engagement}
+              approachability={feedbackScores.approachability}
+            />
+          )}
         </div>
       )}
 

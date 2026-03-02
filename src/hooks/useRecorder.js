@@ -45,6 +45,7 @@ export default function useRecorder(streamRef) {
     recorderRef.current = recorder
     recorder.start(1000)
     setIsRecording(true)
+    useSessionStore.getState().setRecordingStartTime(Date.now())
   }, [streamRef, setRecordedBlob, setIsRecording])
 
   const stopRecording = useCallback(() => {

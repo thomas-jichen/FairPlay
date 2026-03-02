@@ -1,7 +1,7 @@
 import { ISEF_CATEGORIES } from './categories'
 import { SCIENCE_RUBRIC, ENGINEERING_RUBRIC, getRubricType } from './rubrics'
 
-const CATEGORY_EXPERTISE = {
+export const CATEGORY_EXPERTISE = {
   ANIM: 'animal sciences researcher with expertise in zoology, ethology, or veterinary science',
   BEHA: 'behavioral scientist with expertise in psychology, sociology, or cognitive science',
   BCHM: 'biochemist with expertise in molecular biochemistry, enzymology, or proteomics',
@@ -26,7 +26,7 @@ const CATEGORY_EXPERTISE = {
   TMED: 'translational medicine researcher with expertise in clinical research, drug development, or diagnostics',
 }
 
-const CRUELTY_BEHAVIOR = {
+export const CRUELTY_BEHAVIOR = {
   1: `You are encouraging and warm. Ask broad, open-ended questions that let the student shine. Frame everything positively: "That's fascinating — can you tell me more about...?" Never directly challenge claims. If something is unclear, gently ask for elaboration. Your goal is to make the student feel confident.`,
 
   2: `You are friendly and supportive but intellectually engaged. Ask clear questions about major aspects of the work. You may gently probe when you notice a significant claim: "I noticed you mentioned X — could you walk me through how you arrived at that?" Frame challenges as genuine curiosity, not criticism.`,

@@ -176,3 +176,35 @@ Respond with just the closing text, no JSON.`
 
   return content.trim().replace(/^["']|["']$/g, '')
 }
+
+export async function generateEvaluation({ systemPrompt, userMessage }) {
+  const messages = [
+    { role: 'system', content: systemPrompt },
+    { role: 'user', content: userMessage },
+  ]
+
+  const { content } = await chatCompletion({
+    model: MODELS.QWEN3_32B,
+    messages,
+    temperature: 0.2,
+    maxTokens: 2000,
+  })
+
+  const parsed = parseJSON(content)
+  if (!parsed) {
+    throw new Error('Failed to parse evaluation response as JSON')
+  }
+
+  // Validate structure
+  if (!Array.isArray(parsed.rubricScores) || parsed.rubricScores.length !== 5) {
+    throw new Error('Invalid rubric scores: expected 5 sections')
+  }
+  if (typeof parsed.overallScore !== 'number') {
+    throw new Error('Invalid overall score')
+  }
+  if (!parsed.feedback || !parsed.judgeImpression) {
+    throw new Error('Missing feedback or judge impression')
+  }
+
+  return parsed
+}
