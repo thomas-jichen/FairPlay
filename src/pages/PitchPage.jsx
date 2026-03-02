@@ -49,7 +49,7 @@ export default function PitchPage() {
   // Redirect if no category selected
   useEffect(() => {
     if (!category) {
-      navigate('/', { replace: true })
+      navigate('/app', { replace: true })
     }
   }, [category, navigate])
 
@@ -233,7 +233,7 @@ export default function PitchPage() {
     recorder.stopRecording()
     speech.stopListening()
     resetSession()
-    navigate('/')
+    navigate('/app')
   }, [webcam, recorder, speech, resetSession, navigate])
 
   if (!category) return null

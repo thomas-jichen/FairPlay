@@ -2,6 +2,8 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import App from './App'
+import LandingLayout from './LandingLayout'
+import LandingPage from './pages/LandingPage'
 import SettingsPage from './pages/SettingsPage'
 import PitchPage from './pages/PitchPage'
 import './index.css'
@@ -9,6 +11,13 @@ import './index.css'
 const router = createBrowserRouter([
   {
     path: '/',
+    element: <LandingLayout />,
+    children: [
+      { index: true, element: <LandingPage /> },
+    ],
+  },
+  {
+    path: '/app',
     element: <App />,
     children: [
       { index: true, element: <SettingsPage /> },

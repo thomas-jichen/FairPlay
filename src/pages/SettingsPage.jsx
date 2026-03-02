@@ -28,7 +28,7 @@ export default function SettingsPage() {
 
   function handleStart() {
     if (!canStart) return
-    navigate('/pitch')
+    navigate('/app/pitch')
   }
 
   const containerVariants = {

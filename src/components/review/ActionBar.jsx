@@ -56,7 +56,7 @@ export default function ActionBar({ evaluationResult, recordedBlob, category, cr
 
   const handlePracticeAgain = useCallback(() => {
     resetSession()
-    navigate('/')
+    navigate('/app')
   }, [resetSession, navigate])
 
   const secondaryBtnClass =
