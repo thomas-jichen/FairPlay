@@ -65,10 +65,10 @@ export default function FileUpload({ uploadedFile, onFileChange }) {
   }
 
   return (
-    <div className="space-y-3">
-      <label className="flex items-center text-sm font-medium text-text-primary tracking-wide">
+    <div className="space-y-3 px-1">
+      <label className="flex items-center text-sm font-medium text-text-primary tracking-tight">
         Project Materials
-        <span className="ml-2 px-2 py-0.5 rounded-md bg-white/5 text-[10px] uppercase tracking-wider text-text-muted border border-white/10">Optional</span>
+        <span className="ml-2 px-2 py-0.5 rounded-md bg-black/5 text-[10px] uppercase tracking-wider text-text-muted border border-black/5">Optional</span>
       </label>
 
       {!uploadedFile ? (
@@ -80,16 +80,13 @@ export default function FileUpload({ uploadedFile, onFileChange }) {
           className={`relative overflow-hidden group flex flex-col items-center justify-center rounded-2xl border-2 border-dashed
             px-6 py-10 cursor-pointer transition-all duration-300 ease-out
             ${isDragging
-              ? 'border-accent bg-accent/10 shadow-[inset_0_0_20px_rgba(14,187,187,0.15)] scale-[1.02]'
-              : 'border-white/20 bg-black/20 hover:border-accent/50 hover:bg-black/30'
+              ? 'border-black/30 bg-black/5 scale-[1.02]'
+              : 'border-black/10 bg-black/[0.02] hover:border-black/20 hover:bg-black/[0.04]'
             }`}
         >
-          {/* Subtle animated background glow on hover */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-accent/0 via-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
           <div className={`relative z-10 transition-transform duration-300 ${isDragging ? 'scale-110 translate-y-[-4px]' : 'group-hover:scale-110 group-hover:translate-y-[-4px]'}`}>
             <svg
-              className={`h-10 w-10 mb-4 transition-colors duration-300 ${isDragging ? 'text-accent drop-shadow-[0_0_8px_rgba(14,187,187,0.5)]' : 'text-text-muted group-hover:text-accent-light'}`}
+              className={`h-10 w-10 mb-4 transition-colors duration-300 ${isDragging ? 'text-black' : 'text-text-muted group-hover:text-black/60'}`}
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -107,23 +104,23 @@ export default function FileUpload({ uploadedFile, onFileChange }) {
           </p>
         </div>
       ) : (
-        <div className="group relative flex items-center gap-4 rounded-2xl border border-white/10 bg-surface-secondary/50 backdrop-blur-sm p-4 overflow-hidden transition-all duration-300 hover:bg-surface-elevated hover:border-white/20 hover:shadow-lg">
-          {/* Success glow strip */}
-          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-accent-light to-accent rounded-l-2xl" />
+        <div className="group relative flex items-center gap-4 rounded-2xl border border-black/10 bg-white/60 backdrop-blur-sm p-4 overflow-hidden transition-all duration-300 hover:bg-white/90 hover:border-black/15 shadow-sm">
+          {/* Subtle indicator strip */}
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-black/10 rounded-l-2xl group-hover:bg-black/20 transition-colors" />
 
           {uploadedFile.preview ? (
             <img
               src={uploadedFile.preview}
               alt="Upload preview"
-              className="h-16 w-16 rounded-xl object-cover border border-white/10 shadow-sm"
+              className="h-16 w-16 rounded-xl object-cover border border-black/5 shadow-sm"
             />
           ) : (
-            <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-accent/10 border border-accent/20 text-accent text-sm font-bold shadow-[0_0_15px_rgba(14,187,187,0.1)]">
+            <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-black/5 border border-black/10 text-black text-sm font-semibold">
               PDF
             </div>
           )}
-          <div className="flex-1 min-w-0 py-1">
-            <p className="text-sm font-medium text-white truncate drop-shadow-sm">
+          <div className="flex-1 min-w-0 py-1 pl-1">
+            <p className="text-sm font-medium text-text-primary truncate">
               {uploadedFile.name}
             </p>
             <div className="flex items-center mt-1">
@@ -131,8 +128,8 @@ export default function FileUpload({ uploadedFile, onFileChange }) {
                 {formatSize(uploadedFile.size)}
               </p>
               {isExtracting && (
-                <div className="ml-3 flex items-center text-xs text-accent animate-pulse">
-                  <div className="w-3 h-3 border-2 border-accent border-t-transparent rounded-full animate-spin mr-1.5" />
+                <div className="ml-3 flex items-center text-xs text-text-primary animate-pulse">
+                  <div className="w-3 h-3 border-2 border-text-muted border-t-transparent rounded-full animate-spin mr-1.5" />
                   Extracting text
                 </div>
               )}
@@ -141,7 +138,7 @@ export default function FileUpload({ uploadedFile, onFileChange }) {
           <button
             type="button"
             onClick={handleRemove}
-            className="rounded-full p-2 text-text-muted hover:bg-red-500/10 hover:text-red-400 transition-all duration-200"
+            className="rounded-full p-2 text-text-muted hover:bg-black/5 hover:text-black transition-all duration-200"
             aria-label="Remove file"
           >
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

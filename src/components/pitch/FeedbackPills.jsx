@@ -1,7 +1,7 @@
 const COLOR_STYLES = {
-  green: { bg: 'bg-emerald-500/10', text: 'text-emerald-400', border: 'border-emerald-500/20', shadow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]' },
-  yellow: { bg: 'bg-amber-500/10', text: 'text-amber-400', border: 'border-amber-500/20', shadow: 'shadow-[0_0_15px_rgba(245,158,11,0.15)]' },
-  red: { bg: 'bg-red-500/10', text: 'text-red-400', border: 'border-red-500/20', shadow: 'shadow-[0_0_15px_rgba(239,68,68,0.15)]' },
+  green: { bg: 'bg-emerald-50', text: 'text-emerald-600', border: 'border-emerald-200', shadow: 'shadow-sm' },
+  yellow: { bg: 'bg-amber-50', text: 'text-amber-600', border: 'border-amber-200', shadow: 'shadow-sm' },
+  red: { bg: 'bg-red-50', text: 'text-red-600', border: 'border-red-200', shadow: 'shadow-sm' },
 }
 
 function Pill({ label, color }) {

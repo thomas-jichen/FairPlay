@@ -7,11 +7,11 @@ export default function CrueltySlider({ value, onChange }) {
 
   return (
     <div className="space-y-4 group">
-      <div className="flex items-center justify-between">
-        <label className="text-sm font-medium text-text-primary tracking-wide">
+      <div className="flex items-center justify-between px-1">
+        <label className="text-sm font-medium text-text-primary tracking-tight">
           Judge Cruelty Level
         </label>
-        <span className="text-sm font-semibold text-accent drop-shadow-[0_0_8px_rgba(14,187,187,0.4)] px-3 py-1 bg-accent/10 rounded-full border border-accent/20">
+        <span className="text-sm font-semibold text-text-primary px-3 py-1 bg-black/5 rounded-full border border-black/10">
           {value} — {CRUELTY_LABELS[value]}
         </span>
       </div>
@@ -27,20 +27,20 @@ export default function CrueltySlider({ value, onChange }) {
           className="w-full relative z-10"
         />
         <div
-          className="absolute top-[13px] left-0 h-2 bg-gradient-to-r from-accent-dark/50 to-accent rounded-l-full pointer-events-none transition-all duration-200"
+          className="absolute top-[13px] left-0 h-1.5 bg-black rounded-l-full pointer-events-none transition-all duration-200"
           style={{ width: `${((value - 1) / (5 - 1)) * 100}%` }}
         />
       </div>
 
-      <div className="flex justify-between text-xs font-medium text-text-muted">
+      <div className="flex justify-between px-1 text-xs font-medium text-text-muted">
         <span>Gentle</span>
-        <span className="text-accent-light/50">Level 3 suggested</span>
+        <span className="text-text-secondary">Level 3 suggested</span>
         <span>Ruthless</span>
       </div>
 
-      <div className="mt-2 rounded-xl bg-black/20 border border-white/5 p-4 backdrop-blur-sm transition-all duration-300 group-hover:bg-black/30 group-hover:border-white/10 flex justify-between items-center">
-        <span className="text-sm text-text-secondary">Expected Q&A Duration</span>
-        <span className="tabular-nums text-sm font-bold text-accent">{config.qaDurationMinutes} min</span>
+      <div className="mt-2 rounded-2xl bg-black/[0.02] border border-black/[0.06] p-4 transition-all duration-300 flex justify-between items-center group-hover:bg-black/[0.04]">
+        <span className="text-sm text-text-secondary tracking-tight">Expected Q&A Duration</span>
+        <span className="tabular-nums text-sm font-semibold text-text-primary">{config.qaDurationMinutes} min</span>
       </div>
     </div>
   )

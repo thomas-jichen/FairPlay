@@ -10,12 +10,12 @@ export default function DurationSlider({
 }) {
   return (
     <div className="space-y-4 group">
-      <div className="flex items-center justify-between">
-        <label className="text-sm font-medium text-text-primary tracking-wide">
+      <div className="flex items-center justify-between px-1">
+        <label className="text-sm font-medium text-text-primary tracking-tight">
           {label}
         </label>
-        <span className="text-lg tabular-nums font-bold text-accent drop-shadow-[0_0_8px_rgba(14,187,187,0.4)]">
-          {value} <span className="text-sm font-medium text-accent-light/80">{unit}</span>
+        <span className="text-base tabular-nums font-semibold text-text-primary">
+          {value} <span className="text-sm font-medium text-text-secondary">{unit}</span>
         </span>
       </div>
 
@@ -31,14 +31,14 @@ export default function DurationSlider({
         />
         {/* Decorative track fill (visual only) */}
         <div
-          className="absolute top-[13px] left-0 h-2 bg-gradient-to-r from-accent-dark/50 to-accent rounded-l-full pointer-events-none transition-all duration-200"
+          className="absolute top-[13px] left-0 h-1.5 bg-black rounded-l-full pointer-events-none transition-all duration-200"
           style={{ width: `${((value - min) / (max - min)) * 100}%` }}
         />
       </div>
 
-      <div className="flex justify-between text-xs font-medium text-text-muted">
+      <div className="flex justify-between px-1 text-xs text-text-muted">
         <span>{min} {unit}</span>
-        {hint && <span className="text-accent-light/50">{hint}</span>}
+        {hint && <span>{hint}</span>}
         <span>{max} {unit}</span>
       </div>
     </div>

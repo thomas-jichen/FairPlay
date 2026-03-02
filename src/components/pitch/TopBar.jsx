@@ -21,8 +21,8 @@ export default function TopBar({
           <button
             type="button"
             onClick={onNextPhase}
-            className="rounded-full bg-accent/90 hover:bg-accent px-5 py-2 text-sm font-semibold text-white shadow-[0_0_15px_rgba(14,187,187,0.3)]
-                       backdrop-blur-md border border-white/20 transition-all duration-300 hover:scale-105 active:scale-95"
+            className="rounded-full bg-white px-5 py-2 text-sm font-semibold text-black shadow-lg
+                       transition-all duration-300 hover:scale-105 active:scale-95"
           >
             End Pitch
           </button>
@@ -32,8 +32,8 @@ export default function TopBar({
           <button
             type="button"
             onClick={onNextPhase}
-            className="rounded-full bg-accent/90 hover:bg-accent px-5 py-2 text-sm font-semibold text-white shadow-[0_0_15px_rgba(14,187,187,0.3)]
-                       backdrop-blur-md border border-white/20 transition-all duration-300 hover:scale-105 active:scale-95"
+            className="rounded-full bg-white px-5 py-2 text-sm font-semibold text-black shadow-lg
+                       transition-all duration-300 hover:scale-105 active:scale-95"
           >
             End Q&A
           </button>
@@ -43,8 +43,8 @@ export default function TopBar({
           <button
             type="button"
             onClick={onEndSession}
-            className="rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20
-                       px-5 py-2 text-sm font-medium text-white shadow-lg transition-all duration-300 hover:scale-105 active:scale-95"
+            className="glass-pill hover:bg-white/60
+                       px-5 py-2 text-sm font-medium text-text-primary shadow-lg transition-all duration-300 hover:scale-105 active:scale-95"
           >
             Back to Settings
           </button>
@@ -58,16 +58,16 @@ export default function TopBar({
     <div className="w-full flex items-center justify-between gap-4">
       {/* Left side: Phase Indicator */}
       <div className="flex-1 flex justify-start">
-        <div className="glass-pill pl-2 pr-4 py-1.5 flex items-center">
+        <div className="glass-pill shadow-lg pl-2 pr-4 py-1.5 flex items-center">
           <PhaseIndicator currentPhase={currentPhase} />
         </div>
       </div>
 
       {/* Center: Timer & Feedback Metrics */}
       {(currentPhase === PHASES.PITCHING || currentPhase === PHASES.QA) && (
-        <div className="glass-pill px-6 py-2.5 flex items-center gap-6 shadow-2xl shadow-black/50 border-white/20 bg-black/40">
+        <div className="glass-pill px-6 py-2.5 flex items-center gap-6 shadow-2xl">
           {isInterrupted && (
-            <span className="inline-flex items-center rounded-full bg-red-500/20 border border-red-500/30 px-3 py-1 text-xs font-bold tracking-wide uppercase text-red-400 animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.4)]">
+            <span className="inline-flex items-center rounded-full bg-red-100 border border-red-200 px-3 py-1 text-xs font-bold tracking-wide uppercase text-red-600 animate-[pulse_2s_infinite] shadow-sm">
               PAUSED
             </span>
           )}
@@ -75,12 +75,12 @@ export default function TopBar({
 
           {!isInterrupted && (
             <>
-              <div className="w-px h-6 bg-white/10" />
+              <div className="w-px h-6 bg-black/10" />
               <PaceIndicator wpm={wpm} />
 
               {feedbackScores && (
                 <>
-                  <div className="w-px h-6 bg-white/10" />
+                  <div className="w-px h-6 bg-black/10" />
                   <FeedbackPills
                     confidence={feedbackScores.confidence}
                     engagement={feedbackScores.engagement}

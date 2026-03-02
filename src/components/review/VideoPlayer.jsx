@@ -39,21 +39,21 @@ export default function VideoPlayer({ recordedBlob, conversationHistory }) {
 
   if (!recordedBlob) {
     return (
-      <div className="glass-panel rounded-2xl p-10 text-center border-dashed border-white/20">
-        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-white/5 mb-4">
-          <svg className="h-6 w-6 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <div className="glass-panel flex flex-col items-center justify-center rounded-[32px] p-16 text-center shadow-lg">
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-white/60 border border-white mb-6 shadow-sm">
+          <svg className="h-8 w-8 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
           </svg>
         </div>
-        <p className="text-sm font-medium text-text-muted tracking-wide">No video recording available</p>
+        <p className="text-lg font-semibold text-text-primary tracking-tight mb-2">No video recording available</p>
+        <p className="text-base font-medium text-text-secondary">Your camera may have been disabled.</p>
       </div>
     )
   }
 
   return (
-    <div className="glass-panel rounded-2xl overflow-hidden border-white/10 shadow-2xl relative group">
-      <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-transparent h-16 pointer-events-none z-10" />
-      <h3 className="absolute top-4 left-5 text-sm font-semibold tracking-wide text-white drop-shadow-md z-20">Session Recording</h3>
+    <div className="glass-panel rounded-[32px] overflow-hidden shadow-lg relative group">
+      <h3 className="absolute top-5 left-6 text-sm font-semibold tracking-tight text-white drop-shadow-md z-20">Session Recording</h3>
 
       <div className="relative bg-black aspect-video flex items-center justify-center">
         <video
@@ -65,15 +65,14 @@ export default function VideoPlayer({ recordedBlob, conversationHistory }) {
           style={{ transform: 'scaleX(-1)' }}
         />
 
-        {/* Floating Judge Question Overlay inside Video (Top Middle) */}
+        {/* Floating Judge Question Overlay inside Video */}
         {activeQuestion && (
           <div className="absolute top-16 left-1/2 -translate-x-1/2 w-[90%] max-w-lg z-20 animate-slide-down">
-            <div className="glass-panel rounded-xl px-5 py-3 border-white/20 bg-black/60 backdrop-blur-md shadow-2xl">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="flex h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_8px_rgba(14,187,187,0.8)]" />
-                <span className="text-[10px] uppercase tracking-widest font-bold text-accent">Judge Question</span>
+            <div className="glass-panel rounded-2xl px-6 py-4 shadow-2xl bg-white/40 border-white/60">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-[10px] uppercase tracking-widest font-bold text-text-primary opacity-80">AI Judge Question</span>
               </div>
-              <p className="text-sm font-medium text-white shadow-sm" style={{ transform: 'scaleX(1)' }}>
+              <p className="text-base font-bold text-text-primary leading-snug" style={{ transform: 'scaleX(1)' }}>
                 {activeQuestion.text}
               </p>
             </div>

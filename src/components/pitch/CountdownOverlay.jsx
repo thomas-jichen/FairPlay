@@ -16,17 +16,8 @@ export default function CountdownOverlay({ count }) {
   if (count === null || count <= 0) return null
 
   return (
-    <div className="absolute inset-0 z-40 flex items-center justify-center bg-black/60 backdrop-blur-xl transition-opacity duration-300">
+    <div className="absolute inset-0 z-40 flex items-center justify-center bg-white/20 backdrop-blur-3xl transition-opacity duration-300">
       <div className="relative flex flex-col items-center justify-center">
-
-        {/* Animated Background Pulse Ring */}
-        <motion.div
-          key={`ring-${count}`}
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1.5, opacity: [0, 0.4, 0] }}
-          transition={{ duration: 1, ease: "easeOut" }}
-          className="absolute w-64 h-64 rounded-full bg-accent/20 blur-2xl top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-        />
 
         {/* Number Display */}
         <div className="h-40 flex items-center justify-center">
@@ -44,7 +35,7 @@ export default function CountdownOverlay({ count }) {
                   opacity: { duration: 0.2 },
                   exit: { duration: 0.4, ease: "easeIn" }
                 }}
-                className="block text-[180px] font-bold text-white tracking-tighter drop-shadow-[0_0_50px_rgba(14,187,187,0.7)]"
+                className="block text-[180px] font-semibold text-text-primary tracking-tight"
               >
                 {count}
               </motion.span>

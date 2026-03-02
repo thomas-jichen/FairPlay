@@ -1,9 +1,9 @@
 const PACE_CONFIG = {
-  fast: { bg: 'bg-red-500/10', text: 'text-red-400', border: 'border-red-500/20', dot: 'bg-red-400', shadow: 'shadow-[0_0_15px_rgba(239,68,68,0.15)]' },
-  slightFast: { bg: 'bg-amber-500/10', text: 'text-amber-400', border: 'border-amber-500/20', dot: 'bg-amber-400', shadow: 'shadow-[0_0_15px_rgba(245,158,11,0.15)]' },
-  good: { bg: 'bg-emerald-500/10', text: 'text-emerald-400', border: 'border-emerald-500/20', dot: 'bg-emerald-400', shadow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]' },
-  slightSlow: { bg: 'bg-amber-500/10', text: 'text-amber-400', border: 'border-amber-500/20', dot: 'bg-amber-400', shadow: 'shadow-[0_0_15px_rgba(245,158,11,0.15)]' },
-  slow: { bg: 'bg-red-500/10', text: 'text-red-400', border: 'border-red-500/20', dot: 'bg-red-400', shadow: 'shadow-[0_0_15px_rgba(239,68,68,0.15)]' },
+  fast: { bg: 'bg-red-50', text: 'text-red-600', border: 'border-red-200', dot: 'bg-red-500', shadow: 'shadow-sm' },
+  slightFast: { bg: 'bg-amber-50', text: 'text-amber-600', border: 'border-amber-200', dot: 'bg-amber-500', shadow: 'shadow-sm' },
+  good: { bg: 'bg-emerald-50', text: 'text-emerald-600', border: 'border-emerald-200', dot: 'bg-emerald-500', shadow: 'shadow-sm' },
+  slightSlow: { bg: 'bg-amber-50', text: 'text-amber-600', border: 'border-amber-200', dot: 'bg-amber-500', shadow: 'shadow-sm' },
+  slow: { bg: 'bg-red-50', text: 'text-red-600', border: 'border-red-200', dot: 'bg-red-500', shadow: 'shadow-sm' },
 }
 
 function getPaceCategory(wpm) {
@@ -22,8 +22,8 @@ export default function PaceIndicator({ wpm }) {
   const style = PACE_CONFIG[category]
 
   return (
-    <div className={`flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-bold tracking-wider transition-all duration-700 ease-out ${style.bg} ${style.border} ${style.shadow}`}>
-      <span className={`transition-colors duration-700 font-mono ${style.text}`}>
+    <div className={`flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-bold tracking-wider transition-all duration-700 ease-out ${style.bg} ${style.border} ${style.shadow}`}>
+      <span className={`transition-colors duration-700 tabular-nums ${style.text}`}>
         {wpm}
       </span>
       <span className={`text-[10px] text-text-muted transition-colors duration-700`}>WPM</span>
