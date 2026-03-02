@@ -41,8 +41,15 @@ export default function Hero() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
             </svg>
           </Link>
-          <p className="text-md text-text-muted max-w-2xl mx-auto mt-8">Realistic judging simulations preparing you to be an ISEF winner, without the cost of science fair coaches or years of competition experience.</p>
         </motion.div>
+
+        {/* Sub-CTA copy */}
+        <motion.p
+          variants={fadeInUp}
+          className="text-md text-text-muted max-w-2xl mx-auto mt-10"
+        >
+          Realistic judging simulations preparing you to be an ISEF winner, without the cost of science fair coaches or years of competition experience.
+        </motion.p>
       </motion.div>
     </section>
   )
