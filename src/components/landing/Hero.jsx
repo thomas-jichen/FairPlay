@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router'
 import { fadeInUp, staggerContainer } from './animations'
+import ReportMock from './ReportMock'
 
 export default function Hero() {
   return (
@@ -12,7 +13,7 @@ export default function Hero() {
         variants={staggerContainer}
         initial="hidden"
         animate="visible"
-        className="relative max-w-6xl mx-auto text-center py-12 px-6"
+        className="relative max-w-6xl mx-auto text-center pt-12 pb-4 px-6"
       >
         {/* Headline */}
         <motion.h1
@@ -34,7 +35,7 @@ export default function Hero() {
         <motion.div variants={fadeInUp} className="mt-10">
           <Link
             to="/app"
-            className="type-cta inline-flex items-center gap-3 rounded-full glass-cta px-10 py-4 text-base text-white"
+            className="type-cta inline-flex items-center gap-3 rounded-full glass-cta px-10 py-4 text-base"
           >
             Try FairPlay
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -51,6 +52,9 @@ export default function Hero() {
           Realistic judging simulations preparing you to be an ISEF winner, without the cost of coaching or years of competition experience.
         </motion.p>
       </motion.div>
+
+      {/* Mock Report Screenshot */}
+      <ReportMock />
     </section>
   )
 }

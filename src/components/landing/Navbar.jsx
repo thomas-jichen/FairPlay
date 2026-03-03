@@ -3,8 +3,7 @@ import { Link } from 'react-router'
 export default function Navbar() {
   const scrollTo = (id) => {
     if (id === 'top') {
-      const container = document.getElementById('landing-scroll-container')
-      if (container) container.scrollTo({ top: 0, behavior: 'smooth' })
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       return
     }
     const el = document.getElementById(id)
@@ -24,13 +23,13 @@ export default function Navbar() {
           <div className="flex items-center gap-6">
             <button
               onClick={() => scrollTo('team')}
-              className="text-sm font-medium text-text-secondary hover:text-text-primary transition-colors duration-300"
+              className="text-sm font-light text-text-secondary hover:text-text-primary transition-colors duration-300" style={{ fontFamily: '"Montserrat", sans-serif' }}
             >
               Team
             </button>
             <button
               onClick={() => scrollTo('features')}
-              className="text-sm font-medium text-text-secondary hover:text-text-primary transition-colors duration-300"
+              className="text-sm font-light text-text-secondary hover:text-text-primary transition-colors duration-300" style={{ fontFamily: '"Montserrat", sans-serif' }}
             >
               Features
             </button>
@@ -38,7 +37,7 @@ export default function Navbar() {
         </div>
         <Link
           to="/app"
-          className="type-cta rounded-full glass-cta px-5 py-2.5 text-sm text-white"
+          className="type-cta rounded-full glass-cta px-5 py-2.5 text-sm"
         >
           Try FairPlay
         </Link>

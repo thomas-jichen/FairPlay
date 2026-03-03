@@ -6,25 +6,22 @@ import FooterCTA from '../components/landing/FooterCTA'
 export default function LandingPage() {
   return (
     <main>
-      {/* Page 1: Hero */}
-      <section className="snap-page flex items-center justify-center">
+      {/* Hero */}
+      <section className="pt-28 pb-6 flex items-center justify-center">
         <Hero />
       </section>
 
-      {/* Page 2: Team */}
-      <section id="team" className="snap-page flex flex-col items-center justify-center w-full h-full py-8 max-w-[100vw] overflow-hidden">
+      {/* Team */}
+      <section id="team" className="pt-6 pb-8 flex flex-col items-center justify-center w-full max-w-[100vw] overflow-hidden">
         <TeamSection />
       </section>
 
-      {/* Page 3: Features & Footer */}
-      <section id="features" className="snap-page flex flex-col justify-between w-full h-full max-w-[100vw] overflow-hidden">
-        <div className="flex-grow flex flex-col justify-center">
-          <Features />
-        </div>
-        <div className="w-full shrink-0">
-          <FooterCTA />
-        </div>
+      {/* Features & Footer */}
+      <section id="features" className="pt-8 pb-16 flex flex-col w-full max-w-[100vw] overflow-hidden">
+        <Features />
       </section>
+
+      <FooterCTA />
     </main>
   )
 }
