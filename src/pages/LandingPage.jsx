@@ -1,7 +1,6 @@
 import Hero from '../components/landing/Hero'
 import Features from '../components/landing/Features'
-import WinnersMarquee from '../components/landing/WinnersMarquee'
-import BuiltBy from '../components/landing/BuiltBy'
+import TeamSection from '../components/landing/TeamSection'
 
 export default function LandingPage() {
   return (
@@ -12,13 +11,8 @@ export default function LandingPage() {
       </section>
 
       {/* Page 2: Team */}
-      <section id="team" className="snap-page flex flex-col items-center justify-center w-full h-full py-8 overflow-x-hidden overflow-y-auto">
-        <div className="w-full mb-12">
-          <WinnersMarquee />
-        </div>
-        <div className="w-full">
-          <BuiltBy />
-        </div>
+      <section id="team" className="snap-page flex flex-col items-center justify-center w-full h-full py-8 max-w-[100vw] overflow-hidden">
+        <TeamSection />
       </section>
 
       {/* Page 3: Features */}
