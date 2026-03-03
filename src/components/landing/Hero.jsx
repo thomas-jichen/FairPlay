@@ -27,7 +27,7 @@ export default function Hero() {
           variants={fadeInUp}
           className="type-body text-lg md:text-xl text-text-secondary max-w-2xl mx-auto mt-8"
         >
-          Democratizing science fair winning strategies with real-time multimodal AI coaches tuned by Regeneron ISEF grand award winners.
+          Democratizing winning science fair strategies with real-time multimodal AI coaches tuned by Regeneron ISEF grand award winners.
         </motion.p>
 
         {/* CTA */}
