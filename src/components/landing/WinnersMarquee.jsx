@@ -22,7 +22,7 @@ export default function WinnersMarquee() {
   const isInView = useInView(ref, { once: true, margin: '-60px' })
 
   return (
-    <section ref={ref} className="pt-12 pb-6 overflow-hidden">
+    <section ref={ref} className="pt-4 pb-2 overflow-hidden w-full">
       {/* Section header */}
       <motion.div
         variants={staggerContainer}

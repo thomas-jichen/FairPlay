@@ -12,9 +12,13 @@ export default function LandingPage() {
       </section>
 
       {/* Page 2: Team */}
-      <section id="team" className="snap-page flex flex-col justify-center">
-        <WinnersMarquee />
-        <BuiltBy />
+      <section id="team" className="snap-page flex flex-col items-center justify-center w-full h-full py-8 overflow-x-hidden overflow-y-auto">
+        <div className="w-full mb-12">
+          <WinnersMarquee />
+        </div>
+        <div className="w-full">
+          <BuiltBy />
+        </div>
       </section>
 
       {/* Page 3: Features */}

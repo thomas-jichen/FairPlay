@@ -217,7 +217,7 @@ export default function Features() {
   const isInView = useInView(sectionRef, { once: true, margin: '-40px' })
 
   return (
-    <section className="py-6 px-6">
+    <section className="w-full h-full flex flex-col justify-center px-6">
       {/* Section header */}
       <motion.div
         ref={sectionRef}

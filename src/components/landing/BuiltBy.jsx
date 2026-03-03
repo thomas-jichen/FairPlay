@@ -39,7 +39,7 @@ export default function BuiltBy() {
   const isInView = useInView(ref, { once: true, margin: '-60px' })
 
   return (
-    <section ref={ref} className="pt-14 pb-10 px-6">
+    <section ref={ref} className="py-4 px-6 w-full">
       <motion.div
         variants={staggerContainer}
         initial="hidden"
