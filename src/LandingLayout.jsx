@@ -3,7 +3,7 @@ import Navbar from './components/landing/Navbar'
 
 export default function LandingLayout() {
   return (
-    <div className="min-h-screen bg-surface-primary text-text-primary overflow-x-hidden relative">
+    <div className="snap-scroll-container bg-surface-primary text-text-primary relative" id="landing-scroll-container">
       {/* Ambient liquid glass blob layer */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0" aria-hidden="true">
         <div className="liquid-blob liquid-blob-1 -top-[15%] -left-[10%] w-[55%] h-[55%] bg-[rgba(251,191,146,0.40)]" />

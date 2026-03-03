@@ -1,12 +1,17 @@
+import thomasImg from './images/thomas.jpg'
+import evanImg from './images/evan.jpeg'
+
 export const FOUNDERS = [
   {
     name: 'Thomas Wang',
-    award: "ISEF '25 Physics and Astronomy 2nd Place Grand Award Winner",
+    image: thomasImg,
+    award: "ISEF '25 2nd Place Grand Award Winner Physics & Astronomy (PHYS)",
     university: "Stanford University '30",
   },
   {
     name: 'Evan Xiang',
-    award: "ISEF '25 Biomedical and Health Sciences 3rd Place Grand Award Winner",
+    image: evanImg,
+    award: "ISEF '25 3rd Place Grand Award Winner Biomedical & Health Sciences (BMED)",
     university: "Massachusetts Institute of Technology '30",
   },
 ]

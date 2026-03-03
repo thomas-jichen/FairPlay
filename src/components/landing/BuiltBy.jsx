@@ -6,20 +6,28 @@ import { fadeInUp, staggerContainer } from './animations'
 function FounderCard({ founder }) {
   return (
     <motion.div variants={fadeInUp} className="glass-panel rounded-3xl p-8 text-center">
-      {/* Photo placeholder */}
-      <div className="w-24 h-24 rounded-full mx-auto bg-gradient-to-br from-surface-secondary to-surface-tertiary border-2 border-white shadow-lg" />
+      <div className="w-24 h-24 rounded-full mx-auto overflow-hidden border-2 border-white shadow-lg">
+        <img
+          src={founder.image}
+          alt={founder.name}
+          width={192}
+          height={192}
+          className="w-full h-full object-cover"
+          style={{ imageRendering: 'auto' }}
+        />
+      </div>
 
-      <h3 className="text-xl font-semibold tracking-tight mt-6 text-text-primary">
+      <h3 className="type-title text-xl mt-6 text-text-primary">
         {founder.name}
       </h3>
 
       <div className="flex flex-wrap items-center justify-center gap-2 mt-4">
-        <span className="glass-pill px-4 py-1.5 text-xs font-semibold tracking-tight text-text-secondary">
+        <span className="glass-pill px-5 py-1.5 text-sm font-medium text-text-secondary" style={{ letterSpacing: '-0.01em' }}>
           {founder.award}
         </span>
       </div>
 
-      <p className="text-sm font-medium text-text-muted mt-3">
+      <p className="type-caption text-text-muted mt-3">
         {founder.university}
       </p>
     </motion.div>
@@ -31,7 +39,7 @@ export default function BuiltBy() {
   const isInView = useInView(ref, { once: true, margin: '-60px' })
 
   return (
-    <section ref={ref} className="py-32 px-6">
+    <section ref={ref} className="pt-14 pb-10 px-6">
       <motion.div
         variants={staggerContainer}
         initial="hidden"
@@ -39,8 +47,8 @@ export default function BuiltBy() {
         className="max-w-4xl mx-auto"
       >
         {/* Section header */}
-        <motion.div variants={fadeInUp} className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-text-primary">
+        <motion.div variants={fadeInUp} className="text-center mb-8">
+          <h2 className="type-title text-3xl md:text-4xl text-text-primary">
             Built by ISEF Grand Award Winners
           </h2>
         </motion.div>
@@ -52,12 +60,12 @@ export default function BuiltBy() {
           ))}
         </div>
 
-        {/* Shared quote */}
+        {/* Shared quote — light, airy typographic treatment */}
         <motion.blockquote
           variants={fadeInUp}
-          className="text-lg text-text-secondary italic leading-relaxed max-w-2xl mx-auto mt-16 text-center"
+          className="type-quote text-lg text-text-secondary max-w-2xl mx-auto mt-8 text-center"
         >
-          {FOUNDERS_QUOTE}
+          "{FOUNDERS_QUOTE}"
         </motion.blockquote>
       </motion.div>
     </section>

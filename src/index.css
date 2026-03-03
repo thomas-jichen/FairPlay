@@ -45,6 +45,77 @@
     color: var(--color-text-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "ss01", "ss02", "liga";
+    text-rendering: optimizeLegibility;
+  }
+
+  /* ── Söhne Typographic System ── */
+
+  /* Display — hero headlines, ultra-tight, heavy weight */
+  .type-display {
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 0.92;
+    font-feature-settings: "ss01", "ss02", "liga", "kern";
+  }
+
+  /* Title — section headings, bold, tight */
+  .type-title {
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+  }
+
+  /* Overline — category labels above sections, wide-spaced, lightweight */
+  .type-overline {
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    line-height: 1;
+  }
+
+  /* Body — description text, normal weight for readability */
+  .type-body {
+    font-weight: 400;
+    letter-spacing: -0.005em;
+    line-height: 1.7;
+  }
+
+  /* Quote — blockquotes, thin weight, airy */
+  .type-quote {
+    font-weight: 300;
+    letter-spacing: 0.01em;
+    line-height: 1.75;
+    font-style: italic;
+  }
+
+  /* Caption — small labels, numerals, metrics */
+  .type-caption {
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-size: 0.6875rem;
+    line-height: 1;
+  }
+
+  /* CTA — button text, medium with open tracking */
+  .type-cta {
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  /* Wordmark — nav brand, distinctive spacing */
+  .type-wordmark {
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  /* Numeral — stylized feature indices */
+  .type-numeral {
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    font-variant-numeric: tabular-nums;
   }
 
   /* Custom Range Sliders */
@@ -103,12 +174,10 @@
   .glass-panel {
     position: relative;
     overflow: hidden;
-    background: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.40) 0%,
-      rgba(255, 255, 255, 0.22) 50%,
-      rgba(255, 255, 255, 0.32) 100%
-    );
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.40) 0%,
+        rgba(255, 255, 255, 0.22) 50%,
+        rgba(255, 255, 255, 0.32) 100%);
     backdrop-filter: blur(40px) saturate(1.8);
     -webkit-backdrop-filter: blur(40px) saturate(1.8);
     border: 1px solid rgba(255, 255, 255, 0.55);
@@ -128,12 +197,10 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      105deg,
-      transparent 40%,
-      rgba(255, 255, 255, 0.20) 50%,
-      transparent 60%
-    );
+    background: linear-gradient(105deg,
+        transparent 40%,
+        rgba(255, 255, 255, 0.20) 50%,
+        transparent 60%);
     background-size: 200% 100%;
     animation: glass-shimmer 8s ease-in-out infinite;
     pointer-events: none;
@@ -151,11 +218,9 @@
   }
 
   .glass-pill {
-    background: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.45) 0%,
-      rgba(255, 255, 255, 0.28) 100%
-    );
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.45) 0%,
+        rgba(255, 255, 255, 0.28) 100%);
     backdrop-filter: blur(24px) saturate(1.6);
     -webkit-backdrop-filter: blur(24px) saturate(1.6);
     border: 1px solid rgba(255, 255, 255, 0.65);
@@ -181,11 +246,9 @@
   }
 
   .glass-panel-inner {
-    background: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.65) 0%,
-      rgba(255, 255, 255, 0.50) 100%
-    );
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.65) 0%,
+        rgba(255, 255, 255, 0.50) 100%);
     backdrop-filter: blur(20px) saturate(1.4);
     -webkit-backdrop-filter: blur(20px) saturate(1.4);
     border: 1px solid rgba(255, 255, 255, 0.70);
@@ -195,11 +258,9 @@
   }
 
   .glass-cta {
-    background: linear-gradient(
-      135deg,
-      rgba(0, 0, 0, 0.90) 0%,
-      rgba(0, 0, 0, 0.80) 100%
-    );
+    background: linear-gradient(135deg,
+        rgba(0, 0, 0, 0.90) 0%,
+        rgba(0, 0, 0, 0.80) 100%);
     backdrop-filter: blur(20px) saturate(1.4);
     -webkit-backdrop-filter: blur(20px) saturate(1.4);
     border: 1px solid rgba(255, 255, 255, 0.12);
@@ -230,11 +291,9 @@
   }
 
   .glass-footer {
-    background: linear-gradient(
-      0deg,
-      rgba(255, 255, 255, 0.60) 0%,
-      rgba(255, 255, 255, 0.40) 100%
-    );
+    background: linear-gradient(0deg,
+        rgba(255, 255, 255, 0.60) 0%,
+        rgba(255, 255, 255, 0.40) 100%);
     backdrop-filter: blur(40px) saturate(1.8);
     -webkit-backdrop-filter: blur(40px) saturate(1.8);
     border-top: 1px solid rgba(255, 255, 255, 0.5);
@@ -245,11 +304,9 @@
   }
 
   .glass-navbar {
-    background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.65) 0%,
-      rgba(255, 255, 255, 0.50) 100%
-    );
+    background: linear-gradient(180deg,
+        rgba(255, 255, 255, 0.65) 0%,
+        rgba(255, 255, 255, 0.50) 100%);
     backdrop-filter: blur(40px) saturate(1.8);
     -webkit-backdrop-filter: blur(40px) saturate(1.8);
     border-bottom: 1px solid rgba(255, 255, 255, 0.5);
@@ -262,29 +319,70 @@
 
 /* ── Glass Shimmer ── */
 @keyframes glass-shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 /* ── Ambient Liquid Blob Animations ── */
 @keyframes blob-drift-1 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  25% { transform: translate(30px, -50px) scale(1.05); }
-  50% { transform: translate(-20px, 20px) scale(0.95); }
-  75% { transform: translate(40px, 30px) scale(1.02); }
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  25% {
+    transform: translate(30px, -50px) scale(1.05);
+  }
+
+  50% {
+    transform: translate(-20px, 20px) scale(0.95);
+  }
+
+  75% {
+    transform: translate(40px, 30px) scale(1.02);
+  }
 }
 
 @keyframes blob-drift-2 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  25% { transform: translate(-40px, 30px) scale(0.97); }
-  50% { transform: translate(25px, -40px) scale(1.06); }
-  75% { transform: translate(-15px, -20px) scale(1.0); }
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  25% {
+    transform: translate(-40px, 30px) scale(0.97);
+  }
+
+  50% {
+    transform: translate(25px, -40px) scale(1.06);
+  }
+
+  75% {
+    transform: translate(-15px, -20px) scale(1.0);
+  }
 }
 
 @keyframes blob-drift-3 {
-  0%, 100% { transform: translate(0, 0) scale(1.02); }
-  33% { transform: translate(35px, 25px) scale(0.96); }
-  66% { transform: translate(-30px, -35px) scale(1.04); }
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1.02);
+  }
+
+  33% {
+    transform: translate(35px, 25px) scale(0.96);
+  }
+
+  66% {
+    transform: translate(-30px, -35px) scale(1.04);
+  }
 }
 
 .liquid-blob {
@@ -295,17 +393,37 @@
   will-change: transform;
 }
 
-.liquid-blob-1 { animation: blob-drift-1 25s ease-in-out infinite; }
-.liquid-blob-2 { animation: blob-drift-2 30s ease-in-out infinite; }
-.liquid-blob-3 { animation: blob-drift-3 22s ease-in-out infinite; }
-
-@keyframes blob-drift-4 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  30% { transform: translate(-25px, -40px) scale(1.04); }
-  60% { transform: translate(30px, 20px) scale(0.97); }
+.liquid-blob-1 {
+  animation: blob-drift-1 25s ease-in-out infinite;
 }
 
-.liquid-blob-4 { animation: blob-drift-4 28s ease-in-out infinite; }
+.liquid-blob-2 {
+  animation: blob-drift-2 30s ease-in-out infinite;
+}
+
+.liquid-blob-3 {
+  animation: blob-drift-3 22s ease-in-out infinite;
+}
+
+@keyframes blob-drift-4 {
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  30% {
+    transform: translate(-25px, -40px) scale(1.04);
+  }
+
+  60% {
+    transform: translate(30px, 20px) scale(0.97);
+  }
+}
+
+.liquid-blob-4 {
+  animation: blob-drift-4 28s ease-in-out infinite;
+}
 
 /* Animations */
 @keyframes slide-down-fade {
@@ -383,6 +501,7 @@
   from {
     transform: translateX(0);
   }
+
   to {
     transform: translateX(-50%);
   }
@@ -396,4 +515,19 @@
 
 .marquee-strip:hover {
   animation-play-state: paused;
+}
+
+/* ── Snap Scroll System ── */
+.snap-scroll-container {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 100vh;
+}
+
+.snap-page {
+  scroll-snap-align: start;
+  height: 100vh;
+  overflow: hidden;
 }
