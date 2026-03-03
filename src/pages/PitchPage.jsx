@@ -25,6 +25,7 @@ import CountdownOverlay from '../components/pitch/CountdownOverlay'
 import TranscriptOverlay from '../components/pitch/TranscriptOverlay'
 import JudgeQuestionBar from '../components/pitch/JudgeQuestionBar'
 import PosterThumbnail from '../components/pitch/PosterThumbnail'
+import PosterViewer from '../components/pitch/PosterViewer'
 import ReviewScreen from '../components/review/ReviewScreen'
 
 export default function PitchPage() {
@@ -43,6 +44,8 @@ export default function PitchPage() {
   const isInterrupted = useSessionStore((s) => s.isInterrupted)
   const currentJudgeQuestion = useSessionStore((s) => s.currentJudgeQuestion)
   const uploadedFile = useSessionStore((s) => s.uploadedFile)
+
+  const [isPosterViewerOpen, setIsPosterViewerOpen] = useState(false)
 
   const qaDuration = CRUELTY_CONFIG[crueltyLevel].qaDurationMinutes
 
@@ -300,7 +303,10 @@ export default function PitchPage() {
           {/* Bottom Left: Poster */}
           <div className="pointer-events-auto">
             {uploadedFile && showPitchOrQA && (
-              <PosterThumbnail uploadedFile={uploadedFile} />
+              <PosterThumbnail
+                uploadedFile={uploadedFile}
+                onClick={() => setIsPosterViewerOpen(true)}
+              />
             )}
           </div>
 
@@ -324,6 +330,13 @@ export default function PitchPage() {
           </p>
         </div>
       )}
+
+      {/* Poster Viewer Panel */}
+      <PosterViewer
+        uploadedFile={uploadedFile}
+        isOpen={isPosterViewerOpen}
+        onClose={() => setIsPosterViewerOpen(false)}
+      />
     </div>
   )
 }

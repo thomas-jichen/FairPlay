@@ -1,8 +1,12 @@
-export default function PosterThumbnail({ uploadedFile }) {
+export default function PosterThumbnail({ uploadedFile, onClick }) {
   if (!uploadedFile) return null
 
   return (
-    <div className="group relative">
+    <button
+      onClick={onClick}
+      className="group relative text-left outline-none transition-all duration-300 focus:ring-2 focus:ring-white/50 rounded-2xl"
+      title="Click to view full poster"
+    >
       {uploadedFile.preview ? (
         <img
           src={uploadedFile.preview}
@@ -22,6 +26,13 @@ export default function PosterThumbnail({ uploadedFile }) {
           </span>
         </div>
       )}
-    </div>
+
+      {/* Expand Icon Overlay on Hover */}
+      <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-full bg-black/50 backdrop-blur-md p-1.5 shadow-sm text-white border border-white/20">
+        <svg fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
+        </svg>
+      </div>
+    </button>
   )
 }
