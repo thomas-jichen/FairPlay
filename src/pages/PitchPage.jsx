@@ -26,6 +26,8 @@ import TranscriptOverlay from '../components/pitch/TranscriptOverlay'
 import JudgeQuestionBar from '../components/pitch/JudgeQuestionBar'
 import PosterThumbnail from '../components/pitch/PosterThumbnail'
 import PosterViewer from '../components/pitch/PosterViewer'
+import TeleprompterButton from '../components/pitch/TeleprompterButton'
+import TeleprompterViewer from '../components/pitch/TeleprompterViewer'
 import ReviewScreen from '../components/review/ReviewScreen'
 
 export default function PitchPage() {
@@ -44,8 +46,10 @@ export default function PitchPage() {
   const isInterrupted = useSessionStore((s) => s.isInterrupted)
   const currentJudgeQuestion = useSessionStore((s) => s.currentJudgeQuestion)
   const uploadedFile = useSessionStore((s) => s.uploadedFile)
+  const abstractText = useSessionStore((s) => s.abstractText)
 
   const [isPosterViewerOpen, setIsPosterViewerOpen] = useState(false)
+  const [isTeleprompterOpen, setIsTeleprompterOpen] = useState(false)
 
   const qaDuration = CRUELTY_CONFIG[crueltyLevel].qaDurationMinutes
 
@@ -298,15 +302,18 @@ export default function PitchPage() {
           )}
         </div>
 
-        {/* Bottom layer: Transcript and Poster */}
+        {/* Bottom layer: Transcript, Poster, and Teleprompter */}
         <div className="w-full max-w-7xl mx-auto flex justify-between items-end gap-6 pointer-events-none">
-          {/* Bottom Left: Poster */}
-          <div className="pointer-events-auto">
-            {uploadedFile && showPitchOrQA && (
+
+          {/* Bottom Left: Poster Thumbnail (140px wide to balance right side) */}
+          <div className="w-[140px] shrink-0 pointer-events-auto flex items-end">
+            {uploadedFile && showPitchOrQA ? (
               <PosterThumbnail
                 uploadedFile={uploadedFile}
                 onClick={() => setIsPosterViewerOpen(true)}
               />
+            ) : (
+              <div className="h-[100px] w-full" /> /* Invisible spacer if no poster */
             )}
           </div>
 
@@ -317,8 +324,12 @@ export default function PitchPage() {
             )}
           </div>
 
-          {/* Spacer for right-alignment balance */}
-          <div className="w-[180px] hidden md:block"></div>
+          {/* Bottom Right: Teleprompter Button */}
+          <div className="w-[140px] shrink-0 flex justify-end pointer-events-auto pb-4 md:pb-0">
+            {abstractText && showPitchOrQA && (
+              <TeleprompterButton onClick={() => setIsTeleprompterOpen(true)} />
+            )}
+          </div>
         </div>
 
       </div>
@@ -336,6 +347,13 @@ export default function PitchPage() {
         uploadedFile={uploadedFile}
         isOpen={isPosterViewerOpen}
         onClose={() => setIsPosterViewerOpen(false)}
+      />
+
+      {/* Teleprompter Viewer Panel */}
+      <TeleprompterViewer
+        text={abstractText}
+        isOpen={isTeleprompterOpen}
+        onClose={() => setIsTeleprompterOpen(false)}
       />
     </div>
   )
