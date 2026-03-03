@@ -38,7 +38,7 @@ export default function ConversationLog({ conversationHistory }) {
                   : 'bg-black text-white rounded-tr-sm shadow-md'
                   }`}
               >
-                <p className="text-sm leading-relaxed font-medium">{msg.text}</p>
+                <p className="type-body text-sm leading-relaxed">{msg.text}</p>
               </div>
             </div>
           )

@@ -28,7 +28,7 @@ export default function ActionBar({ evaluationResult, recordedBlob, category, cr
   const handleShareResults = useCallback(async () => {
     if (!evaluationResult) return
     const text = [
-      `FairPlay Pitch Practice — Score: ${evaluationResult.overallScore}/100`,
+      `FAIRPLAY Pitch Practice — Score: ${evaluationResult.overallScore}/100`,
       '',
       'Key Strengths:',
       ...evaluationResult.feedback.keyStrengths.map((s) => `  - ${s}`),

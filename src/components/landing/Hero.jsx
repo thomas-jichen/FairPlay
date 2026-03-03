@@ -20,7 +20,7 @@ export default function Hero() {
           variants={fadeInUp}
           className="type-display text-4xl md:text-5xl lg:text-6xl text-text-primary whitespace-nowrap"
         >
-          FairPlay: Sci-Fair Playground
+          FAIRPLAY: Sci-Fair Playground
         </motion.h1>
 
         {/* Subheading */}
@@ -33,15 +33,14 @@ export default function Hero() {
 
         {/* CTA */}
         <motion.div variants={fadeInUp} className="mt-10">
-          <Link
-            to="/app"
-            className="type-cta inline-flex items-center gap-3 rounded-full glass-cta px-10 py-4 text-base"
+          <a
+            href="/app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="type-cta rounded-full glossy-black-cta px-5 py-2.5 text-sm"
           >
-            Try FairPlay
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-            </svg>
-          </Link>
+            TRY FAIRPLAY
+          </a>
         </motion.div>
 
         {/* Sub-CTA copy */}

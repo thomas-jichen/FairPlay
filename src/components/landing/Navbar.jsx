@@ -18,29 +18,31 @@ export default function Navbar() {
             onClick={() => scrollTo('top')}
             className="type-wordmark text-lg text-text-primary"
           >
-            FairPlay
+            FAIRPLAY
           </button>
           <div className="flex items-center gap-6">
             <button
               onClick={() => scrollTo('team')}
-              className="text-sm font-light text-text-secondary hover:text-text-primary transition-colors duration-300" style={{ fontFamily: '"Montserrat", sans-serif' }}
+              className="text-sm font-light text-text-secondary hover:text-text-primary transition-colors duration-300" style={{ fontFamily: '"Söhne", "Helvetica Neue", -apple-system, sans-serif' }}
             >
               Team
             </button>
             <button
               onClick={() => scrollTo('features')}
-              className="text-sm font-light text-text-secondary hover:text-text-primary transition-colors duration-300" style={{ fontFamily: '"Montserrat", sans-serif' }}
+              className="text-sm font-light text-text-secondary hover:text-text-primary transition-colors duration-300" style={{ fontFamily: '"Söhne", "Helvetica Neue", -apple-system, sans-serif' }}
             >
               Features
             </button>
           </div>
         </div>
-        <Link
-          to="/app"
-          className="type-cta rounded-full glass-cta px-5 py-2.5 text-sm"
+        <a
+          href="/app"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="type-cta rounded-full glossy-black-cta px-5 py-2.5 text-sm"
         >
-          Try FairPlay
-        </Link>
+          TRY FAIRPLAY
+        </a>
       </div>
     </nav>
   )

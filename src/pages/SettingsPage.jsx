@@ -57,10 +57,10 @@ export default function SettingsPage() {
       >
         {/* Header */}
         <motion.div variants={itemVariants} className="space-y-2 mb-4 px-2">
-          <h1 className="text-4xl font-medium tracking-tight text-text-primary">
-            FairPlay
+          <h1 className="type-display text-4xl tracking-tight text-text-primary">
+            FAIRPLAY
           </h1>
-          <p className="text-lg text-text-secondary tracking-tight">
+          <p className="type-body text-lg text-text-secondary">
             ISEF Pitch Practice
           </p>
         </motion.div>

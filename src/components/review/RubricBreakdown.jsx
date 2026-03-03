@@ -50,7 +50,7 @@ function SectionRow({ section }) {
         <div className="overflow-hidden">
           <div className="pt-6 border-t border-black/5">
             <h4 className="text-[10px] font-bold tracking-widest text-text-muted uppercase mb-3">Justification</h4>
-            <p className="text-sm text-text-secondary leading-relaxed bg-white/40 rounded-2xl p-5 border border-white/50 shadow-sm font-medium">
+            <p className="type-body text-sm text-text-secondary leading-relaxed bg-white/40 rounded-2xl p-5 border border-white/50 shadow-sm">
               {section.justification}
             </p>
           </div>

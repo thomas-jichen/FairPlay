@@ -32,7 +32,7 @@ function LoadingState() {
       <div className="relative flex items-center justify-center">
         <div className="relative h-12 w-12 rounded-full border-4 border-black/5 border-t-black animate-spin" />
       </div>
-      <p className="text-base font-medium tracking-tight text-text-secondary animate-pulse">
+      <p className="type-body text-base text-text-secondary animate-pulse">
         {LOADING_MESSAGES[messageIndex]}
       </p>
     </div>
@@ -128,7 +128,7 @@ export default function ReviewScreen() {
             </svg>
           </div>
           <p className="text-xl font-semibold text-text-primary mb-2 tracking-tight">Evaluation Failed</p>
-          <p className="text-sm text-text-secondary leading-relaxed mb-8">{error}</p>
+          <p className="type-body text-sm text-text-secondary leading-relaxed mb-8">{error}</p>
           <button
             onClick={() => {
               setError(null)
@@ -172,7 +172,7 @@ export default function ReviewScreen() {
             </div>
 
             <div className="relative z-10 field-justification">
-              <p className="text-base text-text-secondary leading-relaxed font-medium">
+              <p className="type-body text-base text-text-secondary leading-relaxed">
                 {evaluationResult.judgeImpression}
               </p>
             </div>

@@ -21,8 +21,9 @@ export default function FooterCTA() {
         </p>
         <Link
           to="/privacy"
+          onClick={() => window.scrollTo(0, 0)}
           className="inline-flex items-center gap-2 text-xs font-medium text-text-muted hover:text-text-primary transition-colors duration-300"
-          style={{ letterSpacing: '0.04em', fontFamily: '"Montserrat", sans-serif' }}
+          style={{ letterSpacing: '0.04em', fontFamily: '"Söhne", "Helvetica Neue", -apple-system, sans-serif' }}
         >
           Read our full IP & Privacy Policy
           <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -34,12 +35,12 @@ export default function FooterCTA() {
       {/* Footer bar */}
       <div className="glass-footer py-3">
         <div className="max-w-7xl mx-auto px-12 flex items-center justify-between">
-          <span className="type-wordmark text-sm text-text-primary">FairPlay</span>
+          <span className="type-wordmark text-sm text-text-primary">FAIRPLAY</span>
           <div className="flex items-center gap-4">
-            <Link to="/privacy" className="text-xs font-light text-text-muted hover:text-text-primary transition-colors duration-300" style={{ letterSpacing: '0.04em' }}>
+            <Link to="/privacy" onClick={() => window.scrollTo(0, 0)} className="text-xs font-light text-text-muted hover:text-text-primary transition-colors duration-300" style={{ letterSpacing: '0.04em' }}>
               Privacy Policy
             </Link>
-            <span className="text-xs font-light text-text-muted" style={{ letterSpacing: '0.04em' }}>&copy; {new Date().getFullYear()} FairPlay.</span>
+            <span className="text-xs font-light text-text-muted" style={{ letterSpacing: '0.04em' }}>&copy; {new Date().getFullYear()} FAIRPLAY.</span>
           </div>
         </div>
       </div>

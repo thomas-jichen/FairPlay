@@ -49,27 +49,28 @@
     text-rendering: optimizeLegibility;
   }
 
-  /* ── Söhne Typographic System ── */
+  /* ── Typographic System ── */
 
-  /* Display — hero headlines, thin Montserrat */
+  /* Display — hero headlines, bold Söhne */
   .type-display {
-    font-family: "Montserrat", sans-serif;
-    font-weight: 300;
+    font-family: "Söhne", "Helvetica Neue", -apple-system, sans-serif;
+    font-weight: 700;
     letter-spacing: -0.035em;
     line-height: 0.92;
     font-feature-settings: "ss01", "ss02", "liga", "kern";
   }
 
-  /* Title — section headings, light Montserrat */
+  /* Title — section headings, semibold Söhne */
   .type-title {
-    font-family: "Montserrat", sans-serif;
-    font-weight: 400;
+    font-family: "Söhne", "Helvetica Neue", -apple-system, sans-serif;
+    font-weight: 600;
     letter-spacing: -0.025em;
     line-height: 1.1;
   }
 
   /* Overline — category labels above sections, wide-spaced, lightweight */
   .type-overline {
+    font-family: "Söhne", "Helvetica Neue", -apple-system, sans-serif;
     font-weight: 500;
     letter-spacing: 0.18em;
     text-transform: uppercase;
@@ -78,14 +79,14 @@
   }
 
   .type-body {
-    font-family: "Noto Serif", Georgia, "Times New Roman", serif;
+    font-family: "Copernicus", "Source Serif 4", Georgia, "Times New Roman", serif;
     font-weight: 400;
     letter-spacing: -0.005em;
     line-height: 1.7;
   }
 
   .type-quote {
-    font-family: "Noto Serif", Georgia, "Times New Roman", serif;
+    font-family: "Copernicus", "Source Serif 4", Georgia, "Times New Roman", serif;
     font-weight: 300;
     letter-spacing: 0.01em;
     line-height: 1.75;
@@ -94,6 +95,7 @@
 
   /* Caption — small labels, numerals, metrics */
   .type-caption {
+    font-family: "Söhne", "Helvetica Neue", -apple-system, sans-serif;
     font-weight: 500;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -101,17 +103,17 @@
     line-height: 1;
   }
 
-  /* CTA — button text, medium with open tracking */
+  /* CTA — button text, medium Söhne with open tracking */
   .type-cta {
-    font-family: "Montserrat", sans-serif;
-    font-weight: 400;
+    font-family: "Söhne", "Helvetica Neue", -apple-system, sans-serif;
+    font-weight: 500;
     letter-spacing: 0.04em;
   }
 
-  /* Wordmark — nav brand, light Montserrat */
+  /* Wordmark — nav brand, bold Söhne */
   .type-wordmark {
-    font-family: "Montserrat", sans-serif;
-    font-weight: 400;
+    font-family: "Söhne", "Helvetica Neue", -apple-system, sans-serif;
+    font-weight: 700;
     letter-spacing: -0.02em;
   }
 
@@ -296,6 +298,43 @@
   }
 
   .glass-cta:active {
+    transform: scale(0.98);
+  }
+
+  .glossy-black-cta {
+    background: linear-gradient(165deg,
+        rgba(60, 60, 60, 0.95) 0%,
+        rgba(20, 20, 20, 0.98) 40%,
+        rgba(0, 0, 0, 0.98) 100%);
+    backdrop-filter: blur(20px) saturate(1.4);
+    -webkit-backdrop-filter: blur(20px) saturate(1.4);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.35),
+      0 2px 8px rgba(0, 0, 0, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.35),
+      inset 0 2px 4px rgba(255, 255, 255, 0.10),
+      inset 0 0 24px rgba(255, 255, 255, 0.06);
+    color: #ffffff;
+    transition:
+      box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .glossy-black-cta:hover {
+    border-color: rgba(255, 255, 255, 0.30);
+    box-shadow:
+      0 12px 40px rgba(0, 0, 0, 0.40),
+      0 4px 12px rgba(0, 0, 0, 0.30),
+      inset 0 1px 0 rgba(255, 255, 255, 0.45),
+      inset 0 2px 6px rgba(255, 255, 255, 0.12),
+      inset 0 0 30px rgba(255, 255, 255, 0.08),
+      0 0 0 1px rgba(255, 255, 255, 0.12);
+    transform: scale(1.02);
+  }
+
+  .glossy-black-cta:active {
     transform: scale(0.98);
   }
 

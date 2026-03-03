@@ -49,9 +49,9 @@ export default function FeedbackCards({ feedback }) {
         >
           <ul className="space-y-4">
             {feedback.keyStrengths.map((s, i) => (
-              <li key={i} className="flex items-start gap-3 text-base text-text-secondary font-medium">
+              <li key={i} className="flex items-start gap-3 text-base text-text-secondary">
                 <span className="shrink-0 mt-2 h-2 w-2 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500/20" />
-                <span className="leading-relaxed">{s}</span>
+                <span className="type-body leading-relaxed">{s}</span>
               </li>
             ))}
           </ul>
@@ -64,9 +64,9 @@ export default function FeedbackCards({ feedback }) {
         >
           <ul className="space-y-4">
             {feedback.areasForImprovement.map((a, i) => (
-              <li key={i} className="flex items-start gap-3 text-base text-text-secondary font-medium">
+              <li key={i} className="flex items-start gap-3 text-base text-text-secondary">
                 <span className="shrink-0 mt-2 h-2 w-2 rounded-full bg-amber-500 shadow-sm shadow-amber-500/20" />
-                <span className="leading-relaxed">{a}</span>
+                <span className="type-body leading-relaxed">{a}</span>
               </li>
             ))}
           </ul>
@@ -75,19 +75,19 @@ export default function FeedbackCards({ feedback }) {
 
       <div className="space-y-6">
         <FeedbackCard title="Pitch Content" defaultExpanded={false}>
-          <p className="text-base text-text-secondary leading-relaxed font-medium bg-white/40 rounded-2xl p-5 border border-white/50 shadow-sm">{feedback.pitchContent}</p>
+          <p className="type-body text-base text-text-secondary leading-relaxed bg-white/40 rounded-2xl p-5 border border-white/50 shadow-sm">{feedback.pitchContent}</p>
         </FeedbackCard>
 
         <FeedbackCard title="Q&A Performance" defaultExpanded={false}>
-          <p className="text-base text-text-secondary leading-relaxed font-medium bg-white/40 rounded-2xl p-5 border border-white/50 shadow-sm">{feedback.qaPerformance}</p>
+          <p className="type-body text-base text-text-secondary leading-relaxed bg-white/40 rounded-2xl p-5 border border-white/50 shadow-sm">{feedback.qaPerformance}</p>
         </FeedbackCard>
 
         <FeedbackCard title="Presentation Skills" defaultExpanded={false}>
-          <p className="text-base text-text-secondary leading-relaxed font-medium bg-white/40 rounded-2xl p-5 border border-white/50 shadow-sm">{feedback.presentationSkills}</p>
+          <p className="type-body text-base text-text-secondary leading-relaxed bg-white/40 rounded-2xl p-5 border border-white/50 shadow-sm">{feedback.presentationSkills}</p>
         </FeedbackCard>
 
         <FeedbackCard title="Suggested Practice Focus" defaultExpanded={false}>
-          <p className="text-base text-text-secondary leading-relaxed font-medium bg-white/40 rounded-2xl p-5 border border-white/50 shadow-sm">{feedback.suggestedPracticeFocus}</p>
+          <p className="type-body text-base text-text-secondary leading-relaxed bg-white/40 rounded-2xl p-5 border border-white/50 shadow-sm">{feedback.suggestedPracticeFocus}</p>
         </FeedbackCard>
       </div>
     </div>

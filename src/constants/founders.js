@@ -17,4 +17,4 @@ export const FOUNDERS = [
 ]
 
 export const FOUNDERS_QUOTE =
-  'We built FairPlay to give you the exact preparation insights we gained from competing at the biggest stage, now delivered through AI judges fine-tuned by us.'
+  'We built FAIRPLAY to give you the exact preparation insights we gained from competing at the biggest stage, now delivered through AI judges fine-tuned by us.'

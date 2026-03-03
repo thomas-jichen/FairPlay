@@ -38,8 +38,8 @@ export default function ReportMock() {
                             <div className="w-3 h-3 rounded-full bg-amber-400/60" />
                             <div className="w-3 h-3 rounded-full bg-emerald-400/60" />
                         </div>
-                        <span className="text-xs font-medium text-text-muted tracking-wide ml-2" style={{ fontFamily: '"Montserrat", sans-serif' }}>
-                            FairPlay — Session Report
+                        <span className="text-xs font-medium text-text-muted tracking-wide ml-2" style={{ fontFamily: '"Söhne", "Helvetica Neue", -apple-system, sans-serif' }}>
+                            FAIRPLAY — Session Report
                         </span>
                     </div>
                     <div className="flex items-center gap-2">
@@ -76,7 +76,7 @@ export default function ReportMock() {
                                     </div>
                                 </div>
                                 <div>
-                                    <h3 className="text-lg font-medium text-text-primary tracking-tight" style={{ fontFamily: '"Montserrat", sans-serif' }}>
+                                    <h3 className="text-lg font-medium text-text-primary tracking-tight" style={{ fontFamily: '"Söhne", "Helvetica Neue", -apple-system, sans-serif' }}>
                                         Overall Score
                                     </h3>
                                     <p className="text-sm text-text-secondary mt-0.5">
@@ -95,7 +95,7 @@ export default function ReportMock() {
 
                             {/* Rubric Breakdown */}
                             <div className="glass-panel-inner rounded-2xl p-5 space-y-3.5">
-                                <h4 className="text-sm font-medium text-text-primary tracking-tight" style={{ fontFamily: '"Montserrat", sans-serif' }}>
+                                <h4 className="text-sm font-medium text-text-primary tracking-tight" style={{ fontFamily: '"Söhne", "Helvetica Neue", -apple-system, sans-serif' }}>
                                     Rubric Breakdown
                                 </h4>
                                 {rubricScores.map((item) => (
@@ -142,7 +142,7 @@ export default function ReportMock() {
 
                             {/* System Verdict */}
                             <div className="glass-panel-inner rounded-2xl p-5">
-                                <h4 className="text-sm font-medium text-text-primary tracking-tight mb-3" style={{ fontFamily: '"Montserrat", sans-serif' }}>
+                                <h4 className="text-sm font-medium text-text-primary tracking-tight mb-3" style={{ fontFamily: '"Söhne", "Helvetica Neue", -apple-system, sans-serif' }}>
                                     System Verdict
                                 </h4>
                                 <p className="text-xs text-text-secondary leading-relaxed">
@@ -176,7 +176,7 @@ export default function ReportMock() {
 
                             {/* Real-time Metrics */}
                             <div className="glass-panel-inner rounded-2xl p-4">
-                                <h4 className="text-xs font-medium text-text-primary tracking-tight mb-3" style={{ fontFamily: '"Montserrat", sans-serif' }}>
+                                <h4 className="text-xs font-medium text-text-primary tracking-tight mb-3" style={{ fontFamily: '"Söhne", "Helvetica Neue", -apple-system, sans-serif' }}>
                                     Real-time Metrics
                                 </h4>
                                 <div className="grid grid-cols-3 gap-2">
@@ -195,7 +195,7 @@ export default function ReportMock() {
 
                             {/* Conversation Log */}
                             <div className="glass-panel-inner rounded-2xl p-4">
-                                <h4 className="text-xs font-medium text-text-primary tracking-tight mb-3" style={{ fontFamily: '"Montserrat", sans-serif' }}>
+                                <h4 className="text-xs font-medium text-text-primary tracking-tight mb-3" style={{ fontFamily: '"Söhne", "Helvetica Neue", -apple-system, sans-serif' }}>
                                     Q&A Transcript
                                 </h4>
                                 <div className="space-y-3">

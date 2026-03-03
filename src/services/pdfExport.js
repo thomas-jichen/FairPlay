@@ -40,7 +40,7 @@ export function generatePdfReport({ evaluationResult, category, crueltyLevel }) 
   // Title
   doc.setFontSize(22)
   doc.setFont('helvetica', 'bold')
-  doc.text('FairPlay Session Report', pageWidth / 2, y, { align: 'center' })
+  doc.text('FAIRPLAY Session Report', pageWidth / 2, y, { align: 'center' })
   y += 10
 
   // Meta
