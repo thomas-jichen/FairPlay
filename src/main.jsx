@@ -6,6 +6,7 @@ import LandingLayout from './LandingLayout'
 import LandingPage from './pages/LandingPage'
 import SettingsPage from './pages/SettingsPage'
 import PitchPage from './pages/PitchPage'
+import PrivacyPage from './pages/PrivacyPage'
 import './index.css'
 
 const router = createBrowserRouter([
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <LandingPage /> },
     ],
+  },
+  {
+    path: '/privacy',
+    element: <PrivacyPage />,
   },
   {
     path: '/app',
