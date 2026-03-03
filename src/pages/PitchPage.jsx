@@ -252,6 +252,7 @@ export default function PitchPage() {
     <div className="relative h-screen w-screen overflow-hidden bg-black animate-fade-in font-sans">
       <WebcamFeed
         videoRef={webcam.videoRef}
+        streamRef={webcam.streamRef}
         isActive={webcam.isActive}
         error={webcam.error}
         onRequestCamera={webcam.startCamera}
