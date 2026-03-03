@@ -43,7 +43,8 @@ export default function WebcamFeed({ videoRef, isActive, error, onRequestCamera 
       autoPlay
       playsInline
       muted
-      className="h-full w-full object-cover"
+      onLoadedMetadata={(e) => e.target.play().catch(() => { })}
+      className="absolute inset-0 h-full w-full object-cover z-0"
       style={{ transform: 'scaleX(-1)' }}
     />
   )
