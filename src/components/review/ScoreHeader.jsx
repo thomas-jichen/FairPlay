@@ -79,7 +79,7 @@ export default function ScoreHeader({ overallScore, trackType, category, cruelty
 
         <div className="flex flex-col items-center md:items-start text-center md:text-left relative z-10">
           <h1 className="type-display text-4xl md:text-5xl text-text-primary tracking-tight mb-5">
-            Session Review
+            SESSION REVIEW
           </h1>
 
           <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">

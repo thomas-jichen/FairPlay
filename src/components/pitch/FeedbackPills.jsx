@@ -8,9 +8,9 @@ function Pill({ label, color }) {
   const style = COLOR_STYLES[color] || COLOR_STYLES.green
 
   return (
-    <div className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-bold tracking-wider transition-all duration-700 ease-out ${style.bg} ${style.border} ${style.shadow}`}>
+    <div className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-bold uppercase tracking-widest transition-all duration-700 ease-out ${style.bg} ${style.border} ${style.shadow}`} style={{ fontFamily: '"Söhne", "Helvetica Neue", -apple-system, sans-serif' }}>
       <div className={`w-1.5 h-1.5 rounded-full animate-pulse transition-colors duration-700 bg-current ${style.text}`} />
-      <span className={`transition-colors duration-700 ${style.text}`}>
+      <span className={`transition-colors duration-700 text-[10px] ${style.text}`}>
         {label}
       </span>
     </div>
