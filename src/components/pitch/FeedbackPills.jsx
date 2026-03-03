@@ -20,9 +20,9 @@ function Pill({ label, color }) {
 export default function FeedbackPills({ confidence, engagement, approachability }) {
   return (
     <div className="flex items-center gap-2">
-      <Pill label="CONF" color={confidence.color} />
-      <Pill label="ENG" color={engagement.color} />
-      <Pill label="APP" color={approachability.color} />
+      <Pill label="Confidence" color={confidence.color} />
+      <Pill label="Engagement" color={engagement.color} />
+      <Pill label="Approachability" color={approachability.color} />
     </div>
   )
 }
