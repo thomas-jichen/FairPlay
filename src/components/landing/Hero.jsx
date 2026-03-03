@@ -27,7 +27,7 @@ export default function Hero() {
           variants={fadeInUp}
           className="type-body text-lg md:text-xl text-text-secondary max-w-2xl mx-auto mt-8"
         >
-          Democratizing science fair winning strategies with real-time multimodal AI coaches tuned by Regeneron ISEF grand award winners.
+          Democratizing winning science fair strategies with real-time multimodal AI coaches tuned by ISEF Grand Award Winners.
         </motion.p>
 
         {/* CTA */}
@@ -48,7 +48,7 @@ export default function Hero() {
           variants={fadeInUp}
           className="type-body text-base text-text-muted max-w-2xl mx-auto mt-10"
         >
-          Realistic judging simulations preparing you to be an ISEF winner, without the cost of science fair coaches or years of competition experience.
+          Realistic judging simulations preparing you to be an ISEF winner, without the cost of coaching or years of competition experience.
         </motion.p>
       </motion.div>
     </section>
