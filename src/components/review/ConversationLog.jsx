@@ -3,7 +3,7 @@ export default function ConversationLog({ conversationHistory }) {
     return (
       <div className="glass-panel rounded-3xl p-8 space-y-6 relative">
         <div className="border-b border-black/[0.05] pb-4">
-          <h2 className="text-lg font-medium tracking-tight text-text-primary">Q&A Transcript</h2>
+          <h2 className="type-overline text-text-primary">Q&A Transcript</h2>
         </div>
         <div className="text-center py-10">
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-white/60 border border-white mb-5 shadow-sm">
@@ -20,7 +20,7 @@ export default function ConversationLog({ conversationHistory }) {
   return (
     <div className="glass-panel rounded-3xl p-8 space-y-6 relative overflow-hidden">
       <div className="border-b border-black/[0.05] pb-4 relative z-20">
-        <h2 className="text-lg font-medium tracking-tight text-text-primary">Q&A Transcript</h2>
+        <h2 className="type-overline text-text-primary">Q&A Transcript</h2>
       </div>
 
       <div className="space-y-6 max-h-[500px] overflow-y-auto pr-4 pb-8 scrollbar-hide relative z-0">

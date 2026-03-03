@@ -20,7 +20,7 @@ function SectionRow({ section }) {
             {section.section}
           </div>
           <div>
-            <span className="text-base font-semibold text-text-primary tracking-tight transition-colors">{section.title}</span>
+            <span className="type-caption text-text-primary transition-colors">{section.title}</span>
             <div className="mt-1 flex items-center gap-2">
               <span className="text-xs font-medium text-text-muted uppercase tracking-wider">Score:</span>
               <span className={`text-sm font-bold tabular-nums tracking-tight ${colorStyles.text}`}>
@@ -64,7 +64,7 @@ export default function RubricBreakdown({ rubricScores }) {
   return (
     <div className="glass-panel rounded-3xl p-8 space-y-6">
       <div className="border-b border-black/[0.05] pb-4">
-        <h2 className="text-lg font-medium tracking-tight text-text-primary">Category Breakdown</h2>
+        <h2 className="type-overline text-text-primary">Category Breakdown</h2>
       </div>
       <div className="space-y-3">
         {rubricScores.map((section) => (

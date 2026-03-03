@@ -76,7 +76,7 @@ export default function ReportMock() {
                                     </div>
                                 </div>
                                 <div>
-                                    <h3 className="text-lg font-medium text-text-primary tracking-tight" style={{ fontFamily: '"Söhne", "Helvetica Neue", -apple-system, sans-serif' }}>
+                                    <h3 className="type-overline text-text-primary">
                                         Overall Score
                                     </h3>
                                     <p className="text-sm text-text-secondary mt-0.5">
@@ -95,7 +95,7 @@ export default function ReportMock() {
 
                             {/* Rubric Breakdown */}
                             <div className="glass-panel-inner rounded-2xl p-5 space-y-3.5">
-                                <h4 className="text-sm font-medium text-text-primary tracking-tight" style={{ fontFamily: '"Söhne", "Helvetica Neue", -apple-system, sans-serif' }}>
+                                <h4 className="type-caption text-text-primary">
                                     Rubric Breakdown
                                 </h4>
                                 {rubricScores.map((item) => (
@@ -133,7 +133,7 @@ export default function ReportMock() {
                                                     </svg>
                                                 )}
                                             </div>
-                                            <span className="text-xs font-medium text-text-primary">{item.title}</span>
+                                            <span className="type-caption text-text-primary">{item.title}</span>
                                         </div>
                                         <p className="type-body text-[11px] text-text-secondary leading-relaxed">{item.text}</p>
                                     </div>
@@ -142,7 +142,7 @@ export default function ReportMock() {
 
                             {/* System Verdict */}
                             <div className="glass-panel-inner rounded-2xl p-5">
-                                <h4 className="text-sm font-medium text-text-primary tracking-tight mb-3" style={{ fontFamily: '"Söhne", "Helvetica Neue", -apple-system, sans-serif' }}>
+                                <h4 className="type-caption text-text-primary mb-3">
                                     System Verdict
                                 </h4>
                                 <p className="type-body text-xs text-text-secondary leading-relaxed">
@@ -176,7 +176,7 @@ export default function ReportMock() {
 
                             {/* Real-time Metrics */}
                             <div className="glass-panel-inner rounded-2xl p-4">
-                                <h4 className="text-xs font-medium text-text-primary tracking-tight mb-3" style={{ fontFamily: '"Söhne", "Helvetica Neue", -apple-system, sans-serif' }}>
+                                <h4 className="type-caption text-text-primary mb-3">
                                     Real-time Metrics
                                 </h4>
                                 <div className="grid grid-cols-3 gap-2">
@@ -195,7 +195,7 @@ export default function ReportMock() {
 
                             {/* Conversation Log */}
                             <div className="glass-panel-inner rounded-2xl p-4">
-                                <h4 className="text-xs font-medium text-text-primary tracking-tight mb-3" style={{ fontFamily: '"Söhne", "Helvetica Neue", -apple-system, sans-serif' }}>
+                                <h4 className="type-caption text-text-primary mb-3">
                                     Q&A Transcript
                                 </h4>
                                 <div className="space-y-3">

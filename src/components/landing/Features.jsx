@@ -183,7 +183,7 @@ function RubricMock() {
           </div>
         </div>
         <div>
-          <p className="type-title text-xs text-text-primary">Overall Score</p>
+          <p className="type-overline text-text-primary">Overall Score</p>
           <p className="type-body text-[11px] text-text-secondary mt-0.5">Based on ISEF rubric</p>
         </div>
       </div>

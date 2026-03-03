@@ -68,7 +68,7 @@ export default function SettingsPage() {
         {/* Panel 1: Your Project */}
         <motion.div variants={itemVariants} className="glass-panel rounded-3xl p-8 space-y-8">
           <div className="border-b border-black-[0.05] pb-4">
-            <h2 className="text-lg font-medium tracking-tight text-text-primary">Your Project</h2>
+            <h2 className="type-overline text-text-primary">Your Project</h2>
           </div>
 
           <div className="space-y-8">
@@ -96,7 +96,7 @@ export default function SettingsPage() {
         {/* Panel 2: Judge Behavior */}
         <motion.div variants={itemVariants} className="glass-panel rounded-3xl p-8 space-y-8">
           <div className="border-b border-black-[0.05] pb-4">
-            <h2 className="text-lg font-medium tracking-tight text-text-primary">Judge Behavior</h2>
+            <h2 className="type-overline text-text-primary">Judge Behavior</h2>
           </div>
 
           <div className="space-y-8">
@@ -108,7 +108,7 @@ export default function SettingsPage() {
         {/* Panel 3: Session Timing */}
         <motion.div variants={itemVariants} className="glass-panel rounded-3xl p-8 space-y-8">
           <div className="border-b border-black-[0.05] pb-4">
-            <h2 className="text-lg font-medium tracking-tight text-text-primary">Session Timing</h2>
+            <h2 className="type-overline text-text-primary">Session Timing</h2>
           </div>
 
           <div className="space-y-10">

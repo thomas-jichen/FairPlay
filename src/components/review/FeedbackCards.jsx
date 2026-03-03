@@ -15,7 +15,7 @@ function FeedbackCard({ title, children, defaultExpanded = false, icon }) {
               {icon}
             </div>
           )}
-          <span className="text-lg font-semibold text-text-primary tracking-tight transition-colors">{title}</span>
+          <span className="type-caption text-text-primary transition-colors">{title}</span>
         </div>
         <div className={`flex h-10 w-10 items-center justify-center rounded-full bg-white/50 border border-white/60 shadow-sm transition-transform duration-300 ${expanded ? 'rotate-180 bg-white' : ''}`}>
           <svg className="h-5 w-5 text-text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -39,7 +39,7 @@ export default function FeedbackCards({ feedback }) {
   return (
     <div className="glass-panel rounded-3xl p-8 space-y-6">
       <div className="border-b border-black/[0.05] pb-4">
-        <h2 className="text-lg font-medium tracking-tight text-text-primary">Detailed Insights</h2>
+        <h2 className="type-overline text-text-primary">Detailed Insights</h2>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <FeedbackCard
