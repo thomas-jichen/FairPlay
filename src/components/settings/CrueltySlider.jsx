@@ -39,7 +39,7 @@ export default function CrueltySlider({ value, onChange }) {
       </div>
 
       <div className="mt-2 rounded-2xl bg-black/[0.02] border border-black/[0.06] p-4 transition-all duration-300 flex justify-between items-center group-hover:bg-black/[0.04]">
-        <span className="text-sm text-text-secondary tracking-tight">Expected Q&A Duration</span>
+        <span className="type-body text-sm text-text-secondary tracking-tight">Expected Q&A Duration</span>
         <span className="tabular-nums text-sm font-semibold text-text-primary">{config.qaDurationMinutes} min</span>
       </div>
     </div>

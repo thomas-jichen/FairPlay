@@ -78,18 +78,18 @@ export default function ScoreHeader({ overallScore, trackType, category, cruelty
         </div>
 
         <div className="flex flex-col items-center md:items-start text-center md:text-left relative z-10">
-          <h1 className="text-4xl md:text-5xl font-semibold text-text-primary tracking-tight mb-5">
+          <h1 className="type-display text-4xl md:text-5xl text-text-primary tracking-tight mb-5">
             Session Review
           </h1>
 
           <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
-            <span className="glass-pill px-5 py-2 text-sm font-semibold tracking-tight text-text-primary shadow-sm border-white bg-white/60">
+            <span className="glass-pill px-5 py-2 type-caption text-text-primary shadow-sm border-white bg-white/60">
               {categoryLabel}
             </span>
-            <span className="glass-pill px-5 py-2 text-sm font-medium tracking-tight text-text-secondary border-white/40">
+            <span className="glass-pill px-5 py-2 type-caption text-text-secondary border-white/40">
               {trackType === 'science' ? 'Science' : 'Engineering'} Track
             </span>
-            <span className="glass-pill px-5 py-2 text-sm font-medium tracking-tight text-text-secondary border-white/40">
+            <span className="glass-pill px-5 py-2 type-caption text-text-secondary border-white/40">
               {judgeLabel} Judge
             </span>
           </div>

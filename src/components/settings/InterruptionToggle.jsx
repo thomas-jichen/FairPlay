@@ -5,7 +5,7 @@ export default function InterruptionToggle({ enabled, onChange }) {
         <label className="text-sm font-medium text-text-primary tracking-tight">
           Interruption Style
         </label>
-        <p className="text-xs text-text-muted">
+        <p className="type-body text-xs text-text-muted mt-1">
           Decide if the judge waits until the Q&A phase or interrupts mid-pitch.
         </p>
       </div>

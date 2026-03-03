@@ -101,7 +101,7 @@ export default function ReportMock() {
                                 {rubricScores.map((item) => (
                                     <div key={item.label}>
                                         <div className="flex items-center justify-between mb-1">
-                                            <span className="text-xs text-text-secondary" style={{ letterSpacing: '-0.01em' }}>{item.label}</span>
+                                            <span className="type-body text-xs text-text-secondary" style={{ letterSpacing: '-0.01em' }}>{item.label}</span>
                                             <span className="text-xs font-medium text-text-primary tabular-nums">{item.score}</span>
                                         </div>
                                         <div className="h-1.5 bg-black/[0.04] rounded-full overflow-hidden">
@@ -135,7 +135,7 @@ export default function ReportMock() {
                                             </div>
                                             <span className="text-xs font-medium text-text-primary">{item.title}</span>
                                         </div>
-                                        <p className="text-[11px] text-text-secondary leading-relaxed">{item.text}</p>
+                                        <p className="type-body text-[11px] text-text-secondary leading-relaxed">{item.text}</p>
                                     </div>
                                 ))}
                             </div>
@@ -145,7 +145,7 @@ export default function ReportMock() {
                                 <h4 className="text-sm font-medium text-text-primary tracking-tight mb-3" style={{ fontFamily: '"Söhne", "Helvetica Neue", -apple-system, sans-serif' }}>
                                     System Verdict
                                 </h4>
-                                <p className="text-xs text-text-secondary leading-relaxed">
+                                <p className="type-body text-xs text-text-secondary leading-relaxed">
                                     Strong command of experimental methodology with clear articulation of controls and variables.
                                     Statistical reasoning is solid but would benefit from discussing effect sizes.
                                     Presentation delivery showed confident posture and good eye contact throughout.
@@ -207,7 +207,7 @@ export default function ReportMock() {
                                                 }`}>
                                                 {msg.role === 'judge' ? 'J' : 'S'}
                                             </div>
-                                            <p className="text-[11px] text-text-secondary leading-relaxed flex-1">{msg.text}</p>
+                                            <p className="type-body text-[11px] text-text-secondary leading-relaxed flex-1">{msg.text}</p>
                                         </div>
                                     ))}
                                 </div>
