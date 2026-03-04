@@ -47,6 +47,7 @@ export default function PitchPage() {
   const currentJudgeQuestion = useSessionStore((s) => s.currentJudgeQuestion)
   const uploadedFile = useSessionStore((s) => s.uploadedFile)
   const abstractText = useSessionStore((s) => s.abstractText)
+  const scriptText = useSessionStore((s) => s.scriptText)
 
   const [isPosterViewerOpen, setIsPosterViewerOpen] = useState(false)
   const [isTeleprompterOpen, setIsTeleprompterOpen] = useState(false)
@@ -303,31 +304,27 @@ export default function PitchPage() {
         </div>
 
         {/* Bottom layer: Transcript, Poster, and Teleprompter */}
-        <div className="w-full max-w-7xl mx-auto flex justify-between items-end gap-6 pointer-events-none">
+        <div className="w-full max-w-7xl mx-auto flex justify-between items-stretch gap-6 pointer-events-none pb-4">
 
           {/* Bottom Left: Poster Thumbnail (140px wide to balance right side) */}
-          <div className="w-[140px] shrink-0 pointer-events-auto flex items-end">
-            {uploadedFile && showPitchOrQA ? (
-              <PosterThumbnail
-                uploadedFile={uploadedFile}
-                onClick={() => setIsPosterViewerOpen(true)}
-              />
-            ) : (
-              <div className="h-[100px] w-full" /> /* Invisible spacer if no poster */
-            )}
+          <div className="w-[140px] shrink-0 pointer-events-auto">
+            <PosterThumbnail
+              uploadedFile={uploadedFile}
+              onClick={() => setIsPosterViewerOpen(true)}
+            />
           </div>
 
           {/* Bottom Center: Transcript */}
-          <div className="flex-1 flex justify-center pb-4 max-w-3xl pointer-events-auto">
-            {showPitchOrQA && (
-              <TranscriptOverlay transcript={transcript} />
-            )}
+          <div className="flex-1 flex justify-center max-w-3xl pointer-events-auto">
+            <TranscriptOverlay transcript={transcript} currentPhase={currentPhase} />
           </div>
 
           {/* Bottom Right: Teleprompter Button */}
-          <div className="w-[140px] shrink-0 flex justify-end pointer-events-auto pb-4 md:pb-0">
-            {abstractText && showPitchOrQA && (
+          <div className="w-[140px] shrink-0 pointer-events-auto">
+            {scriptText ? (
               <TeleprompterButton onClick={() => setIsTeleprompterOpen(true)} />
+            ) : (
+              <TeleprompterButton onClick={undefined} disabled={true} />
             )}
           </div>
         </div>
@@ -351,7 +348,7 @@ export default function PitchPage() {
 
       {/* Teleprompter Viewer Panel */}
       <TeleprompterViewer
-        text={abstractText}
+        text={scriptText}
         isOpen={isTeleprompterOpen}
         onClose={() => setIsTeleprompterOpen(false)}
       />

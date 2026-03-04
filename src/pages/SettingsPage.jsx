@@ -5,6 +5,7 @@ import DurationSlider from '../components/settings/DurationSlider'
 import CategorySelect from '../components/settings/CategorySelect'
 import FileUpload from '../components/settings/FileUpload'
 import AbstractInput from '../components/settings/AbstractInput'
+import ScriptInput from '../components/settings/ScriptInput'
 import InterruptionToggle from '../components/settings/InterruptionToggle'
 import CrueltySlider from '../components/settings/CrueltySlider'
 
@@ -19,6 +20,8 @@ export default function SettingsPage() {
   const setUploadedFile = useSessionStore((s) => s.setUploadedFile)
   const abstractText = useSessionStore((s) => s.abstractText)
   const setAbstractText = useSessionStore((s) => s.setAbstractText)
+  const scriptText = useSessionStore((s) => s.scriptText)
+  const setScriptText = useSessionStore((s) => s.setScriptText)
   const interruptDuringPitch = useSessionStore((s) => s.interruptDuringPitch)
   const setInterruptDuringPitch = useSessionStore((s) => s.setInterruptDuringPitch)
   const crueltyLevel = useSessionStore((s) => s.crueltyLevel)
@@ -74,6 +77,7 @@ export default function SettingsPage() {
           <div className="space-y-8">
             <CategorySelect value={category} onChange={setCategory} />
             <AbstractInput value={abstractText} onChange={setAbstractText} />
+            <ScriptInput value={scriptText} onChange={setScriptText} />
             <FileUpload uploadedFile={uploadedFile} onFileChange={setUploadedFile} />
 
             <div className="flex items-center gap-2 pt-1">

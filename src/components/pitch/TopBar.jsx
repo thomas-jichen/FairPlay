@@ -21,7 +21,7 @@ export default function TopBar({
           <button
             type="button"
             onClick={onNextPhase}
-            className="rounded-full bg-white px-5 py-2 text-sm font-semibold text-black shadow-lg
+            className="type-cta rounded-full glossy-black-cta px-5 py-2 text-sm
                        transition-all duration-300 hover:scale-105 active:scale-95"
           >
             End Pitch
@@ -32,7 +32,7 @@ export default function TopBar({
           <button
             type="button"
             onClick={onNextPhase}
-            className="rounded-full bg-white px-5 py-2 text-sm font-semibold text-black shadow-lg
+            className="type-cta rounded-full glossy-black-cta px-5 py-2 text-sm
                        transition-all duration-300 hover:scale-105 active:scale-95"
           >
             End Q&A
@@ -57,38 +57,41 @@ export default function TopBar({
   return (
     <div className="w-full flex items-center justify-between gap-4">
       {/* Left side: Phase Indicator */}
-      <div className="flex-1 flex justify-start">
-        <div className="glass-pill shadow-lg pl-2 pr-4 py-1.5 flex items-center">
+      <div className="flex-1 flex justify-start -ml-2">
+        <div className="glass-pill no-shimmer shadow-lg pl-2 pr-4 py-1.5 flex items-center">
           <PhaseIndicator currentPhase={currentPhase} />
         </div>
       </div>
 
-      {/* Center: Timer & Feedback Metrics */}
+      {/* Center: Timer, Feedback Metrics & Pace Slider */}
       {(currentPhase === PHASES.PITCHING || currentPhase === PHASES.QA) && (
-        <div className="glass-pill px-6 py-2.5 flex items-center gap-6 shadow-2xl">
-          {isInterrupted && (
-            <span className="inline-flex items-center rounded-full bg-red-100 border border-red-200 px-3 py-1 text-xs font-bold tracking-wide uppercase text-red-600 animate-[pulse_2s_infinite] shadow-sm">
-              PAUSED
-            </span>
-          )}
-          <TimerDisplay formatted={timerFormatted} isOvertime={isOvertime} />
+        <div className="glass-pill no-shimmer px-6 py-2.5 flex flex-col items-center gap-2 shadow-2xl">
+          {/* Top row: Timer + Feedback Pills */}
+          <div className="flex items-center gap-6">
+            {isInterrupted && (
+              <span className="inline-flex items-center rounded-full bg-red-100 border border-red-200 px-3 py-1 text-xs font-bold tracking-wide uppercase text-red-600 animate-[pulse_2s_infinite] shadow-sm">
+                PAUSED
+              </span>
+            )}
+            <TimerDisplay formatted={timerFormatted} isOvertime={isOvertime} />
 
+            {!isInterrupted && feedbackScores && (
+              <>
+                <div className="w-px h-6 bg-black/10" />
+                <FeedbackPills
+                  confidence={feedbackScores.confidence}
+                  engagement={feedbackScores.engagement}
+                  approachability={feedbackScores.approachability}
+                />
+              </>
+            )}
+          </div>
+
+          {/* Bottom row: Pace Slider */}
           {!isInterrupted && (
-            <>
-              <div className="w-px h-6 bg-black/10" />
+            <div className="w-full min-w-[280px]">
               <PaceIndicator wpm={wpm} />
-
-              {feedbackScores && (
-                <>
-                  <div className="w-px h-6 bg-black/10" />
-                  <FeedbackPills
-                    confidence={feedbackScores.confidence}
-                    engagement={feedbackScores.engagement}
-                    approachability={feedbackScores.approachability}
-                  />
-                </>
-              )}
-            </>
+            </div>
           )}
         </div>
       )}

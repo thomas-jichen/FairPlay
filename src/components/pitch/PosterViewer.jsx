@@ -95,21 +95,21 @@ export default function PosterViewer({ uploadedFile, isOpen, onClose }) {
                     style={{ width, height, position: 'absolute', left: 24, top: '15vh', zIndex: 50, touchAction: 'none' }}
                     className="pointer-events-auto"
                 >
-                    <div className="relative w-full h-full glass-panel rounded-3xl overflow-hidden shadow-2xl border border-white/60 flex flex-col bg-white/70 backdrop-blur-3xl">
+                    <div className="relative w-full h-full glass-panel no-shimmer rounded-3xl overflow-hidden shadow-2xl border border-white/60 flex flex-col bg-black/80 backdrop-blur-3xl">
 
                         {/* Draggable Header */}
                         <div
                             onPointerDown={(e) => dragControls.start(e)}
                             style={{ touchAction: 'none' }}
-                            className="flex items-center justify-between px-4 py-3 border-b border-black/[0.05] bg-white/40 cursor-grab active:cursor-grabbing shrink-0"
+                            className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-black/40 cursor-grab active:cursor-grabbing shrink-0"
                         >
                             <div className="flex items-center gap-2 overflow-hidden pointer-events-none">
-                                <div className="flex h-6 w-6 items-center justify-center rounded bg-black/5 border border-black/10 shrink-0">
-                                    <span className="text-[8px] font-bold tracking-widest uppercase text-text-secondary">
+                                <div className="flex h-6 w-6 items-center justify-center rounded bg-white/10 border border-white/20 shrink-0">
+                                    <span className="text-[8px] font-bold tracking-widest uppercase text-white/50">
                                         {uploadedFile.type.includes('pdf') ? 'PDF' : 'IMG'}
                                     </span>
                                 </div>
-                                <span className="text-sm font-medium text-text-primary truncate">
+                                <span className="text-sm font-medium text-white/90 truncate">
                                     {uploadedFile.name}
                                 </span>
                             </div>
@@ -117,15 +117,15 @@ export default function PosterViewer({ uploadedFile, isOpen, onClose }) {
                             <div className="flex items-center gap-2">
                                 {/* Drag Indicator (Visual Only) */}
                                 <div className="flex gap-1 opacity-40 px-2">
-                                    <div className="w-1 h-1 rounded-full bg-black/60"></div>
-                                    <div className="w-1 h-1 rounded-full bg-black/60"></div>
-                                    <div className="w-1 h-1 rounded-full bg-black/60"></div>
+                                    <div className="w-1 h-1 rounded-full bg-white/60"></div>
+                                    <div className="w-1 h-1 rounded-full bg-white/60"></div>
+                                    <div className="w-1 h-1 rounded-full bg-white/60"></div>
                                 </div>
 
                                 <button
                                     onPointerDown={(e) => e.stopPropagation()}
                                     onClick={onClose}
-                                    className="w-8 h-8 flex items-center justify-center rounded-full bg-black/5 text-text-secondary hover:bg-black/10 hover:text-text-primary transition-colors shrink-0"
+                                    className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-white/50 hover:bg-white/20 hover:text-white transition-colors shrink-0"
                                     aria-label="Close poster viewer"
                                 >
                                     <svg fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
@@ -167,7 +167,7 @@ export default function PosterViewer({ uploadedFile, isOpen, onClose }) {
                             className="absolute bottom-0 right-0 w-8 h-8 cursor-se-resize flex items-end justify-end p-2 z-10"
                             style={{ touchAction: 'none' }}
                         >
-                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-black/30">
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white/30">
                                 <path d="M12 0L0 12H12V0Z" fill="currentColor" />
                             </svg>
                         </div>

@@ -35,7 +35,7 @@ export default function CountdownOverlay({ count }) {
                   opacity: { duration: 0.2 },
                   exit: { duration: 0.4, ease: "easeIn" }
                 }}
-                className="block text-[180px] font-semibold text-text-primary tracking-tight"
+                className="block text-[180px] font-semibold text-white tracking-tight"
               >
                 {count}
               </motion.span>
@@ -44,7 +44,7 @@ export default function CountdownOverlay({ count }) {
         </div>
 
         {/* Text Below */}
-        <p className="mt-8 text-xl tracking-[0.2em] text-text-secondary font-medium uppercase animate-pulse">
+        <p className="mt-8 text-xl tracking-[0.2em] text-white/70 font-medium uppercase animate-pulse">
           Get Ready
         </p>
 

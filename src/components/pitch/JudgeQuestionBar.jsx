@@ -29,7 +29,7 @@ export default function JudgeQuestionBar({ question, type, questionNumber, isVis
       className={`w-full transition-all duration-700 ease-spring transform origin-top
                   ${show ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 -translate-y-8'}`}
     >
-      <div className="glass-panel rounded-[32px] p-6 md:p-8 shadow-2xl relative overflow-hidden group">
+      <div className="glass-panel no-shimmer rounded-[32px] p-6 md:p-8 shadow-2xl relative overflow-hidden group bg-white/50 backdrop-blur-xl">
         <div className="relative z-10">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">

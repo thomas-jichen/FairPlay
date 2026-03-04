@@ -1,12 +1,12 @@
-export default function TeleprompterButton({ onClick }) {
+export default function TeleprompterButton({ onClick, disabled }) {
     return (
         <button
-            onClick={onClick}
-            className="group relative flex flex-col items-center justify-center gap-2 outline-none transition-all duration-300 focus:ring-2 focus:ring-white/50"
-            title="Open Teleprompter"
+            onClick={disabled ? undefined : onClick}
+            className={`group relative flex flex-col h-full w-full outline-none transition-all duration-300 focus:ring-2 focus:ring-white/50 ${disabled ? 'cursor-not-allowed opacity-50' : ''}`}
+            title={disabled ? "No Script Uploaded" : "Open Teleprompter"}
         >
-            <div className="glass-panel relative flex h-[100px] w-[140px] items-center justify-center rounded-2xl shadow-xl opacity-90 transition-all duration-300
-                      group-hover:opacity-100 group-hover:scale-[1.02] group-hover:border-white group-hover:-translate-y-1">
+            <div className="glass-panel no-shimmer relative flex h-full w-full items-center justify-center rounded-2xl shadow-xl opacity-90 transition-all duration-300
+                      group-hover:opacity-100 group-hover:scale-[1.02] group-hover:border-white">
 
                 {/* Abstract/Script Icon */}
                 <div className="flex flex-col items-center gap-2">
@@ -15,7 +15,7 @@ export default function TeleprompterButton({ onClick }) {
                             <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                         </svg>
                     </div>
-                    <span className="type-caption text-[10px] text-text-secondary tracking-widest uppercase">Script</span>
+                    <span className="type-caption text-[10px] text-text-secondary tracking-widest uppercase">Teleprompter</span>
                 </div>
 
                 {/* Expand Icon Overlay on Hover */}

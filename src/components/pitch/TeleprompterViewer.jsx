@@ -30,6 +30,7 @@ export default function TeleprompterViewer({ text, isOpen, onClose }) {
         const onPointerMove = (moveEvent) => {
             if (!isResizing.current) return
 
+            // Since it's anchored to the left now, increasing deltaX increases width
             const newWidth = Math.max(250, startWidth + (moveEvent.clientX - startX))
             const newHeight = Math.max(300, startHeight + (moveEvent.clientY - startY))
 
@@ -96,10 +97,10 @@ export default function TeleprompterViewer({ text, isOpen, onClose }) {
                     dragMomentum={false}
                     dragElastic={0}
 
-                    style={{ width, height, position: 'absolute', right: 24, top: '15vh', zIndex: 50, touchAction: 'none' }}
+                    style={{ width, height, position: 'absolute', left: window.innerWidth > 768 ? window.innerWidth - 424 : 24, top: '15vh', zIndex: 50, touchAction: 'none' }}
                     className="pointer-events-auto"
                 >
-                    <div className="relative w-full h-full glass-panel rounded-3xl overflow-hidden shadow-2xl border border-white/60 flex flex-col bg-black/80 backdrop-blur-3xl">
+                    <div className="relative w-full h-full glass-panel no-shimmer rounded-3xl overflow-hidden shadow-2xl border border-white/60 flex flex-col bg-black/80 backdrop-blur-3xl">
 
                         {/* Draggable Header / Controls */}
                         <div
@@ -170,7 +171,7 @@ export default function TeleprompterViewer({ text, isOpen, onClose }) {
                         <div className="absolute top-[52px] left-0 right-0 h-16 bg-gradient-to-b from-black/90 to-transparent pointer-events-none" />
                         <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/90 to-transparent pointer-events-none" />
 
-                        {/* Custom Resize Handle */}
+                        {/* Custom Resize Handle (Bottom Right) */}
                         <div
                             onPointerDown={handleResizePointerDown}
                             className="absolute bottom-0 right-0 w-8 h-8 cursor-se-resize flex items-end justify-end p-2 z-10"

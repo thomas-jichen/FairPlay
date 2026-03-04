@@ -220,11 +220,11 @@
   input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 24px;
-    height: 24px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
     background: #FFFFFF;
-    margin-top: -9px;
+    margin-top: 0;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
     transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s ease;
   }
@@ -282,6 +282,11 @@
     background-size: 200% 100%;
     animation: glass-shimmer 8s ease-in-out infinite;
     pointer-events: none;
+  }
+
+  /* Utility to disable shimmer effect */
+  .no-shimmer::after {
+    display: none !important;
   }
 
   .glass-panel:hover {

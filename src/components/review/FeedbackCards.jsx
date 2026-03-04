@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-function FeedbackCard({ title, children, defaultExpanded = false, icon }) {
+export function FeedbackCard({ title, children, defaultExpanded = false, icon }) {
   const [expanded, setExpanded] = useState(defaultExpanded)
 
   return (

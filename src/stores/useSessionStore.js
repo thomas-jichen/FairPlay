@@ -9,6 +9,7 @@ const useSessionStore = create((set) => ({
   interruptDuringPitch: false,
   crueltyLevel: 3,
   abstractText: '',
+  scriptText: '',
   posterText: '',
 
   // Runtime state (reset on session end)
@@ -37,6 +38,7 @@ const useSessionStore = create((set) => ({
   setInterruptDuringPitch: (enabled) => set({ interruptDuringPitch: enabled }),
   setCrueltyLevel: (level) => set({ crueltyLevel: level }),
   setAbstractText: (text) => set({ abstractText: text }),
+  setScriptText: (text) => set({ scriptText: text }),
   setPosterText: (text) => set({ posterText: text }),
 
   // Runtime actions
