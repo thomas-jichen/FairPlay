@@ -12,7 +12,7 @@ export default function Hero() {
         variants={staggerContainer}
         initial="hidden"
         animate="visible"
-        className="relative max-w-6xl mx-auto text-center pt-12 pb-4 px-6"
+        className="relative max-w-6xl mx-auto text-center pt-16 pb-4 px-6"
       >
         {/* Headline */}
         <motion.h1
