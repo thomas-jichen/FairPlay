@@ -2,16 +2,19 @@ import { CRUELTY_CONFIG } from '../../constants/crueltyConfig'
 
 const CRUELTY_LABELS = ['', 'Gentle', 'Moderate', 'Challenging', 'Tough', 'Ruthless']
 
-export default function CrueltySlider({ value, onChange }) {
+export default function CrueltySlider({ label, value, onChange }) {
   const config = CRUELTY_CONFIG[value]
 
   return (
     <div className="space-y-4 group">
-      <div className="flex justify-end px-1 mb-2">
-        <span className="text-sm font-semibold text-text-primary px-3 py-1 bg-black/5 rounded-full border border-black/10">
-          {value} — {CRUELTY_LABELS[value]}
-        </span>
-      </div>
+      {label && (
+        <div className="flex items-center justify-between px-1 mb-2">
+          <h3 className="text-sm font-medium text-text-primary tracking-tight">{label}</h3>
+          <span className="text-sm font-semibold text-text-primary px-3 py-1 bg-black/5 rounded-full border border-black/10">
+            {value} — {CRUELTY_LABELS[value]}
+          </span>
+        </div>
+      )}
 
       <div className="relative py-2 flex items-center">
         <input

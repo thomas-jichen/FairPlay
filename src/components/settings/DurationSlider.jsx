@@ -10,14 +10,14 @@ export default function DurationSlider({
 }) {
   return (
     <div className="space-y-4 group">
-      <div className="flex items-center justify-between px-1">
-        <label className="text-sm font-medium text-text-primary tracking-tight">
-          {label}
-        </label>
-        <span className="text-base tabular-nums font-semibold text-text-primary">
-          {value} <span className="text-sm font-medium text-text-secondary">{unit}</span>
-        </span>
-      </div>
+      {label && (
+        <div className="flex items-center justify-between px-1 mb-2">
+          <h3 className="text-sm font-medium text-text-primary tracking-tight">{label}</h3>
+          <span className="text-sm font-semibold text-text-primary px-3 py-1 bg-black/5 rounded-full border border-black/10 tabular-nums">
+            {value} {unit}
+          </span>
+        </div>
+      )}
 
       <div className="relative py-2 flex items-center">
         <input

@@ -82,7 +82,7 @@ export default function SettingsPage() {
       {/* Subtle top gradient */}
       <div className="fixed top-0 inset-x-0 h-40 bg-gradient-to-b from-black/[0.03] to-transparent pointer-events-none" />
 
-      <div className="relative z-10 w-full max-w-2xl flex flex-col gap-8 pb-20 mt-8 overflow-hidden px-2">
+      <div className="relative z-10 w-full max-w-2xl mx-auto flex flex-col items-center gap-8 pb-20 mt-8 px-4 sm:px-0">
         {/* Header */}
         <div className="space-y-2 mb-4 text-center">
           <a
@@ -98,7 +98,7 @@ export default function SettingsPage() {
           </p>
         </div>
 
-        <div className="relative min-h-[600px] h-[75vh]">
+        <div className="relative w-full min-h-[600px] h-[75vh] self-stretch">
           <AnimatePresence mode="wait" custom={direction}>
             {step === 1 && (
               <motion.div
@@ -226,11 +226,10 @@ export default function SettingsPage() {
                   <span className="text-xs font-medium text-text-muted">Step 3 of 3</span>
                 </div>
 
-                <div className="space-y-12 flex-1 overflow-y-auto pr-2 pb-4 scrollbar-hide">
-                  <div className="space-y-8">
-                    <h3 className="text-sm font-medium text-text-primary tracking-tight">Session Timing</h3>
+                <div className="space-y-16 flex-1 overflow-y-auto pr-2 pb-4 scrollbar-hide">
+                  <div className="space-y-4">
                     <DurationSlider
-                      label="Pitch Duration"
+                      label="Session Timing"
                       value={pitchDuration}
                       onChange={setPitchDuration}
                       min={1}
@@ -239,14 +238,12 @@ export default function SettingsPage() {
                     />
                   </div>
 
-                  <div className="space-y-8">
-                    <h3 className="text-sm font-medium text-text-primary tracking-tight">Judge Behavior</h3>
-                    <InterruptionToggle enabled={interruptDuringPitch} onChange={setInterruptDuringPitch} />
+                  <div className="space-y-4">
+                    <InterruptionToggle label="Judge Behavior" enabled={interruptDuringPitch} onChange={setInterruptDuringPitch} />
                   </div>
 
-                  <div className="space-y-8">
-                    <h3 className="text-sm font-medium text-text-primary tracking-tight">Judge Cruelty</h3>
-                    <CrueltySlider value={crueltyLevel} onChange={setCrueltyLevel} />
+                  <div className="space-y-4">
+                    <CrueltySlider label="Judge Cruelty" value={crueltyLevel} onChange={setCrueltyLevel} />
                   </div>
                 </div>
 

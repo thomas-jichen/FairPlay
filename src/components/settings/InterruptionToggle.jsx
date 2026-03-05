@@ -1,6 +1,11 @@
-export default function InterruptionToggle({ enabled, onChange }) {
+export default function InterruptionToggle({ label, enabled, onChange }) {
   return (
     <div className="space-y-4 px-1">
+      {label && (
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="text-sm font-medium text-text-primary tracking-tight">{label}</h3>
+        </div>
+      )}
       <div className="relative flex rounded-xl border border-black/5 bg-black/[0.03] p-1 backdrop-blur-sm isolation-auto">
         {/* Sliding background indicator */}
         <div
