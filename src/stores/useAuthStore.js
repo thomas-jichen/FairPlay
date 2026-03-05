@@ -34,6 +34,17 @@ const useAuthStore = create((set, get) => ({
             const payload = decodeJwtPayload(credentialResponse.credential)
             const { sub: googleId, email, name, picture: avatarUrl } = payload
 
+            if (!supabase) {
+                // No Supabase — still set local user state from the JWT
+                set({
+                    user: { id: googleId, googleId, email, name, avatarUrl },
+                    isSignedIn: true,
+                    isLoading: false,
+                })
+                localStorage.setItem('fairplay_user_id', googleId)
+                return true
+            }
+
             // Upsert user in Supabase
             const { data, error } = await supabase
                 .from('users')
@@ -91,7 +102,7 @@ const useAuthStore = create((set, get) => ({
      */
     loadSavedSettings: async () => {
         const { user } = get()
-        if (!user) return null
+        if (!user || !supabase) return null
 
         try {
             const { data, error } = await supabase
@@ -118,7 +129,7 @@ const useAuthStore = create((set, get) => ({
      */
     saveSettings: async (settings) => {
         const { user } = get()
-        if (!user) return
+        if (!user || !supabase) return
 
         try {
             await supabase
@@ -145,6 +156,11 @@ const useAuthStore = create((set, get) => ({
     restoreSession: async () => {
         const userId = localStorage.getItem('fairplay_user_id')
         if (!userId) return
+        if (!supabase) {
+            // Can't restore from Supabase, clear stale data
+            localStorage.removeItem('fairplay_user_id')
+            return
+        }
 
         set({ isLoading: true })
 
