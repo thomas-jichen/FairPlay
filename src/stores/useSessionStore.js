@@ -41,6 +41,14 @@ const useSessionStore = create((set) => ({
   setScriptText: (text) => set({ scriptText: text }),
   setPosterText: (text) => set({ posterText: text }),
 
+  // Hydrate settings from Supabase (for signed-in users)
+  hydrateFromSaved: (saved) => set({
+    ...(saved.category !== undefined && { category: saved.category }),
+    ...(saved.pitchDuration !== undefined && { pitchDuration: saved.pitchDuration }),
+    ...(saved.crueltyLevel !== undefined && { crueltyLevel: saved.crueltyLevel }),
+    ...(saved.interruptDuringPitch !== undefined && { interruptDuringPitch: saved.interruptDuringPitch }),
+  }),
+
   // Runtime actions
   setPhase: (phase) => set({ currentPhase: phase }),
   addTranscriptSegment: (segment) =>
