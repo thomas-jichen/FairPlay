@@ -1,5 +1,6 @@
 import { useLocation, useOutlet } from 'react-router'
 import { AnimatePresence, motion } from 'framer-motion'
+import { Analytics } from '@vercel/analytics/react'
 
 export default function App() {
   const location = useLocation()
