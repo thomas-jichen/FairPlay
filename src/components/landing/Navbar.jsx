@@ -22,16 +22,16 @@ export default function Navbar() {
           </button>
           <div className="flex items-center gap-6">
             <button
-              onClick={() => scrollTo('team')}
-              className="text-sm font-light text-text-secondary hover:text-text-primary transition-colors duration-300" style={{ fontFamily: '"Söhne", "Helvetica Neue", -apple-system, sans-serif' }}
-            >
-              Team
-            </button>
-            <button
               onClick={() => scrollTo('features')}
               className="text-sm font-light text-text-secondary hover:text-text-primary transition-colors duration-300" style={{ fontFamily: '"Söhne", "Helvetica Neue", -apple-system, sans-serif' }}
             >
               Features
+            </button>
+            <button
+              onClick={() => scrollTo('team')}
+              className="text-sm font-light text-text-secondary hover:text-text-primary transition-colors duration-300" style={{ fontFamily: '"Söhne", "Helvetica Neue", -apple-system, sans-serif' }}
+            >
+              Team
             </button>
           </div>
         </div>

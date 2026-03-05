@@ -1,26 +1,33 @@
 import Hero from '../components/landing/Hero'
+import WinnersMarquee from '../components/landing/WinnersMarquee'
+import BuiltByFounders from '../components/landing/BuiltByFounders'
 import Features from '../components/landing/Features'
-import TeamSection from '../components/landing/TeamSection'
 import FooterCTA from '../components/landing/FooterCTA'
 
 export default function LandingPage() {
   return (
-    <main>
+    <main className="overflow-x-hidden w-full">
       {/* Hero */}
       <section className="pt-28 pb-6 flex items-center justify-center">
         <Hero />
       </section>
 
-      {/* Team */}
-      <section id="team" className="pt-6 pb-8 flex flex-col items-center justify-center w-full max-w-[100vw] overflow-hidden">
-        <TeamSection />
+      {/* Winners Marquee */}
+      <section className="py-24 w-full">
+        <WinnersMarquee />
       </section>
 
-      {/* Features & Footer */}
-      <section id="features" className="pt-8 pb-16 flex flex-col w-full max-w-[100vw] overflow-hidden">
+      {/* Features */}
+      <section id="features" className="py-24 flex flex-col w-full">
         <Features />
       </section>
 
+      {/* Built by Founders */}
+      <section id="team" className="py-24 flex flex-col items-center justify-center w-full">
+        <BuiltByFounders />
+      </section>
+
+      {/* Privacy & Footer */}
       <FooterCTA />
     </main>
   )

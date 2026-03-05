@@ -64,10 +64,10 @@ function JudgeMock() {
         {/* Simulated feedback pills */}
         <div className="absolute top-2 right-2 flex gap-1.5">
           <span className="type-caption rounded-full bg-emerald-500/20 border border-emerald-500/30 px-2 py-0.5 text-[11px] text-emerald-400">
-            CONF
+            CONFIDENCE
           </span>
           <span className="type-caption rounded-full bg-emerald-500/20 border border-emerald-500/30 px-2 py-0.5 text-[11px] text-emerald-400">
-            ENG
+            ENGAGEMENT
           </span>
         </div>
       </div>
@@ -80,10 +80,10 @@ function JudgeMock() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
             </svg>
           </div>
-          <span className="type-caption text-[11px] text-text-secondary">AI Judge</span>
+          <span className="type-caption text-[11px] text-text-secondary">AI Judge (Persona: Senior Machine Learning Engineer)</span>
         </div>
         <p className="text-xs font-medium text-text-primary leading-relaxed" style={{ letterSpacing: '-0.01em' }}>
-          "How did you control for temperature variation in your experimental trials?"
+          "Can you walk me through the training split of your reinforcement learning model?"
         </p>
       </div>
     </div>
@@ -157,7 +157,7 @@ function RubricMock() {
     { label: 'Research Question', score: 87 },
     { label: 'Methodology', score: 72 },
     { label: 'Data Analysis', score: 91 },
-    { label: 'Presentation', score: 84 },
+    { label: 'Future Work', score: 84 },
   ]
 
   return (
@@ -228,21 +228,22 @@ export default function Features() {
       >
         <motion.span
           variants={fadeInUp}
-          className="type-overline glass-pill px-4 py-1 text-sm text-text-muted inline-block"
+          className=""
         >
-          How It Works
+
         </motion.span>
         <motion.h2
           variants={fadeInUp}
-          className="type-title text-2xl md:text-3xl mt-2.5 text-text-primary"
+          className="type-title text-3xl md:text-4xl mt-2.5 text-text-primary"
+
         >
           Practice like the real thing.
         </motion.h2>
         <motion.p
           variants={fadeInUp}
-          className="type-body text-base text-text-secondary mt-2 max-w-xl mx-auto"
+          className="type-body text-lg text-text-secondary mt-4"
         >
-          Every detail of the ISEF judging experience, powered by AI that sees, hears, and challenges you.
+          Every detail of the ISEF judging experience, on your laptop.
         </motion.p>
       </motion.div>
 
