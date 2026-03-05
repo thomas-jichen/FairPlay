@@ -1,5 +1,6 @@
 import { Link } from 'react-router'
 import { motion } from 'framer-motion'
+import { Analytics } from '@vercel/analytics/react'
 
 const fadeIn = { hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0 } }
 
@@ -169,7 +170,8 @@ function PolicySection({ section, index }) {
 
 export default function PrivacyPage() {
     return (
-        <div className="min-h-screen bg-surface-primary text-text-primary relative overflow-x-hidden">
+        <>
+            <div className="min-h-screen bg-surface-primary text-text-primary relative overflow-x-hidden">
             {/* Ambient liquid glass blob layer — same as landing page */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none z-0" aria-hidden="true">
                 <div className="liquid-blob liquid-blob-1 -top-[15%] -left-[10%] w-[55%] h-[55%] bg-[rgba(251,191,146,0.40)]" />
@@ -248,5 +250,7 @@ export default function PrivacyPage() {
 
             </div>
         </div>
+        <Analytics />
+    </>
     )
 }
