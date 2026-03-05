@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/react'
 import App from './App'
 import LandingLayout from './LandingLayout'
 import LandingPage from './pages/LandingPage'
@@ -36,5 +37,6 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <RouterProvider router={router} />
     <Analytics />
+    <SpeedInsights />
   </StrictMode>
 )

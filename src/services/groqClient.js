@@ -1,4 +1,4 @@
-const GROQ_BASE_URL = 'https://api.groq.com/openai/v1/chat/completions'
+const GROQ_DIRECT_URL = 'https://api.groq.com/openai/v1/chat/completions'
 
 export const MODELS = {
   KIMI_K2: 'moonshotai/kimi-k2-instruct',
@@ -30,6 +30,9 @@ class RateLimiter {
 
 const rateLimiter = new RateLimiter(55, 60_000) // 55 RPM to stay safely under 60
 
+// Use serverless proxy in production, direct Groq calls in dev
+const useProxy = import.meta.env.PROD
+
 export class GroqError extends Error {
   constructor(message, status, retryable) {
     super(message)
@@ -40,9 +43,11 @@ export class GroqError extends Error {
 }
 
 export async function chatCompletion({ model, messages, temperature = 0.7, maxTokens = 512 }) {
-  const apiKey = import.meta.env.VITE_GROQ_API_KEY
-  if (!apiKey) {
-    throw new GroqError('VITE_GROQ_API_KEY not set in .env', 0, false)
+  if (!useProxy) {
+    const apiKey = import.meta.env.VITE_GROQ_API_KEY
+    if (!apiKey) {
+      throw new GroqError('VITE_GROQ_API_KEY not set in .env', 0, false)
+    }
   }
 
   await rateLimiter.waitForCapacity()
@@ -57,12 +62,16 @@ export async function chatCompletion({ model, messages, temperature = 0.7, maxTo
     const timeout = setTimeout(() => controller.abort(), 30_000)
 
     try {
-      const res = await fetch(GROQ_BASE_URL, {
+      const fetchUrl = useProxy ? '/api/chat' : GROQ_DIRECT_URL
+      const headers = { 'Content-Type': 'application/json' }
+
+      if (!useProxy) {
+        headers.Authorization = `Bearer ${import.meta.env.VITE_GROQ_API_KEY}`
+      }
+
+      const res = await fetch(fetchUrl, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${apiKey}`,
-        },
+        headers,
         body: JSON.stringify({ model, messages, temperature, max_tokens: maxTokens }),
         signal: controller.signal,
       })
