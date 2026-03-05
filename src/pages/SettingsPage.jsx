@@ -217,7 +217,7 @@ export default function SettingsPage() {
             </h1>
           </a>
           <p className="type-body text-lg text-text-secondary">
-            Personalized realistic ISEF judging simulations.
+            Personalized realistic ISEF judging simulations
           </p>
         </div>
 

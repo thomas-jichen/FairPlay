@@ -40,7 +40,7 @@ export default function FooterCTA() {
             <Link to="/privacy" onClick={() => window.scrollTo(0, 0)} className="text-xs font-light text-text-muted hover:text-text-primary transition-colors duration-300" style={{ letterSpacing: '0.04em' }}>
               Privacy Policy
             </Link>
-            <span className="text-xs font-light text-text-muted" style={{ letterSpacing: '0.04em' }}>&copy; {new Date().getFullYear()} FAIRPLAY.</span>
+            <span className="text-xs font-light text-text-muted" style={{ letterSpacing: '0.04em' }}>&copy; {new Date().getFullYear()} Fairplay.</span>
           </div>
         </div>
       </div>
