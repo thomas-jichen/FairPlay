@@ -6,7 +6,7 @@ const useSessionStore = create((set) => ({
   pitchDuration: 3,
   category: null,
   uploadedFile: null,
-  interruptDuringPitch: false,
+  interruptDuringPitch: true,
   crueltyLevel: 3,
   abstractText: '',
   scriptText: '',

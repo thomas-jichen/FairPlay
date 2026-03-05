@@ -20,9 +20,6 @@ export default function AbstractInput({ value, onChange }) {
                      resize-y min-h-[100px] shadow-sm transition-all duration-300"
         />
       </div>
-      <p className="text-xs text-text-muted pl-1">
-        Provides context to the AI judge, simulating judges who read abstracts beforehand.
-      </p>
     </div>
   )
 }

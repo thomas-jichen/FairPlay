@@ -19,7 +19,7 @@ export default function DurationSlider({
         </span>
       </div>
 
-      <div className="relative pt-2 pb-1">
+      <div className="relative py-2 flex items-center">
         <input
           type="range"
           min={min}
@@ -27,19 +27,22 @@ export default function DurationSlider({
           step={step}
           value={value}
           onChange={(e) => onChange(Number(e.target.value))}
-          className="w-full relative z-10"
-        />
-        {/* Decorative track fill (visual only) */}
-        <div
-          className="absolute top-[13px] left-0 h-1.5 bg-black rounded-l-full pointer-events-none transition-all duration-200"
-          style={{ width: `${((value - min) / (max - min)) * 100}%` }}
+          className="w-full h-1.5 bg-black/10 rounded-full appearance-none outline-none relative z-10
+                     [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5
+                     [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:rounded-full
+                     [&::-webkit-slider-thumb]:shadow-md hover:[&::-webkit-slider-thumb]:scale-110 [&::-webkit-slider-thumb]:transition-transform
+                     [&::-webkit-slider-thumb]:mt-[-7px]
+                     [&::-webkit-slider-runnable-track]:h-1.5 [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-black/10
+                     [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:appearance-none
+                     [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-none [&::-moz-range-thumb]:shadow-md cursor-pointer
+                     [&::-moz-range-track]:h-1.5 [&::-moz-range-track]:rounded-full [&::-moz-range-track]:bg-black/10"
         />
       </div>
 
-      <div className="flex justify-between px-1 text-xs text-text-muted">
-        <span>{min} {unit}</span>
-        {hint && <span>{hint}</span>}
-        <span>{max} {unit}</span>
+      <div className="flex justify-between px-1 text-xs text-text-muted mt-1">
+        <span className="w-16 text-left">{min} {unit}</span>
+        {hint && <span className="flex-1 text-center">{hint}</span>}
+        <span className="w-16 text-right">{max} {unit}</span>
       </div>
     </div>
   )

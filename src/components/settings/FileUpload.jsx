@@ -65,11 +65,13 @@ export default function FileUpload({ uploadedFile, onFileChange }) {
   }
 
   return (
-    <div className="space-y-3 px-1">
-      <label className="flex items-center text-sm font-medium text-text-primary tracking-tight">
-        Project Materials
-        <span className="ml-2 px-2 py-0.5 rounded-md bg-black/5 text-[10px] uppercase tracking-wider text-text-muted border border-black/5">Optional</span>
-      </label>
+    <div className="space-y-3 px-1 group">
+      <div className="flex items-center justify-between">
+        <label className="text-sm font-medium text-text-primary tracking-tight">
+          Poster
+        </label>
+        <span className="text-xs text-text-muted">Optional</span>
+      </div>
 
       {!uploadedFile ? (
         <div

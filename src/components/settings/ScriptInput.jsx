@@ -3,7 +3,7 @@ export default function ScriptInput({ value, onChange }) {
         <div className="space-y-3 group">
             <div className="flex items-center justify-between px-1">
                 <label className="text-sm font-medium text-text-primary tracking-tight">
-                    Pitch Script
+                    Script
                 </label>
                 <span className="text-xs text-text-muted">Optional</span>
             </div>
@@ -20,9 +20,6 @@ export default function ScriptInput({ value, onChange }) {
                      resize-y min-h-[100px] shadow-sm transition-all duration-300"
                 />
             </div>
-            <p className="text-xs text-text-muted pl-1">
-                This text will feed into your teleprompter during the practice session.
-            </p>
         </div>
     )
 }
