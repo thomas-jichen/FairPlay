@@ -1,50 +1,30 @@
+import tristanImg from '../assets/images/winners/tristan.jpg'
+import alainaImg from '../assets/images/winners/alaina.jpg'
+import abigailImg from '../assets/images/winners/abigail.jpg'
+
 export const ISEF_WINNERS = [
   {
-    name: 'FirstName LastName',
-    university: 'MIT',
-    award: 'ISEF Grand Award, Chemistry',
-    year: '2024',
+    name: 'Tristan Cao',
+    award: 'ISEF Special Award',
+    category: 'Physics & Astronomy',
+    details: 'Stanford · STS · RISE',
+    year: '2024, 2025',
+    image: tristanImg,
   },
   {
-    name: 'FirstName LastName',
-    university: 'Stanford',
-    award: 'ISEF 1st Place, Engineering',
-    year: '2023',
+    name: 'Alaina Zhang',
+    award: 'ISEF Special Award',
+    category: 'Earth & Environmental',
+    details: 'Stanford · STS · Barron',
+    year: '2025',
+    image: alainaImg,
   },
   {
-    name: 'FirstName LastName',
-    university: 'Caltech',
-    award: 'ISEF 2nd Place, Biology',
-    year: '2024',
-  },
-  {
-    name: 'FirstName LastName',
-    university: 'Harvard',
-    award: 'ISEF Grand Award, Physics',
-    year: '2023',
-  },
-  {
-    name: 'FirstName LastName',
-    university: 'Princeton',
-    award: 'ISEF 1st Place, Math',
-    year: '2024',
-  },
-  {
-    name: 'FirstName LastName',
-    university: 'Yale',
-    award: 'ISEF 3rd Place, Computer Science',
-    year: '2023',
-  },
-  {
-    name: 'FirstName LastName',
-    university: 'Columbia',
-    award: 'ISEF Grand Award, Biomedical',
-    year: '2024',
-  },
-  {
-    name: 'FirstName LastName',
-    university: 'UC Berkeley',
-    award: 'ISEF 2nd Place, Environmental',
-    year: '2023',
+    name: 'Abigail Qi',
+    award: 'ISEF 1st Place Top Award',
+    category: 'Microbiology',
+    details: 'BRMHS · RSI · EUCYS · NSF',
+    year: '2025',
+    image: abigailImg,
   },
 ]

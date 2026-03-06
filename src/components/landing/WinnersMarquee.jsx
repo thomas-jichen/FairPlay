@@ -5,13 +5,31 @@ import { fadeInUp, staggerContainer } from './animations'
 
 function WinnerCard({ winner }) {
   return (
-    <div className="glass-panel rounded-2xl px-7 py-5 flex items-center gap-5 shrink-0 min-w-[300px]">
-      {/* Avatar placeholder */}
-      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-surface-secondary to-surface-tertiary border border-white/60 shrink-0" />
-      <div className="min-w-0">
-        <p className="text-sm font-medium text-text-primary truncate" style={{ letterSpacing: '-0.01em' }}>{winner.name}</p>
-        <p className="text-xs font-normal text-text-secondary mt-0.5 truncate" style={{ letterSpacing: '0.005em' }}>{winner.award}</p>
-        <p className="type-caption text-text-muted mt-0.5">{winner.university} &middot; {winner.year}</p>
+    <div className="glass-panel no-shimmer rounded-2xl px-6 py-4 flex items-center gap-5 shrink-0"
+      style={{ width: '300px', height: '128px' }}>
+      {/* Headshot */}
+      <img
+        src={winner.image}
+        alt={winner.name}
+        className="w-14 h-14 rounded-full object-cover border border-white/60 shrink-0"
+        style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.10)' }}
+      />
+      <div className="min-w-0 flex flex-col justify-center gap-[3px]">
+        <p className="text-[0.9rem] font-semibold text-text-primary truncate" style={{ letterSpacing: '-0.01em' }}>
+          {winner.name}
+        </p>
+        <p className="text-xs font-normal text-text-secondary truncate" style={{ letterSpacing: '0.005em' }}>
+          {winner.award}
+        </p>
+        <p className="text-xs font-normal text-text-secondary truncate" style={{ letterSpacing: '0.005em' }}>
+          {winner.category}
+        </p>
+        <p className="type-caption text-text-muted mt-[3px] truncate">
+          {winner.details}
+        </p>
+        <p className="type-caption text-text-muted mt-[1px] truncate">
+          {winner.year}
+        </p>
       </div>
     </div>
   )
@@ -50,8 +68,9 @@ export default function WinnersMarquee() {
         className="w-full"
       >
         <div className="marquee-strip gap-5">
-          {ISEF_WINNERS.map((w, i) => <WinnerCard key={`a-${i}`} winner={w} />)}
-          {ISEF_WINNERS.map((w, i) => <WinnerCard key={`b-${i}`} winner={w} />)}
+          {[...Array(6)].map((_, setIdx) =>
+            ISEF_WINNERS.map((w, i) => <WinnerCard key={`${setIdx}-${i}`} winner={w} />)
+          )}
         </div>
       </motion.div>
     </div>

@@ -27,7 +27,9 @@ export default function Hero() {
           variants={fadeInUp}
           className="type-body text-lg md:text-xl text-text-secondary max-w-2xl mx-auto mt-8"
         >
-          Personalized realistic AI judging simulations designed by ISEF grand winners. Insights from competing at the biggest stage, democratized.
+          Personalized, realistic AI judging designed by ISEF winners.
+          <br />
+          Insights from competing at the biggest stage, democratized.
         </motion.p>
 
         {/* CTA */}

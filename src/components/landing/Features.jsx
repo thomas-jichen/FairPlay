@@ -243,7 +243,7 @@ export default function Features() {
           variants={fadeInUp}
           className="type-body text-lg text-text-secondary mt-4"
         >
-          Every detail of the ISEF judging experience, on your laptop.
+          Every detail of the ISEF judging experience, in your browser.
         </motion.p>
       </motion.div>
 
