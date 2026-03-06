@@ -251,8 +251,8 @@ export default function Features() {
       <div className="space-y-4">
         <FeatureCard
           index={1}
-          title="Real-time AI Judge Questioning"
-          description="An adaptive AI judge reads your abstract, analyzes your poster, and asks probing questions in real time: just like a panel of ISEF judges would during your presentation."
+          title="Real-time Expert Interview"
+          description="An adaptive AI judge reads your abstract, analyzes your poster, and asks critical questions in real time: just like a panel of ISEF judges would during your presentation."
         >
           <JudgeMock />
         </FeatureCard>
@@ -260,7 +260,7 @@ export default function Features() {
         <FeatureCard
           index={2}
           title="Full Multimodal Context"
-          description="Your abstract, poster text, body language, speaking pace, and mannerisms are all analyzed simultaneously. The AI judge considers everything a real judge would."
+          description="Your pitch, abstract, poster, body language, pace, mannerisms, and more are all analyzed simultaneously. The AI judge considers everything a real judge would."
           reverse
         >
           <ContextMock />
@@ -268,7 +268,7 @@ export default function Features() {
 
         <FeatureCard
           index={3}
-          title="ISEF Rubric-Calibrated Feedback"
+          title="ISEF Rubric Tailored Feedback"
           description="After your session, receive detailed scoring aligned to official ISEF judging criteria with specific, actionable feedback on every dimension of your pitch."
         >
           <RubricMock />
