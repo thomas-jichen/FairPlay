@@ -1,14 +1,46 @@
-const MAX_WORDS = 5000
+const MAX_WORDS = 500
 
 export default function AbstractInput({ value, onChange }) {
   const wordCount = value.trim() ? value.trim().split(/\s+/).length : 0
   const isOverLimit = wordCount > MAX_WORDS
 
+  const handleChange = (e) => {
+    const text = e.target.value
+    const words = text.trim() ? text.trim().split(/\s+/) : []
+    
+    // If they paste or type past the limit, truncate it to exactly MAX_WORDS
+    if (words.length > MAX_WORDS) {
+      // Find the character index where the 500th word ends
+      // This preserves original spacing up to that point
+      let currentWordCount = 0
+      let cutoffIndex = text.length
+      
+      let inWord = false
+      for (let i = 0; i < text.length; i++) {
+        if (text[i].trim() !== '') {
+          if (!inWord) {
+            inWord = true
+            currentWordCount++
+            if (currentWordCount > MAX_WORDS) {
+              cutoffIndex = i
+              break
+            }
+          }
+        } else {
+          inWord = false
+        }
+      }
+      onChange(text.slice(0, cutoffIndex))
+    } else {
+      onChange(text)
+    }
+  }
+
   return (
     <div className="space-y-3 group">
       <div className="flex items-center justify-between px-1">
         <label className="text-sm font-medium text-text-primary tracking-tight">
-          Abstract
+          Abstract <span className="text-text-muted font-normal ml-1">(max. {MAX_WORDS} words)</span>
         </label>
         <span className="text-xs text-text-muted">Optional</span>
       </div>
@@ -16,7 +48,7 @@ export default function AbstractInput({ value, onChange }) {
       <div className="relative">
         <textarea
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={handleChange}
           placeholder="Paste your project abstract overview here..."
           rows={4}
           className={`relative w-full rounded-2xl border bg-black/[0.02] backdrop-blur-sm
