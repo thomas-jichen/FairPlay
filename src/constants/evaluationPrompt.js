@@ -24,7 +24,7 @@ const JSON_SCHEMA = `{
   "judgeImpression": "1-2 sentences — your overall impression of the student, written in your persona voice"
 }`
 
-export function buildEvaluationPrompt({ category, crueltyLevel, rubricType, abstractText, posterText, contextSummary }) {
+export function buildEvaluationPrompt({ category, crueltyLevel, rubricType, abstractText, contextSummary }) {
   const categoryLabel = ISEF_CATEGORIES.find((c) => c.value === category)?.label || category
   const expertise = CATEGORY_EXPERTISE[category] || 'scientist'
   const rubric = rubricType === 'engineering' ? ENGINEERING_RUBRIC : SCIENCE_RUBRIC
@@ -34,13 +34,8 @@ export function buildEvaluationPrompt({ category, crueltyLevel, rubricType, abst
   let materialsSection = ''
   if (contextSummary) {
     materialsSection = `STUDENT PROJECT BRIEFING (summarized from abstract and poster):\n"""\n${contextSummary}\n"""`
-  } else if (abstractText || posterText) {
-    if (abstractText) {
-      materialsSection += `STUDENT'S ABSTRACT:\n"""\n${abstractText}\n"""\n\n`
-    }
-    if (posterText && !posterText.startsWith('[')) {
-      materialsSection += `EXTRACTED TEXT FROM STUDENT'S POSTER:\n"""\n${posterText.slice(0, 8000)}\n"""`
-    }
+  } else if (abstractText) {
+    materialsSection = `STUDENT'S ABSTRACT:\n"""\n${abstractText}\n"""`
   } else {
     materialsSection = 'No abstract or poster materials were provided.'
   }
@@ -90,9 +85,8 @@ export function buildEvaluationUserMessage({
       return `[${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}] ${seg.text}`
     })
     transcriptText = segments.join('\n')
-    // Cap at 5000 chars to stay within context limits
-    if (transcriptText.length > 5000) {
-      transcriptText = transcriptText.slice(0, 5000) + '\n[... transcript truncated]'
+    if (transcriptText.length > 15000) {
+      transcriptText = transcriptText.slice(0, 15000) + '\n[... transcript truncated]'
     }
   }
 
@@ -104,8 +98,8 @@ export function buildEvaluationUserMessage({
       return `${label}: ${msg.text}`
     })
     conversationText = exchanges.join('\n\n')
-    if (conversationText.length > 3000) {
-      conversationText = conversationText.slice(0, 3000) + '\n[... conversation truncated]'
+    if (conversationText.length > 10000) {
+      conversationText = conversationText.slice(0, 10000) + '\n[... conversation truncated]'
     }
   }
 

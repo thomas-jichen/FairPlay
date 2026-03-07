@@ -1,93 +1,95 @@
 import { useEffect, useRef } from 'react'
 import useSessionStore from '../stores/useSessionStore'
 import { analyzeForInterruption } from '../services/judgeService'
-import { CRUELTY_CONFIG, INTERRUPTION_BUFFER_CONFIG } from '../constants/crueltyConfig'
+import { INTERRUPTION_COOLDOWNS, INTERRUPTION_RATE_CAPS } from '../constants/crueltyConfig'
+
+const CHECK_INTERVAL_MS = 5000
+const MIN_NEW_CHARS = 30
+const MIN_PITCH_ELAPSED_MS = 20000
 
 export default function useInterruptionEngine({ enabled, crueltyLevel, onInterrupt }) {
-  const bufferRef = useRef([])
-  const lastCheckTimeRef = useRef(0)
   const pendingRef = useRef(false)
+  const lastCheckedLengthRef = useRef(0)
   const onInterruptRef = useRef(onInterrupt)
   onInterruptRef.current = onInterrupt
 
+  // Rate limiting refs
+  const lastInterruptTimeRef = useRef(0)
+  const interruptCountRef = useRef(0)
+  const engineStartTimeRef = useRef(0)
+
+  // Record engine start time on first enable
   useEffect(() => {
-    if (!enabled) {
-      bufferRef.current = []
-      return
+    if (enabled && engineStartTimeRef.current === 0) {
+      engineStartTimeRef.current = Date.now()
     }
+  }, [enabled])
 
-    const config = CRUELTY_CONFIG[crueltyLevel]
-    if (!config || config.interruptionMode === 'none') return
+  useEffect(() => {
+    if (!enabled) return
 
-    const bufferConfig = INTERRUPTION_BUFFER_CONFIG[config.interruptionMode]
-    if (!bufferConfig || bufferConfig.segmentsBeforeCheck === Infinity) return
+    const interval = setInterval(() => {
+      if (pendingRef.current) return
 
-    const unsubscribe = useSessionStore.subscribe((state, prevState) => {
-      if (state.transcript.length <= prevState.transcript.length) return
+      const state = useSessionStore.getState()
       if (state.isInterrupted) return
+      if (!state.judgeSystemPrompt) return
 
-      const newSegments = state.transcript.slice(prevState.transcript.length)
-      for (const seg of newSegments) {
-        if (seg.phase === 'pitching') {
-          bufferRef.current.push(seg)
-        }
-      }
+      // Don't interrupt in the first 20 seconds of the pitch
+      if (Date.now() - engineStartTimeRef.current < MIN_PITCH_ELAPSED_MS) return
 
-      const now = Date.now()
-      const timeSinceLastCheck = (now - lastCheckTimeRef.current) / 1000
+      // Cooldown: skip if too soon after last interruption
+      const cooldown = INTERRUPTION_COOLDOWNS[crueltyLevel] || 20000
+      if (Date.now() - lastInterruptTimeRef.current < cooldown) return
 
-      if (
-        bufferRef.current.length >= bufferConfig.segmentsBeforeCheck &&
-        timeSinceLastCheck >= bufferConfig.minSecondsBetween &&
-        !pendingRef.current
-      ) {
-        pendingRef.current = true
-        const recentTranscript = bufferRef.current.map((s) => s.text).join(' ')
+      // Rate cap: skip if we've exceeded the max rate
+      const rateCap = INTERRUPTION_RATE_CAPS[crueltyLevel] || 1
+      const elapsedMinutes = (Date.now() - engineStartTimeRef.current) / 60000
+      if (elapsedMinutes > 0 && interruptCountRef.current / elapsedMinutes >= rateCap) return
 
-        // Pre-filter: skip LLM call if transcript lacks substantive content
-        const FILLER_WORDS = new Set(['um', 'uh', 'like', 'so', 'and', 'the', 'a', 'an', 'is', 'it', 'you', 'know', 'okay', 'yeah', 'right', 'well', 'just', 'that', 'this', 'but', 'or', 'for', 'to', 'of', 'in', 'on', 'i', 'my', 'we'])
-        const words = recentTranscript.trim().split(/\s+/)
-        const substantiveWords = words.filter((w) => !FILLER_WORDS.has(w.toLowerCase()))
-        if (substantiveWords.length < 15) {
+      // Build full pitch transcript from finalized segments + interim
+      const finalizedText = state.transcript
+        .filter((s) => s.phase === 'pitching')
+        .map((s) => s.text)
+        .join(' ')
+      const interimText = state.interimText || ''
+      const fullPitchTranscript = (finalizedText + (interimText ? ' ' + interimText : '')).trim()
+
+      if (!fullPitchTranscript) return
+
+      // Check if enough new content since last check
+      const newChars = fullPitchTranscript.length - lastCheckedLengthRef.current
+      if (newChars < MIN_NEW_CHARS) return
+
+      const recentPortion = fullPitchTranscript.slice(lastCheckedLengthRef.current).trim()
+      if (!recentPortion) return
+
+      pendingRef.current = true
+
+      analyzeForInterruption({
+        systemPrompt: state.judgeSystemPrompt,
+        conversationHistory: state.conversationHistory,
+        fullPitchTranscript,
+        recentPortion,
+        crueltyLevel,
+      })
+        .then((result) => {
+          lastCheckedLengthRef.current = fullPitchTranscript.length
           pendingRef.current = false
-          return
-        }
 
-        const systemPrompt = useSessionStore.getState().judgeSystemPrompt
-        const conversationHistory = useSessionStore.getState().conversationHistory
-
-        if (!systemPrompt) {
-          pendingRef.current = false
-          return
-        }
-
-        analyzeForInterruption({
-          systemPrompt,
-          conversationHistory,
-          recentTranscript,
-          crueltyLevel,
+          if (result.interrupt && result.question && !useSessionStore.getState().isInterrupted) {
+            lastInterruptTimeRef.current = Date.now()
+            interruptCountRef.current += 1
+            onInterruptRef.current(result.question)
+          }
         })
-          .then((result) => {
-            bufferRef.current = []
-            lastCheckTimeRef.current = Date.now()
-            pendingRef.current = false
+        .catch((err) => {
+          console.warn('Interruption analysis failed:', err)
+          lastCheckedLengthRef.current = fullPitchTranscript.length
+          pendingRef.current = false
+        })
+    }, CHECK_INTERVAL_MS)
 
-            if (result.interrupt && result.question && !useSessionStore.getState().isInterrupted) {
-              onInterruptRef.current(result.question)
-            }
-          })
-          .catch((err) => {
-            console.warn('Interruption analysis failed:', err)
-            bufferRef.current = []
-            lastCheckTimeRef.current = Date.now()
-            pendingRef.current = false
-          })
-      }
-    })
-
-    return () => {
-      unsubscribe()
-      bufferRef.current = []
-    }
+    return () => clearInterval(interval)
   }, [enabled, crueltyLevel])
 }

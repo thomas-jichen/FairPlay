@@ -97,22 +97,22 @@ export default function PitchPage() {
       const buildPrompt = async () => {
         let contextSummary = null
 
-        if (store.abstractText || store.posterText) {
+        if (store.abstractText || store.posterBase64) {
           try {
             contextSummary = await summarizeJudgeContext({
               abstractText: store.abstractText,
-              posterText: store.posterText,
+              posterBase64: store.posterBase64,
+              posterMimeType: store.posterMimeType,
             })
             store.setContextSummary(contextSummary)
           } catch (err) {
-            console.warn('Context summarization failed, using raw text:', err)
+            console.warn('Context summarization failed:', err)
           }
         }
 
         const prompt = buildSystemPrompt({
           category: store.category,
           abstractText: store.abstractText,
-          posterText: store.posterText,
           crueltyLevel: store.crueltyLevel,
           rubricType: getRubricType(store.category),
           contextSummary,
@@ -173,7 +173,7 @@ export default function PitchPage() {
 
   // Interruption engine
   useInterruptionEngine({
-    enabled: currentPhase === PHASES.PITCHING && interruptDuringPitch && !isInterrupted,
+    enabled: currentPhase === PHASES.PITCHING && interruptDuringPitch,
     crueltyLevel,
     onInterrupt: (question) => {
       timer.pause()
@@ -211,8 +211,13 @@ export default function PitchPage() {
           phase: 'pitching',
         })
         store.setIsInterrupted(false)
-        store.setCurrentJudgeQuestion(null)
-        timer.start()
+
+        // Show acknowledgment before resuming
+        store.setCurrentJudgeQuestion({ text: 'Got it. Continue with your pitch.', type: 'acknowledgment' })
+        setTimeout(() => {
+          useSessionStore.getState().setCurrentJudgeQuestion(null)
+          timer.start()
+        }, 2500)
       } else if (currentPhase === PHASES.QA) {
         qaEngine.handleAnswerComplete(answerText)
       }
@@ -297,7 +302,6 @@ export default function PitchPage() {
                 type={currentJudgeQuestion.type}
                 questionNumber={currentJudgeQuestion.questionNumber || 0}
                 isVisible={true}
-                isListening={answerDetectionActive}
               />
             </div>
           )}

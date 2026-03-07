@@ -3,8 +3,8 @@ import useSessionStore from '../stores/useSessionStore'
 
 const SILENCE_THRESHOLD = 4000
 const FALLBACK_TIMEOUT = 30000
-const MINIMUM_ANSWER_TIME = 5000
-const GRACE_PERIOD = 3000
+const MINIMUM_ANSWER_TIME = 7000
+const GRACE_PERIOD = 2000
 
 export default function useAnswerDetection({ active, onAnswerComplete }) {
   const activationTimeRef = useRef(null)
@@ -13,9 +13,10 @@ export default function useAnswerDetection({ active, onAnswerComplete }) {
   const collectedTextRef = useRef([])
   const baselineTranscriptLenRef = useRef(0)
   const intervalRef = useRef(null)
-  const graceElapsedRef = useRef(false)
   const onCompleteRef = useRef(onAnswerComplete)
   onCompleteRef.current = onAnswerComplete
+
+  const setStatus = useSessionStore.getState().setAnswerDetectionStatus
 
   const cleanup = useCallback(() => {
     if (intervalRef.current) {
@@ -26,12 +27,12 @@ export default function useAnswerDetection({ active, onAnswerComplete }) {
     lastSegmentTimeRef.current = null
     segmentCountRef.current = 0
     collectedTextRef.current = []
-    graceElapsedRef.current = false
   }, [])
 
   useEffect(() => {
     if (!active) {
       cleanup()
+      setStatus(null)
       return
     }
 
@@ -41,9 +42,14 @@ export default function useAnswerDetection({ active, onAnswerComplete }) {
     lastSegmentTimeRef.current = null
     segmentCountRef.current = 0
     collectedTextRef.current = []
-    graceElapsedRef.current = false
+
+    // Start in grace period
+    setStatus('grace')
 
     const unsubscribe = useSessionStore.subscribe((state, prevState) => {
+      // Ignore segments during grace period (residual speech from before interruption)
+      if (Date.now() - activationTimeRef.current < GRACE_PERIOD) return
+
       if (state.transcript.length > prevState.transcript.length) {
         const newSegments = state.transcript.slice(prevState.transcript.length)
         for (const seg of newSegments) {
@@ -51,6 +57,8 @@ export default function useAnswerDetection({ active, onAnswerComplete }) {
             collectedTextRef.current.push(seg.text)
             segmentCountRef.current++
             lastSegmentTimeRef.current = Date.now()
+            // Student is speaking — update status
+            setStatus('heard')
           }
         }
       }
@@ -60,15 +68,13 @@ export default function useAnswerDetection({ active, onAnswerComplete }) {
       const now = Date.now()
       const elapsed = now - activationTimeRef.current
 
-      // Grace period: don't process anything for the first 3 seconds
+      // Grace period: don't process anything for the first 2 seconds
       if (elapsed < GRACE_PERIOD) return
 
-      // After grace ends, refresh lastSegmentTime to prevent stale timestamps
-      if (!graceElapsedRef.current) {
-        graceElapsedRef.current = true
-        if (lastSegmentTimeRef.current !== null) {
-          lastSegmentTimeRef.current = now
-        }
+      // Transition from grace to listening when grace ends
+      const currentStatus = useSessionStore.getState().answerDetectionStatus
+      if (currentStatus === 'grace') {
+        setStatus('listening')
       }
 
       // Minimum answer time: don't complete before 5s regardless of silence
@@ -83,6 +89,7 @@ export default function useAnswerDetection({ active, onAnswerComplete }) {
         const text = collectedTextRef.current.join(' ')
         cleanup()
         unsubscribe()
+        setStatus(null)
         onCompleteRef.current(text)
         return
       }
@@ -92,6 +99,7 @@ export default function useAnswerDetection({ active, onAnswerComplete }) {
         const text = collectedTextRef.current.join(' ') || '(no response detected)'
         cleanup()
         unsubscribe()
+        setStatus(null)
         onCompleteRef.current(text)
       }
     }, 500)
@@ -99,6 +107,7 @@ export default function useAnswerDetection({ active, onAnswerComplete }) {
     return () => {
       cleanup()
       unsubscribe()
+      setStatus(null)
     }
   }, [active, cleanup])
 }

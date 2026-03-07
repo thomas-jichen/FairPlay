@@ -11,6 +11,8 @@ const useSessionStore = create((set) => ({
   abstractText: '',
   scriptText: '',
   posterText: '',
+  posterBase64: null,
+  posterMimeType: null,
 
   // Runtime state (reset on session end)
   currentPhase: PHASES.SETUP,
@@ -19,6 +21,8 @@ const useSessionStore = create((set) => ({
   recordedBlob: null,
   isRecording: false,
   isSpeechActive: false,
+  interimText: '',
+  answerDetectionStatus: null,  // 'grace' | 'listening' | 'heard' | null
   conversationHistory: [],
   isInterrupted: false,
   currentJudgeQuestion: null,
@@ -40,6 +44,8 @@ const useSessionStore = create((set) => ({
   setAbstractText: (text) => set({ abstractText: text }),
   setScriptText: (text) => set({ scriptText: text }),
   setPosterText: (text) => set({ posterText: text }),
+  setPosterBase64: (data) => set({ posterBase64: data }),
+  setPosterMimeType: (type) => set({ posterMimeType: type }),
 
   // Hydrate settings from Supabase (for signed-in users)
   hydrateFromSaved: (saved) => set({
@@ -57,6 +63,8 @@ const useSessionStore = create((set) => ({
   setRecordedBlob: (blob) => set({ recordedBlob: blob }),
   setIsRecording: (val) => set({ isRecording: val }),
   setIsSpeechActive: (val) => set({ isSpeechActive: val }),
+  setInterimText: (text) => set({ interimText: text }),
+  setAnswerDetectionStatus: (status) => set({ answerDetectionStatus: status }),
 
   // Judge actions
   addConversationMessage: (msg) =>
@@ -82,6 +90,8 @@ const useSessionStore = create((set) => ({
     recordedBlob: null,
     isRecording: false,
     isSpeechActive: false,
+    interimText: '',
+    answerDetectionStatus: null,
     conversationHistory: [],
     isInterrupted: false,
     currentJudgeQuestion: null,
@@ -93,6 +103,8 @@ const useSessionStore = create((set) => ({
     approachabilityScore: 0,
     evaluationResult: null,
     recordingStartTime: null,
+    posterBase64: null,
+    posterMimeType: null,
   }),
 }))
 

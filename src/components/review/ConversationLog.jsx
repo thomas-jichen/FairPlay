@@ -1,9 +1,9 @@
-export default function ConversationLog({ conversationHistory }) {
-  if (conversationHistory.length === 0) {
+export default function ConversationLog({ conversationHistory, transcript }) {
+  if (conversationHistory.length === 0 && (!transcript || transcript.length === 0)) {
     return (
       <div className="glass-panel rounded-3xl p-8 space-y-6 relative">
         <div className="border-b border-black/[0.05] pb-4">
-          <h2 className="type-overline text-text-primary">Q&A Transcript</h2>
+          <h2 className="type-overline text-text-primary">Session Transcript</h2>
         </div>
         <div className="text-center py-10">
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-white/60 border border-white mb-5 shadow-sm">
@@ -11,20 +11,63 @@ export default function ConversationLog({ conversationHistory }) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
             </svg>
           </div>
-          <p className="text-sm font-semibold text-text-primary tracking-tight">No Q&A conversation recorded</p>
+          <p className="text-sm font-semibold text-text-primary tracking-tight">No conversation recorded</p>
         </div>
       </div>
     )
   }
 
+  // Build a unified timeline: pitch transcript + judge/student exchanges
+  const timeline = []
+
+  // Add pitch transcript segments
+  if (transcript && transcript.length > 0) {
+    const pitchSegments = transcript.filter((s) => s.phase === 'pitching')
+    if (pitchSegments.length > 0) {
+      // Combine all pitching segments into one block
+      const pitchText = pitchSegments.map((s) => s.text).join(' ')
+      timeline.push({
+        role: 'pitch',
+        text: pitchText,
+        timestamp: pitchSegments[0].timestamp || 0,
+      })
+    }
+  }
+
+  // Add all conversation history entries (interruptions + Q&A)
+  for (const msg of conversationHistory) {
+    timeline.push({
+      role: msg.role,
+      text: msg.text,
+      timestamp: msg.timestamp || 0,
+      phase: msg.phase,
+    })
+  }
+
+  // Sort by timestamp
+  timeline.sort((a, b) => a.timestamp - b.timestamp)
+
   return (
     <div className="glass-panel rounded-3xl p-8 space-y-6 relative overflow-hidden">
       <div className="border-b border-black/[0.05] pb-4 relative z-20">
-        <h2 className="type-overline text-text-primary">Q&A Transcript</h2>
+        <h2 className="type-overline text-text-primary">Session Transcript</h2>
       </div>
 
       <div className="space-y-6 max-h-[500px] overflow-y-auto pr-4 pb-8 scrollbar-hide relative z-0">
-        {conversationHistory.map((msg, i) => {
+        {timeline.map((msg, i) => {
+          if (msg.role === 'pitch') {
+            return (
+              <div key={i} className="flex flex-col items-start">
+                <span className="text-[10px] font-bold tracking-widest uppercase mb-1.5 px-1 text-blue-500">
+                  Your Pitch
+                </span>
+                <div className="max-w-[95%] rounded-[20px] px-5 py-4 bg-black/[0.03] border border-black/5 text-text-secondary rounded-tl-sm">
+                  <p className="type-body text-sm leading-relaxed">{msg.text}</p>
+                </div>
+              </div>
+            )
+          }
+
           const isJudge = msg.role === 'judge'
           return (
             <div key={i} className={`flex flex-col ${isJudge ? 'items-start' : 'items-end'}`}>

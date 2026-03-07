@@ -1,14 +1,13 @@
 import { useRef, useState } from 'react'
 import useSessionStore from '../../stores/useSessionStore'
 import usePdfExtract from '../../hooks/usePdfExtract'
+import { pdfToImage } from '../../services/pdfToImage'
 
 const ACCEPTED_TYPES = [
   'application/pdf',
-  'image/png',
-  'image/jpeg',
-  'image/jpg',
-  'image/webp',
 ]
+
+const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
 
 function formatSize(bytes) {
   if (bytes < 1024) return `${bytes} B`
@@ -19,29 +18,41 @@ function formatSize(bytes) {
 export default function FileUpload({ uploadedFile, onFileChange }) {
   const inputRef = useRef(null)
   const [isDragging, setIsDragging] = useState(false)
+  const [error, setError] = useState(null)
   const setPosterText = useSessionStore((s) => s.setPosterText)
+  const setPosterBase64 = useSessionStore((s) => s.setPosterBase64)
+  const setPosterMimeType = useSessionStore((s) => s.setPosterMimeType)
   const { extractText, isExtracting } = usePdfExtract()
 
   async function handleFile(file) {
     if (!file) return
     if (!ACCEPTED_TYPES.includes(file.type)) return
+    setError(null)
 
-    const isImage = file.type.startsWith('image/')
-    const preview = isImage ? URL.createObjectURL(file) : null
+    if (file.size > MAX_FILE_SIZE) {
+      setError(`File too large (${formatSize(file.size)}). Maximum size is 10 MB.`)
+      return
+    }
 
     onFileChange({
       file,
       name: file.name,
       size: file.size,
       type: file.type,
-      preview,
+      preview: null,
     })
 
-    if (file.type === 'application/pdf') {
-      const text = await extractText(file)
-      setPosterText(text || '[PDF uploaded — text extraction failed]')
-    } else if (isImage) {
-      setPosterText('[Image poster uploaded — text extraction not available]')
+    // Extract text for display and convert to image for Gemini in parallel
+    const [text, imageResult] = await Promise.all([
+      extractText(file),
+      pdfToImage(file),
+    ])
+
+    setPosterText(text || '[PDF uploaded — text extraction failed]')
+
+    if (imageResult) {
+      setPosterBase64(imageResult.base64)
+      setPosterMimeType(imageResult.mimeType)
     }
   }
 
@@ -62,13 +73,16 @@ export default function FileUpload({ uploadedFile, onFileChange }) {
     }
     onFileChange(null)
     setPosterText('')
+    setPosterBase64(null)
+    setPosterMimeType(null)
+    setError(null)
   }
 
   return (
     <div className="space-y-3 px-1 group">
       <div className="flex items-center justify-between">
         <label className="text-sm font-medium text-text-primary tracking-tight">
-          Poster
+          Poster (single-page PDF)
         </label>
         <span className="text-xs text-text-muted">Optional</span>
       </div>
@@ -99,10 +113,10 @@ export default function FileUpload({ uploadedFile, onFileChange }) {
           </div>
 
           <p className="relative z-10 text-sm font-medium text-text-primary mb-1">
-            Drop your poster or slide here
+            Drop your poster here
           </p>
           <p className="relative z-10 text-xs text-text-muted">
-            PDF or high-res image (PNG, WebP)
+            Single-page PDF, max 10 MB
           </p>
         </div>
       ) : (
@@ -150,10 +164,14 @@ export default function FileUpload({ uploadedFile, onFileChange }) {
         </div>
       )}
 
+      {error && (
+        <p className="text-xs text-red-500 font-medium px-1">{error}</p>
+      )}
+
       <input
         ref={inputRef}
         type="file"
-        accept=".pdf,image/*"
+        accept=".pdf"
         onChange={(e) => {
           handleFile(e.target.files[0])
           e.target.value = ''

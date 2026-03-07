@@ -51,7 +51,6 @@ export default function ReviewScreen() {
   const category = useSessionStore((s) => s.category)
   const crueltyLevel = useSessionStore((s) => s.crueltyLevel)
   const abstractText = useSessionStore((s) => s.abstractText)
-  const posterText = useSessionStore((s) => s.posterText)
   const contextSummary = useSessionStore((s) => s.contextSummary)
 
   const [error, setError] = useState(null)
@@ -70,7 +69,6 @@ export default function ReviewScreen() {
           crueltyLevel,
           rubricType,
           abstractText,
-          posterText,
           contextSummary,
         })
 
@@ -99,7 +97,6 @@ export default function ReviewScreen() {
     category,
     crueltyLevel,
     abstractText,
-    posterText,
     contextSummary,
     transcript,
     conversationHistory,
@@ -186,7 +183,7 @@ export default function ReviewScreen() {
             conversationHistory={conversationHistory}
           />
           <div className="sticky top-8">
-            <ConversationLog conversationHistory={conversationHistory} />
+            <ConversationLog conversationHistory={conversationHistory} transcript={transcript} />
           </div>
         </div>
       </div>

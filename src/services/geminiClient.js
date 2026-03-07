@@ -1,9 +1,4 @@
-const GROQ_DIRECT_URL = 'https://api.groq.com/openai/v1/chat/completions'
-
-export const MODELS = {
-  KIMI_K2: 'moonshotai/kimi-k2-instruct',
-  QWEN3_32B: 'qwen/qwen3-32b',
-}
+const GEMINI_DIRECT_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent'
 
 class RateLimiter {
   constructor(maxRequests, windowMs) {
@@ -28,25 +23,24 @@ class RateLimiter {
   }
 }
 
-const rateLimiter = new RateLimiter(55, 60_000) // 55 RPM to stay safely under 60
+const rateLimiter = new RateLimiter(15, 60_000)
 
-// Use serverless proxy in production, direct Groq calls in dev
 const useProxy = import.meta.env.PROD
 
-export class GroqError extends Error {
+export class GeminiError extends Error {
   constructor(message, status, retryable) {
     super(message)
-    this.name = 'GroqError'
+    this.name = 'GeminiError'
     this.status = status
     this.retryable = retryable
   }
 }
 
-export async function chatCompletion({ model, messages, temperature = 0.7, maxTokens = 512 }) {
+export async function geminiGenerate({ contents, generationConfig, systemInstruction }) {
   if (!useProxy) {
-    const apiKey = import.meta.env.VITE_GROQ_API_KEY
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY
     if (!apiKey) {
-      throw new GroqError('VITE_GROQ_API_KEY not set in .env', 0, false)
+      throw new GeminiError('VITE_GEMINI_API_KEY not set in .env', 0, false)
     }
   }
 
@@ -62,50 +56,53 @@ export async function chatCompletion({ model, messages, temperature = 0.7, maxTo
     const timeout = setTimeout(() => controller.abort(), 30_000)
 
     try {
-      const fetchUrl = useProxy ? '/api/chat' : GROQ_DIRECT_URL
-      const headers = { 'Content-Type': 'application/json' }
+      let fetchUrl, headers
+      const body = { contents, generationConfig }
+      if (systemInstruction) body.systemInstruction = systemInstruction
 
-      if (!useProxy) {
-        headers.Authorization = `Bearer ${import.meta.env.VITE_GROQ_API_KEY}`
+      if (useProxy) {
+        fetchUrl = '/api/gemini'
+        headers = { 'Content-Type': 'application/json' }
+      } else {
+        const apiKey = import.meta.env.VITE_GEMINI_API_KEY
+        fetchUrl = `${GEMINI_DIRECT_URL}?key=${apiKey}`
+        headers = { 'Content-Type': 'application/json' }
       }
 
       const res = await fetch(fetchUrl, {
         method: 'POST',
         headers,
-        body: JSON.stringify({ model, messages, temperature, max_tokens: maxTokens }),
+        body: JSON.stringify(body),
         signal: controller.signal,
       })
 
       clearTimeout(timeout)
 
       if (!res.ok) {
-        const body = await res.text().catch(() => '')
+        const errorBody = await res.text().catch(() => '')
         const retryable = res.status === 429 || res.status >= 500
-        lastError = new GroqError(`Groq API ${res.status}: ${body}`, res.status, retryable)
+        lastError = new GeminiError(`Gemini API ${res.status}: ${errorBody}`, res.status, retryable)
         if (!retryable) throw lastError
         continue
       }
 
       rateLimiter.record()
       const data = await res.json()
-      const choice = data.choices?.[0]
 
-      return {
-        content: choice?.message?.content || '',
-        usage: data.usage,
-      }
+      const text = data.candidates?.[0]?.content?.parts?.[0]?.text || ''
+      return { content: text, usage: data.usageMetadata }
     } catch (err) {
       clearTimeout(timeout)
-      if (err instanceof GroqError) {
+      if (err instanceof GeminiError) {
         lastError = err
         if (!err.retryable) throw err
       } else if (err.name === 'AbortError') {
-        lastError = new GroqError('Request timed out', 0, true)
+        lastError = new GeminiError('Request timed out', 0, true)
       } else {
-        lastError = new GroqError(err.message, 0, true)
+        lastError = new GeminiError(err.message, 0, true)
       }
     }
   }
 
-  throw lastError || new GroqError('Max retries exceeded', 0, false)
+  throw lastError || new GeminiError('Max retries exceeded', 0, false)
 }

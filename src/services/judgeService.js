@@ -1,4 +1,5 @@
 import { chatCompletion, MODELS } from './groqClient'
+import { geminiGenerate } from './geminiClient'
 import { CRUELTY_INTERRUPTION_PROMPTS } from '../constants/crueltyConfig'
 
 function buildMessages(systemPrompt, conversationHistory, userContent) {
@@ -30,71 +31,116 @@ function parseJSON(content) {
   }
 }
 
-export async function summarizeJudgeContext({ abstractText, posterText }) {
-  if (!abstractText && !posterText) return null
+export async function summarizeJudgeContext({ abstractText, posterBase64, posterMimeType }) {
+  if (!abstractText && !posterBase64) return null
 
-  const materials = []
+  const parts = []
+
+  if (posterBase64 && posterMimeType) {
+    parts.push({ inlineData: { mimeType: posterMimeType, data: posterBase64 } })
+  }
+
   if (abstractText) {
-    materials.push(`ABSTRACT:\n${abstractText}`)
-  }
-  if (posterText && !posterText.startsWith('[')) {
-    materials.push(`POSTER TEXT:\n${posterText.slice(0, 8000)}`)
-  } else if (posterText) {
-    materials.push(posterText)
+    parts.push({ text: `ABSTRACT:\n${abstractText}` })
   }
 
-  const messages = [
-    {
-      role: 'system',
-      content: 'You are a scientific writing assistant. Summarize the following student research materials into a concise briefing document (approximately 500 words). Preserve all key details: research question, hypothesis, methodology, key results/data points, conclusions, and claimed contributions. Do not add interpretation or commentary — just condense.',
-    },
-    {
-      role: 'user',
-      content: materials.join('\n\n'),
-    },
-  ]
+  if (!posterBase64 && abstractText) {
+    parts.push({ text: 'No poster image was provided. Summarize based on the abstract only.' })
+  }
 
-  const { content } = await chatCompletion({
-    model: MODELS.QWEN3_32B,
-    messages,
-    temperature: 0.3,
-    maxTokens: 700,
+  const { content } = await geminiGenerate({
+    contents: [{ parts }],
+    systemInstruction: {
+      parts: [{ text: 'You are a scientific research analyst preparing a briefing for an ISEF judge. Analyze the poster image visually and the abstract text. Produce a concise structured summary (at most 500 words) covering: research question, hypothesis, methodology, key results/data points, conclusions, and claimed contributions. Preserve all specific numbers, statistics, and technical details. Do not add interpretation or commentary.' }],
+    },
+    generationConfig: {
+      maxOutputTokens: 1024,
+      temperature: 0.2,
+    },
   })
 
   return content.trim()
 }
 
-export async function analyzeForInterruption({ systemPrompt, conversationHistory, recentTranscript, crueltyLevel }) {
+export async function analyzeForInterruption({ systemPrompt, conversationHistory, fullPitchTranscript, recentPortion, crueltyLevel }) {
   const thresholdPrompt = CRUELTY_INTERRUPTION_PROMPTS[crueltyLevel] || CRUELTY_INTERRUPTION_PROMPTS[3]
 
-  const userContent = `The student is currently giving their pitch. Here is what they just said:
+  // Truncate runaway transcripts — keep the most recent content
+  const MAX_TRANSCRIPT_CHARS = 20000
+  let safeTranscript = fullPitchTranscript
+  if (safeTranscript.length > MAX_TRANSCRIPT_CHARS) {
+    safeTranscript = '...[earlier portion truncated]...\n' + safeTranscript.slice(-MAX_TRANSCRIPT_CHARS)
+  }
 
-"${recentTranscript}"
+  // Extract previous judge questions to prevent repetition
+  const previousQuestions = conversationHistory
+    .filter((msg) => msg.role === 'judge' && msg.phase === 'pitching')
+    .map((msg) => msg.text)
 
-Based on your expertise and the student's materials, should you interrupt right now to ask a question?
+  let previousQuestionsBlock = ''
+  if (previousQuestions.length > 0) {
+    const listed = previousQuestions.map((q, i) => `${i + 1}. "${q}"`).join('\n')
+    previousQuestionsBlock = `\nYou have already asked these questions during this pitch (DO NOT ask about the same topics again):\n${listed}\n`
+  }
 
+  const userContent = `You are an experienced ISEF judge listening to a student present their research project. You are standing next to their poster while they speak.
+
+Judges do NOT interrupt often. When they do, it is usually because something important just happened in the explanation.
+
+Here is the full pitch so far:
+
+"""
+${safeTranscript}
+"""
+
+The most recent portion (what the student just said) is:
+
+"""
+${recentPortion}
+"""
+${previousQuestionsBlock}
 Interruption guidelines: ${thresholdPrompt}
 
-Consider these triggers:
-- Bold claims or specific numbers without evidence
-- Methodology being glossed over too quickly
-- Novelty claims that need substantiation
-- Something unclear that will affect your understanding of the rest of the pitch
+Before deciding, ask yourself: Would a real ISEF judge naturally interrupt the student at this exact moment?
 
-IMPORTANT: Review the conversation history above. Do NOT interrupt about a topic you have already asked about or that the student has already addressed. Only interrupt if this is a genuinely new concern.
+If the answer is "probably not", then do NOT interrupt.
+If the answer is "yes, most judges would stop them here", then interrupt.
 
-If you interrupt, your question should reference what the student JUST said — it should feel natural, like a real judge who was listening carefully.
+Judges usually interrupt when:
+• The student makes a strong claim without explaining how they proved it
+• A specific number, result, or statistic appears without explanation
+• A methodology step is mentioned but not explained
+• The student jumps past something critical too quickly
+• A technical term is used without definition
+• Something contradicts what the student said earlier
+• A claim of novelty or improvement is made without comparison
 
-Respond with JSON only, no other text:
-{"interrupt": true/false, "question": "your question if interrupting"}`
+Do NOT interrupt for:
+• Introductions, greetings, or pleasantries
+• Topics from the poster/abstract that the student hasn't mentioned yet in the pitch above
+• Partial words, filler phrases, or speech disfluencies
+• Minor lack of detail — the student may elaborate shortly
+• Anything already discussed in the pitch or conversation history
+
+CRITICAL RULE: You may ONLY interrupt about topics, claims, methods, or results that the student has ACTUALLY SAID in the pitch transcript above. Do NOT use your knowledge of their abstract or poster to ask about things they haven't mentioned yet. You are reacting to what you HEAR, not what you READ beforehand.
+
+Imagine you are standing next to the poster while the student is speaking. Would you actually stop them right now? If you would simply wait and let them continue, do not interrupt.
+
+If you interrupt:
+• Ask ONE short question (maximum 15 words)
+• Sound like a quick interjection, not a prepared question
+• Do NOT explain your reasoning
+
+Respond ONLY with JSON:
+{"interrupt": true/false, "question": "short question if interrupting"}`
 
   const messages = buildMessages(systemPrompt, conversationHistory, userContent)
 
   const { content } = await chatCompletion({
     model: MODELS.KIMI_K2,
     messages,
-    temperature: 0.6,
-    maxTokens: 256,
+    temperature: 0.5,
+    maxTokens: 128,
   })
 
   const parsed = parseJSON(content)
@@ -102,7 +148,6 @@ Respond with JSON only, no other text:
     return { interrupt: parsed.interrupt, question: parsed.question || '' }
   }
 
-  // Fallback: if model didn't return valid JSON, don't interrupt
   return { interrupt: false, question: '' }
 }
 
@@ -117,26 +162,42 @@ Respond with just the acknowledgment text, no JSON.`
     model: MODELS.KIMI_K2,
     messages,
     temperature: 0.7,
-    maxTokens: 128,
+    maxTokens: 256,
   })
 
   return content.trim().replace(/^["']|["']$/g, '')
 }
 
-export async function generateQAQuestion({ systemPrompt, conversationHistory }) {
+export async function generateQAQuestion({ systemPrompt, conversationHistory, pitchTranscript }) {
   const hasStudentAnswer = conversationHistory.length > 0 &&
     conversationHistory[conversationHistory.length - 1].role === 'student'
+
+  // Build a transcript block so the model knows what was actually said
+  let transcriptBlock = ''
+  if (pitchTranscript && pitchTranscript.length > 0) {
+    const pitchText = pitchTranscript
+      .filter((s) => s.phase === 'pitching')
+      .map((s) => s.text)
+      .join(' ')
+    if (pitchText) {
+      transcriptBlock = `\nHere is what the student actually said during their pitch (this is the ONLY content you may base your questions on):\n\n"""\n${pitchText.slice(0, 12000)}\n"""\n`
+    }
+  }
 
   let userContent
   if (hasStudentAnswer) {
     userContent = `The student just answered your previous question. Based on their answer, decide:
 - If their answer was vague, incomplete, or raised new questions, follow up on the SAME topic to probe deeper.
 - If their answer was satisfactory, move to a NEW topic you haven't covered yet.
+${transcriptBlock}
+CRITICAL RULE: You may ONLY ask about topics, claims, methods, or results that the student has ACTUALLY MENTIONED in their pitch or in their answers above. Do NOT ask about anything from the abstract or poster that the student has not yet brought up themselves. If the student hasn't mentioned it, you don't know about it yet.
 
 Respond with JSON only:
 {"acknowledgment": "brief 3-8 word acknowledgment of their answer", "question": "your next question"}`
   } else {
-    userContent = `Ask your first substantive question about the student's project. Pick the most important topic based on their pitch and materials.
+    userContent = `Ask your first substantive question about the student's project. Base your question ONLY on what the student actually said during their pitch.
+${transcriptBlock}
+CRITICAL RULE: You may ONLY ask about topics, claims, methods, or results that the student has ACTUALLY MENTIONED in their pitch. Do NOT ask about anything from the abstract or poster that the student has not yet brought up themselves. If the student hasn't mentioned it, you don't know about it yet.
 
 Respond with JSON only:
 {"acknowledgment": "", "question": "your question"}`
@@ -148,7 +209,7 @@ Respond with JSON only:
     model: MODELS.KIMI_K2,
     messages,
     temperature: 0.7,
-    maxTokens: 256,
+    maxTokens: 512,
   })
 
   const parsed = parseJSON(content)
@@ -171,7 +232,7 @@ Respond with just the closing text, no JSON.`
     model: MODELS.KIMI_K2,
     messages,
     temperature: 0.7,
-    maxTokens: 64,
+    maxTokens: 128,
   })
 
   return content.trim().replace(/^["']|["']$/g, '')
@@ -187,7 +248,7 @@ export async function generateEvaluation({ systemPrompt, userMessage }) {
     model: MODELS.QWEN3_32B,
     messages,
     temperature: 0.2,
-    maxTokens: 2000,
+    maxTokens: 4096,
   })
 
   const parsed = parseJSON(content)

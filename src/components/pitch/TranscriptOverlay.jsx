@@ -5,6 +5,7 @@ const MAX_VISIBLE_LINES = 6
 
 export default function TranscriptOverlay({ transcript, currentPhase }) {
   const containerRef = useRef(null)
+  const interimText = useSessionStore((s) => s.interimText)
 
   // Auto-scroll to bottom smoothly
   useEffect(() => {
@@ -14,9 +15,9 @@ export default function TranscriptOverlay({ transcript, currentPhase }) {
         behavior: 'smooth'
       })
     }
-  }, [transcript.length])
+  }, [transcript.length, interimText])
 
-  if (transcript.length === 0) {
+  if (transcript.length === 0 && !interimText) {
     let placeholder = "Listening for speech..."
     if (currentPhase === 'setup') placeholder = "Ready when you are..."
     if (currentPhase === 'countdown') placeholder = "Get ready..."
@@ -62,6 +63,16 @@ export default function TranscriptOverlay({ transcript, currentPhase }) {
               </p>
             )
           })}
+
+          {/* Live interim text */}
+          {interimText && (
+            <p className="text-base md:text-lg text-text-muted font-medium leading-relaxed tracking-tight animate-pulse" style={{ animationDuration: '1.5s' }}>
+              <span className="inline-block mr-3 text-[10px] md:text-xs font-bold tracking-widest text-text-secondary uppercase bg-black/5 px-2 py-0.5 rounded-full border border-black/10 align-middle -translate-y-[1px]">
+                {currentPhase === 'qa' ? 'Q&A' : 'Pitch'}
+              </span>
+              <span className="drop-shadow-sm">{interimText}</span>
+            </p>
+          )}
         </div>
       </div>
     </div>

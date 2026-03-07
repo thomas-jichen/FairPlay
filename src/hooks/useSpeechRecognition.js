@@ -14,6 +14,7 @@ export default function useSpeechRecognition() {
 
   const addTranscriptSegment = useSessionStore((s) => s.addTranscriptSegment)
   const setIsSpeechActive = useSessionStore((s) => s.setIsSpeechActive)
+  const setInterimText = useSessionStore((s) => s.setInterimText)
 
   const isSupported = !!SpeechRecognition
 
@@ -35,11 +36,12 @@ export default function useSpeechRecognition() {
 
       const recognition = new SpeechRecognition()
       recognition.continuous = true
-      recognition.interimResults = false
+      recognition.interimResults = true
       recognition.lang = 'en-US'
       recognition.maxAlternatives = 1
 
       recognition.onresult = (event) => {
+        let interim = ''
         for (let i = event.resultIndex; i < event.results.length; i++) {
           const result = event.results[i]
           if (result.isFinal) {
@@ -51,7 +53,13 @@ export default function useSpeechRecognition() {
                 phase: phaseRef.current,
               })
             }
+            setInterimText('')
+          } else {
+            interim += result[0].transcript
           }
+        }
+        if (interim) {
+          setInterimText(interim.trim())
         }
       }
 
@@ -89,7 +97,7 @@ export default function useSpeechRecognition() {
       recognition.start()
       setIsSpeechActive(true)
     },
-    [addTranscriptSegment, setIsSpeechActive]
+    [addTranscriptSegment, setIsSpeechActive, setInterimText]
   )
 
   const stopListening = useCallback(() => {

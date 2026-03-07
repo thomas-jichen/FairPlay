@@ -33,7 +33,8 @@ export default function useQAEngine({ active, onQuestion, onComplete, chime }) {
 
     try {
       const conversationHistory = useSessionStore.getState().conversationHistory
-      const result = await generateQAQuestion({ systemPrompt, conversationHistory })
+      const pitchTranscript = useSessionStore.getState().transcript
+      const result = await generateQAQuestion({ systemPrompt, conversationHistory, pitchTranscript })
 
       questionCountRef.current++
 
