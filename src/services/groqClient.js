@@ -50,6 +50,13 @@ export async function chatCompletion({ model, messages, temperature = 0.7, maxTo
     }
   }
 
+  console.log(`%c[Groq] ➤ ${model}`, 'color: #f97316; font-weight: bold', {
+    temperature,
+    maxTokens,
+    messages, // Full messages array for debugging
+  })
+  const startTime = Date.now()
+
   await rateLimiter.waitForCapacity()
 
   let lastError = null
@@ -89,9 +96,15 @@ export async function chatCompletion({ model, messages, temperature = 0.7, maxTo
       rateLimiter.record()
       const data = await res.json()
       const choice = data.choices?.[0]
+      const content = choice?.message?.content || ''
+
+      console.log(`%c[Groq] ✓ ${model} (${Date.now() - startTime}ms)`, 'color: #22c55e; font-weight: bold', {
+        tokens: data.usage,
+        response: content,
+      })
 
       return {
-        content: choice?.message?.content || '',
+        content,
         usage: data.usage,
       }
     } catch (err) {

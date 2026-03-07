@@ -6,7 +6,7 @@ export const config = {
   },
 }
 
-const GEMINI_MODEL = 'gemini-2.0-flash-lite'
+const GEMINI_MODEL = 'gemini-3.1-flash-lite-preview'
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -30,6 +30,9 @@ export default async function handler(req, res) {
     const body = { contents, generationConfig }
     if (systemInstruction) body.systemInstruction = systemInstruction
 
+    const startTime = Date.now()
+    console.log(`\n[Server:Gemini] 🚀 Outgoing request to ${GEMINI_MODEL}...`)
+
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -39,9 +42,11 @@ export default async function handler(req, res) {
     const data = await response.json()
 
     if (!response.ok) {
+      console.error(`[Server:Gemini] ❌ Error ${response.status}:`, data)
       return res.status(response.status).json(data)
     }
 
+    console.log(`[Server:Gemini] ✅ Success (${Date.now() - startTime}ms). Tokens:`, data.usageMetadata)
     return res.status(200).json(data)
   } catch (err) {
     return res.status(502).json({ error: 'Failed to reach Gemini API' })

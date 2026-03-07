@@ -152,9 +152,15 @@ Respond ONLY with JSON:
 }
 
 export async function generateQAOpener({ systemPrompt, conversationHistory }) {
+  // If the student literally said nothing during the entire pitch phase
+  const studentMessages = conversationHistory.filter((m) => m.role === 'student' && m.text.trim().length > 0)
+  if (studentMessages.length === 0) {
+    return "It looks like we didn't get to hear an introduction. Could you briefly tell me what your project is about?"
+  }
+
   const userContent = `The student has just finished their pitch presentation. Provide a brief transition acknowledgment (1-2 sentences) that references something specific from their pitch, then indicate you have questions. Example tone: "Thank you for that overview of your work on [topic]. I have a few questions about your methodology and results."
 
-Respond with just the acknowledgment text, no JSON.`
+Respond with just the acknowledgment text, no JSON. DO NOT invent or hallucinate topics. If the pitch was very short, just say a generic "Thank you for your presentation. Let's move to questions."`
 
   const messages = buildMessages(systemPrompt, conversationHistory, userContent)
 
@@ -195,6 +201,11 @@ CRITICAL RULE: You may ONLY ask about topics, claims, methods, or results that t
 Respond with JSON only:
 {"acknowledgment": "brief 3-8 word acknowledgment of their answer", "question": "your next question"}`
   } else {
+    // If the student has never spoken at all
+    if (!transcriptBlock) {
+      return { acknowledgment: '', question: "Since I didn't catch an overview of your project, could you walk me through your main research question and how you approached it?" }
+    }
+
     userContent = `Ask your first substantive question about the student's project. Base your question ONLY on what the student actually said during their pitch.
 ${transcriptBlock}
 CRITICAL RULE: You may ONLY ask about topics, claims, methods, or results that the student has ACTUALLY MENTIONED in their pitch. Do NOT ask about anything from the abstract or poster that the student has not yet brought up themselves. If the student hasn't mentioned it, you don't know about it yet.

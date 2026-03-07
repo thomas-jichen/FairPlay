@@ -65,6 +65,44 @@ export default function useQAEngine({ active, onQuestion, onComplete, chime }) {
   const handleAnswerComplete = useCallback((answerText) => {
     const store = useSessionStore.getState()
 
+    // If the student didn't respond at all (30s timeout), end Q&A gracefully
+    const isTimeout = !answerText || answerText === '(no response detected)'
+    
+    if (isTimeout) {
+      // Don't log a student response
+      store.setCurrentJudgeQuestion(null)
+      isProcessingRef.current = false
+      
+      const endQA = async () => {
+        const systemPrompt = useSessionStore.getState().judgeSystemPrompt
+        if (systemPrompt) {
+          try {
+            const closing = await generateClosingRemark({
+              systemPrompt,
+              conversationHistory: useSessionStore.getState().conversationHistory,
+            })
+            store.addConversationMessage({
+              role: 'judge',
+              text: closing,
+              timestamp: Date.now(),
+              phase: 'qa',
+            })
+            store.setCurrentJudgeQuestion({ text: closing, type: 'closing' })
+            setTimeout(() => {
+              store.setCurrentJudgeQuestion(null)
+              onCompleteRef.current()
+            }, 3000)
+          } catch {
+            onCompleteRef.current()
+          }
+        } else {
+          onCompleteRef.current()
+        }
+      }
+      endQA()
+      return
+    }
+
     store.addConversationMessage({
       role: 'student',
       text: answerText,
@@ -171,7 +209,7 @@ export default function useQAEngine({ active, onQuestion, onComplete, chime }) {
         setTimeout(() => {
           store.setCurrentJudgeQuestion(null)
           askNextQuestion()
-        }, 3000)
+        }, 6000)
       } catch (err) {
         console.warn('Q&A opener failed:', err)
         store.setIsJudgeThinking(false)

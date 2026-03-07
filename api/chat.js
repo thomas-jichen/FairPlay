@@ -26,6 +26,9 @@ export default async function handler(req, res) {
   }
 
   try {
+    const startTime = Date.now()
+    console.log(`\n[Server:Groq] 🚀 Outgoing request to ${model}...`)
+    
     const response = await fetch(GROQ_BASE_URL, {
       method: 'POST',
       headers: {
@@ -38,9 +41,11 @@ export default async function handler(req, res) {
     const data = await response.json()
 
     if (!response.ok) {
+      console.error(`[Server:Groq] ❌ Error ${response.status}:`, data)
       return res.status(response.status).json(data)
     }
 
+    console.log(`[Server:Groq] ✅ Success (${Date.now() - startTime}ms). Tokens used:`, data.usage)
     return res.status(200).json(data)
   } catch (err) {
     return res.status(502).json({ error: 'Failed to reach Groq API' })

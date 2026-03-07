@@ -74,6 +74,18 @@ export default function useSpeechRecognition() {
       }
 
       recognition.onend = () => {
+        // If the browser aborted recognition (e.g. because an audio chime played), 
+        // we must rescue any pending interim text or it will be lost forever.
+        const currentInterim = useSessionStore.getState().interimText
+        if (currentInterim) {
+          addTranscriptSegment({
+            text: currentInterim,
+            timestamp: (Date.now() - sessionStartTime.current) / 1000,
+            phase: phaseRef.current,
+          })
+          setInterimText('')
+        }
+
         if (shouldBeListening.current) {
           try {
             recognition.start()
@@ -86,7 +98,7 @@ export default function useSpeechRecognition() {
                   startListening(phaseRef.current)
                 }
               }
-            }, 100)
+            }, 10) // Reduced from 100ms to 10ms for faster recovery
           }
         } else {
           setIsSpeechActive(false)

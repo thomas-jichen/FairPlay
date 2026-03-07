@@ -1,4 +1,4 @@
-const GEMINI_DIRECT_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent'
+const GEMINI_DIRECT_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent'
 
 class RateLimiter {
   constructor(maxRequests, windowMs) {
@@ -43,6 +43,16 @@ export async function geminiGenerate({ contents, generationConfig, systemInstruc
       throw new GeminiError('VITE_GEMINI_API_KEY not set in .env', 0, false)
     }
   }
+
+  const hasImage = contents?.some((c) => c.parts?.some((p) => p.inlineData))
+  console.log(`%c[Gemini] ➤ gemini-3.1-flash-lite-preview`, 'color: #8b5cf6; font-weight: bold', {
+    hasImage,
+    temperature: generationConfig?.temperature,
+    maxTokens: generationConfig?.maxOutputTokens,
+    systemInstruction, // Full prompt for debugging
+    contents, // Full contents for debugging
+  })
+  const startTime = Date.now()
 
   await rateLimiter.waitForCapacity()
 
@@ -90,6 +100,12 @@ export async function geminiGenerate({ contents, generationConfig, systemInstruc
       const data = await res.json()
 
       const text = data.candidates?.[0]?.content?.parts?.[0]?.text || ''
+
+      console.log(`%c[Gemini] ✓ (${Date.now() - startTime}ms)`, 'color: #22c55e; font-weight: bold', {
+        tokens: data.usageMetadata,
+        response: text,
+      })
+
       return { content: text, usage: data.usageMetadata }
     } catch (err) {
       clearTimeout(timeout)
