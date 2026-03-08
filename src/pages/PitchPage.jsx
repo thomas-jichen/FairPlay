@@ -67,7 +67,7 @@ export default function PitchPage() {
   const chime = useChime()
 
   const isPaceActive = (currentPhase === PHASES.PITCHING || currentPhase === PHASES.QA) && !isInterrupted
-  useSpeechPace(isPaceActive)
+  useSpeechPace(webcam.streamRef, isPaceActive)
 
   // Phase 4: Real-time feedback
   const posture = usePostureDetection(webcam.videoRef, isPaceActive)
