@@ -9,6 +9,7 @@ import LandingPage from './pages/LandingPage'
 import SettingsPage from './pages/SettingsPage'
 import PitchPage from './pages/PitchPage'
 import PrivacyPage from './pages/PrivacyPage'
+import ISEFArenaPage from './pages/ISEFArenaPage'
 import './index.css'
 
 const router = createBrowserRouter([
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
   {
     path: '/privacy',
     element: <PrivacyPage />,
+  },
+  {
+    path: '/isefarena',
+    element: <ISEFArenaPage />,
   },
   {
     path: '/app',

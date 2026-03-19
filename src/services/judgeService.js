@@ -17,18 +17,65 @@ function buildMessages(systemPrompt, conversationHistory, userContent) {
 }
 
 function parseJSON(content) {
-  // Try to extract JSON from the response, handling markdown code blocks
-  const jsonMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/) || content.match(/(\{[\s\S]*\})/)
+  // First attempt: straightforward JSON parse
+  try {
+    return JSON.parse(content.trim())
+  } catch { /* fall through */ }
+
+  // Second attempt: try to extract JSON from markdown code blocks
+  const jsonMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/)
   if (jsonMatch) {
     try {
       return JSON.parse(jsonMatch[1].trim())
     } catch { /* fall through */ }
   }
-  try {
-    return JSON.parse(content.trim())
-  } catch {
-    return null
+
+  // Third attempt: extract the first valid JSON object by balancing braces
+  const firstBrace = content.indexOf('{');
+  if (firstBrace !== -1) {
+    let depth = 0;
+    let inString = false;
+    let escape = false;
+
+    for (let i = firstBrace; i < content.length; i++) {
+      const char = content[i];
+      if (escape) {
+        escape = false;
+        continue;
+      }
+      if (char === '\\') {
+        escape = true;
+        continue;
+      }
+      if (char === '"') {
+        inString = !inString;
+        continue;
+      }
+      if (!inString) {
+        if (char === '{') depth++;
+        else if (char === '}') {
+          depth--;
+          if (depth === 0) {
+            try {
+              return JSON.parse(content.substring(firstBrace, i + 1));
+            } catch {
+              break;
+            }
+          }
+        }
+      }
+    }
   }
+
+  // Fallback: greedy regex search for any object-like structure
+  const greedyMatch = content.match(/(\{[\s\S]*\})/)
+  if (greedyMatch) {
+    try {
+      return JSON.parse(greedyMatch[1].trim())
+    } catch { /* fall through */ }
+  }
+
+  return null
 }
 
 export async function summarizeJudgeContext({ abstractText, posterBase64, posterMimeType }) {
@@ -131,7 +178,7 @@ If you interrupt:
 • Sound like a quick interjection, not a prepared question
 • Do NOT explain your reasoning
 
-Respond ONLY with JSON:
+Respond with EXACTLY ONE JSON object and nothing else:
 {"interrupt": true/false, "question": "short question if interrupting"}`
 
   const messages = buildMessages(systemPrompt, conversationHistory, userContent)
@@ -198,7 +245,7 @@ export async function generateQAQuestion({ systemPrompt, conversationHistory, pi
 ${transcriptBlock}
 CRITICAL RULE: You may ONLY ask about topics, claims, methods, or results that the student has ACTUALLY MENTIONED in their pitch or in their answers above. Do NOT ask about anything from the abstract or poster that the student has not yet brought up themselves. If the student hasn't mentioned it, you don't know about it yet.
 
-Respond with JSON only:
+Respond with EXACTLY ONE JSON object and nothing else (do not output multiple questions):
 {"acknowledgment": "brief 3-8 word acknowledgment of their answer", "question": "your next question"}`
   } else {
     // If the student has never spoken at all
@@ -210,7 +257,7 @@ Respond with JSON only:
 ${transcriptBlock}
 CRITICAL RULE: You may ONLY ask about topics, claims, methods, or results that the student has ACTUALLY MENTIONED in their pitch. Do NOT ask about anything from the abstract or poster that the student has not yet brought up themselves. If the student hasn't mentioned it, you don't know about it yet.
 
-Respond with JSON only:
+Respond with EXACTLY ONE JSON object and nothing else (do not output multiple questions):
 {"acknowledgment": "", "question": "your question"}`
   }
 

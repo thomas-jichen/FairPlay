@@ -1,0 +1,121 @@
+[
+  {
+    "id": "PHYS039",
+    "reason": "slug not found in API"
+  },
+  {
+    "id": "PHYS037T",
+    "reason": "slug not found in API"
+  },
+  {
+    "id": "PHYS032",
+    "reason": "slug not found in API"
+  },
+  {
+    "id": "PHYS021",
+    "reason": "slug not found in API"
+  },
+  {
+    "id": "PHYS019T",
+    "reason": "slug not found in API"
+  },
+  {
+    "id": "PHYS017",
+    "reason": "slug not found in API"
+  },
+  {
+    "id": "PLNT026",
+    "reason": "slug not found in API"
+  },
+  {
+    "id": "PLNT025",
+    "reason": "slug not found in API"
+  },
+  {
+    "id": "PLNT021",
+    "reason": "slug not found in API"
+  },
+  {
+    "id": "ROBO030T",
+    "reason": "slug not found in API"
+  },
+  {
+    "id": "ROBO022T",
+    "reason": "slug not found in API"
+  },
+  {
+    "id": "ROBO015",
+    "reason": "slug not found in API"
+  },
+  {
+    "id": "TMED023T",
+    "reason": "slug not found in API"
+  },
+  {
+    "id": "TMED020",
+    "reason": "slug not found in API"
+  },
+  {
+    "id": "TMED013",
+    "reason": "slug not found in API"
+  },
+  {
+    "id": "TMED004",
+    "reason": "slug not found in API"
+  },
+  {
+    "id": "ANIM030",
+    "slug": "anim030-dont-sweat-the-small-stuff",
+    "reason": "no video thumbnail"
+  },
+  {
+    "id": "BMED088",
+    "slug": "bmed088-unique-markers-and-origins-of-tnbc",
+    "reason": "no video thumbnail"
+  },
+  {
+    "id": "BMED081",
+    "slug": "bmed081-glp-1-effects-on-type-1-diabetes-in-vitro",
+    "reason": "no video thumbnail"
+  },
+  {
+    "id": "BMED064",
+    "slug": "bmed064-an-ai-approach-to-ibd-using-the-gut-meta-axis",
+    "reason": "no video thumbnail"
+  },
+  {
+    "id": "CELL045",
+    "slug": "cell045-tak1-signaling-controls-muscle-fibroblast-secretio",
+    "reason": "no video thumbnail"
+  },
+  {
+    "id": "CBIO070",
+    "slug": "cbio070-an-ai-driven-approach-for-enhancing-adhd-diagnosis",
+    "reason": "no video thumbnail"
+  },
+  {
+    "id": "MATH026",
+    "slug": "math026-killing-killer-psudoku",
+    "reason": "no video thumbnail"
+  },
+  {
+    "id": "MCRO044",
+    "slug": "mcro044-piperine-inhibitor-against-staphlococcus-aureus",
+    "reason": "no video thumbnail"
+  },
+  {
+    "id": "MCRO040",
+    "slug": "mcro040-antimicrobial-effect-of-copper-alloys-on-bacteria",
+    "reason": "no video thumbnail"
+  },
+  {
+    "id": "MCRO036T",
+    "slug": "mcro036t-artificial-sweetener-resistance-in-probiotics",
+    "reason": "no video thumbnail"
+  },
+  {
+    "id": "TECA011T",
+    "slug": "teca011t-s-m-a-r-t-device",
+    "reason": "no video thumbnail"
+  }
+]

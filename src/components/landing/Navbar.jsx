@@ -35,14 +35,27 @@ export default function Navbar() {
             </button>
           </div>
         </div>
-        <a
-          href="/app"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="type-cta rounded-full glossy-black-cta px-5 py-2.5 text-sm"
-        >
-          TRY FAIRPLAY
-        </a>
+        <div className="flex items-center gap-3">
+          <Link
+            to="/isefarena"
+            className="type-cta rounded-full px-5 py-2.5 text-sm text-white no-underline hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+            style={{
+              background: 'linear-gradient(165deg, rgba(255,160,60,0.95) 0%, rgba(220,120,20,0.98) 40%, rgba(180,80,0,0.98) 100%)',
+              border: '1px solid rgba(255,180,100,0.4)',
+              boxShadow: '0 4px 16px rgba(200,100,0,0.3), inset 0 1px 0 rgba(255,255,255,0.3)',
+            }}
+          >
+            TRY ISEFARENA
+          </Link>
+          <a
+            href="/app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="type-cta rounded-full glossy-black-cta px-5 py-2.5 text-sm"
+          >
+            TRY FAIRPLAY
+          </a>
+        </div>
       </div>
     </nav>
   )

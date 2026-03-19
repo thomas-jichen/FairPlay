@@ -647,3 +647,19 @@
   height: 100vh;
   overflow: hidden;
 }
+
+/* ── ISEF Arena Theme ── */
+.arena-theme {
+  color-scheme: dark;
+  font-family: "Söhne", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.arena-theme .scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.arena-theme .scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
