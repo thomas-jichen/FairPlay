@@ -13,7 +13,7 @@ export default function ArenaHeader({ onReset, resetLabel, showReset }) {
     <header className="fixed top-0 left-0 right-0 z-50 h-14 flex items-center justify-between px-4 sm:px-6 border-b border-white/[0.06] bg-[#0a0a0f]/80 backdrop-blur-xl">
       <Link to="/" className="flex items-baseline gap-2 no-underline">
         <span className="text-white font-bold text-base tracking-wide">ISEF ARENA</span>
-        <span className="text-white/25 text-xs hidden sm:inline">by FairPlay</span>
+        <span className="text-white/25 text-xs hidden sm:inline">by Fairplay</span>
       </Link>
 
       <div className="flex items-center gap-3">

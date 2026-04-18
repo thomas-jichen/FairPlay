@@ -32,7 +32,7 @@ export default function ISEFArenaPage() {
   useEffect(() => {
     document.title = 'ISEF Arena'
     initGame(projects)
-    return () => { document.title = 'FairPlay' }
+    return () => { document.title = 'Fairplay' }
   }, [initGame])
 
   // Preload next video when in revealed phase

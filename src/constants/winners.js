@@ -87,7 +87,7 @@ export const ISEF_WINNERS = [
     name: 'Ethan Albright',
     award: 'ISEF 3rd Place Grand Award',
     category: 'Material Sciences',
-    details: 'Princeton · Coca-Cola Scholar',
+    details: 'Princeton · Coke Scholar',
     year: '2025',
     image: ethanImg,
   },
