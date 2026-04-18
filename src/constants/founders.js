@@ -17,4 +17,4 @@ export const FOUNDERS = [
 ]
 
 export const FOUNDERS_QUOTE =
-  'We built Fairplay to give everyone the simulation tool we wish we had when we began preparing for science fairs. We want to even the playing field so that every student passionate about science  has a chance to win.'
+  'We built Fairplay to give everyone the practice tool we wish we had when we prepared for science fairs. We want to even the playing field so that every student passionate about science has a chance to win.'

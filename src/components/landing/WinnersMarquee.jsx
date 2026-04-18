@@ -51,7 +51,7 @@ export default function WinnersMarquee() {
           variants={fadeInUp}
           className="type-title text-3xl md:text-4xl text-text-primary"
         >
-          From ISEF winners, to ISEF winners.
+          From past ISEF winners, to future ISEF winners.
         </motion.h2>
         <motion.p
           variants={fadeInUp}

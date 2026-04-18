@@ -630,7 +630,7 @@
 .marquee-strip {
   display: flex;
   width: max-content;
-  animation: marquee-scroll 60s linear infinite;
+  animation: marquee-scroll 120s linear infinite;
 }
 
 .marquee-strip:hover {
