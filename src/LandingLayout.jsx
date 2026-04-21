@@ -1,4 +1,5 @@
 import { Outlet } from 'react-router'
+import { Analytics } from '@vercel/analytics/react'
 import Navbar from './components/landing/Navbar'
 
 export default function LandingLayout() {
@@ -16,6 +17,7 @@ export default function LandingLayout() {
         <Navbar />
         <Outlet />
       </div>
+      <Analytics />
     </div>
   )
 }
