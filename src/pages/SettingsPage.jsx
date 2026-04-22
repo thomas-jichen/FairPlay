@@ -43,6 +43,9 @@ export default function SettingsPage() {
   const loadSavedSettings = useAuthStore((s) => s.loadSavedSettings)
   const saveSettings = useAuthStore((s) => s.saveSettings)
   const restoreSession = useAuthStore((s) => s.restoreSession)
+  const hasCompletedGuestSession = useAuthStore((s) => s.hasCompletedGuestSession)
+  const continueAsGuest = useAuthStore((s) => s.continueAsGuest)
+  const guestLocked = hasCompletedGuestSession && !isSignedIn
 
   const canStart = category !== null
 
@@ -234,9 +237,13 @@ export default function SettingsPage() {
                 className="absolute inset-0 w-full glass-panel rounded-3xl p-8 flex flex-col items-center justify-center space-y-8"
               >
                 <div className="text-center space-y-3 max-w-sm">
-                  <h2 className="text-2xl font-medium tracking-tight text-text-primary">Ready to practice?</h2>
+                  <h2 className="text-2xl font-medium tracking-tight text-text-primary">
+                    {guestLocked ? 'Sign in to keep practicing' : 'Ready to practice?'}
+                  </h2>
                   <p className="text-text-secondary text-sm">
-                    Sign up to save and review your progress, or continue as a guest to get started immediately.
+                    {guestLocked
+                      ? 'Guest sessions are limited to one per browser. Sign in with Google to continue practicing and save your progress.'
+                      : 'Sign up to save and review your progress, or continue as a guest to get started immediately.'}
                   </p>
                 </div>
 
@@ -247,22 +254,29 @@ export default function SettingsPage() {
                     className="w-full flex items-center justify-center min-h-[44px]"
                   />
 
-                  <div className="relative">
-                    <div className="absolute inset-0 flex items-center">
-                      <div className="w-full border-t border-black/[0.08]"></div>
-                    </div>
-                    <div className="relative flex justify-center text-xs">
-                      <span className="bg-[#fcfcfc] px-3 text-text-muted">or</span>
-                    </div>
-                  </div>
+                  {!guestLocked && (
+                    <>
+                      <div className="relative">
+                        <div className="absolute inset-0 flex items-center">
+                          <div className="w-full border-t border-black/[0.08]"></div>
+                        </div>
+                        <div className="relative flex justify-center text-xs">
+                          <span className="bg-[#fcfcfc] px-3 text-text-muted">or</span>
+                        </div>
+                      </div>
 
-                  <button
-                    type="button"
-                    onClick={nextStep}
-                    className="w-full relative overflow-hidden rounded-2xl bg-black py-4 text-sm font-medium tracking-tight text-white shadow-md hover:bg-black/80 transition-all active:scale-[0.98]"
-                  >
-                    Continue as Guest
-                  </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          continueAsGuest()
+                          nextStep()
+                        }}
+                        className="w-full relative overflow-hidden rounded-2xl bg-black py-4 text-sm font-medium tracking-tight text-white shadow-md hover:bg-black/80 transition-all active:scale-[0.98]"
+                      >
+                        Continue as Guest
+                      </button>
+                    </>
+                  )}
                 </div>
               </motion.div>
             )}

@@ -18,10 +18,25 @@ function decodeJwtPayload(token) {
     return JSON.parse(jsonPayload)
 }
 
+const GUEST_SESSION_DONE_KEY = 'fairplay_guest_session_done'
+
 const useAuthStore = create((set, get) => ({
     user: null,        // { id, googleId, email, name, avatarUrl }
     isSignedIn: false,
     isLoading: false,
+    isGuest: false,
+    hasCompletedGuestSession:
+        typeof localStorage !== 'undefined' &&
+        localStorage.getItem(GUEST_SESSION_DONE_KEY) === '1',
+
+    continueAsGuest: () => set({ isGuest: true }),
+
+    markGuestSessionComplete: () => {
+        if (typeof localStorage !== 'undefined') {
+            localStorage.setItem(GUEST_SESSION_DONE_KEY, '1')
+        }
+        set({ hasCompletedGuestSession: true })
+    },
 
     /**
      * Called with the credential response from Google Identity Services.
@@ -39,6 +54,7 @@ const useAuthStore = create((set, get) => ({
                 set({
                     user: { id: googleId, googleId, email, name, avatarUrl },
                     isSignedIn: true,
+                    isGuest: false,
                     isLoading: false,
                 })
                 localStorage.setItem('fairplay_user_id', googleId)
@@ -75,7 +91,7 @@ const useAuthStore = create((set, get) => ({
                 avatarUrl: data.avatar_url,
             }
 
-            set({ user, isSignedIn: true, isLoading: false })
+            set({ user, isSignedIn: true, isGuest: false, isLoading: false })
 
             // Persist user ID for session recovery
             localStorage.setItem('fairplay_user_id', data.id)
@@ -93,7 +109,7 @@ const useAuthStore = create((set, get) => ({
      */
     signOut: () => {
         localStorage.removeItem('fairplay_user_id')
-        set({ user: null, isSignedIn: false })
+        set({ user: null, isSignedIn: false, isGuest: false })
     },
 
     /**
@@ -186,6 +202,7 @@ const useAuthStore = create((set, get) => ({
                     avatarUrl: data.avatar_url,
                 },
                 isSignedIn: true,
+                isGuest: false,
                 isLoading: false,
             })
         } catch {

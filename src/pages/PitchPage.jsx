@@ -1,6 +1,7 @@
 import { useEffect, useCallback, useRef, useState } from 'react'
 import { useNavigate } from 'react-router'
 import useSessionStore from '../stores/useSessionStore'
+import useAuthStore from '../stores/useAuthStore'
 import useWebcam from '../hooks/useWebcam'
 import useTimer from '../hooks/useTimer'
 import useCountdown from '../hooks/useCountdown'
@@ -49,8 +50,19 @@ export default function PitchPage() {
   const abstractText = useSessionStore((s) => s.abstractText)
   const scriptText = useSessionStore((s) => s.scriptText)
 
+  const isGuest = useAuthStore((s) => s.isGuest)
+  const isSignedIn = useAuthStore((s) => s.isSignedIn)
+  const markGuestSessionComplete = useAuthStore((s) => s.markGuestSessionComplete)
+
   const [isPosterViewerOpen, setIsPosterViewerOpen] = useState(false)
   const [isTeleprompterOpen, setIsTeleprompterOpen] = useState(false)
+
+  // Mark guest session complete once the session reaches review — gates step 1 next time.
+  useEffect(() => {
+    if (currentPhase === PHASES.REVIEW && isGuest && !isSignedIn) {
+      markGuestSessionComplete()
+    }
+  }, [currentPhase, isGuest, isSignedIn, markGuestSessionComplete])
 
   const qaDuration = CRUELTY_CONFIG[crueltyLevel].qaDurationMinutes
 

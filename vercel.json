@@ -5,6 +5,14 @@
             "destination": "/api/$1"
         },
         {
+            "source": "/app",
+            "destination": "/app.html"
+        },
+        {
+            "source": "/isefarena",
+            "destination": "/isefarena.html"
+        },
+        {
             "source": "/(.*)",
             "destination": "/index.html"
         }
