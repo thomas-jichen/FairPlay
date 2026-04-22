@@ -1,14 +1,16 @@
 import { ISEF_CATEGORIES } from '../../constants/categories'
 
 export default function CategoryFilter({ selected, onSelect }) {
+  const baseClass = 'px-3 py-1.5 type-caption text-xs transition-colors duration-200'
+
   return (
-    <div className="flex flex-wrap gap-1 justify-center mb-6">
+    <div className="flex flex-wrap gap-1.5 justify-center mb-3">
       <button
         onClick={() => onSelect(null)}
-        className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors duration-150 ${
+        className={`${baseClass} ${
           !selected
-            ? 'bg-white/[0.12] text-white/90 border border-white/[0.15]'
-            : 'bg-transparent text-white/35 border border-transparent hover:text-white/50'
+            ? 'glossy-black-cta text-white/90 ring-1 ring-amber-400/30'
+            : 'rounded-full text-white/30 hover:text-white/60 border border-transparent'
         }`}
       >
         All
@@ -17,10 +19,10 @@ export default function CategoryFilter({ selected, onSelect }) {
         <button
           key={cat.value}
           onClick={() => onSelect(cat.value)}
-          className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors duration-150 ${
+          className={`${baseClass} ${
             selected === cat.value
-              ? 'bg-white/[0.12] text-white/90 border border-white/[0.15]'
-              : 'bg-transparent text-white/35 border border-transparent hover:text-white/50'
+              ? 'glossy-black-cta text-white/90 ring-1 ring-amber-400/30'
+              : 'rounded-full text-white/30 hover:text-white/60 border border-transparent'
           }`}
         >
           {cat.value}

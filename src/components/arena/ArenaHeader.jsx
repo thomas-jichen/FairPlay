@@ -10,22 +10,22 @@ export default function ArenaHeader({ onReset, resetLabel, showReset }) {
   const totalGuesses = categoryScores[scoreKey]?.totalGuesses || 0
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 h-14 flex items-center justify-between px-4 sm:px-6 border-b border-white/[0.06] bg-[#0a0a0f]/80 backdrop-blur-xl">
-      <Link to="/" className="flex items-baseline gap-2 no-underline">
-        <span className="text-white font-bold text-base tracking-wide">ISEF ARENA</span>
-        <span className="text-white/25 text-xs hidden sm:inline">by Fairplay</span>
+    <header className="fixed top-0 left-0 right-0 z-50 h-14 flex items-center justify-between px-4 sm:px-6 bg-transparent">
+      <Link to="/" className="flex items-baseline gap-2.5 no-underline group">
+        <span className="type-wordmark text-base text-white/90 group-hover:text-white transition-colors duration-300">ISEF ARENA</span>
+        <span className="type-caption normal-case text-[11px] text-white/30 hidden sm:inline">by Fairplay</span>
       </Link>
 
       <div className="flex items-center gap-3">
+        <ScoreTracker correct={correctCount} total={totalGuesses} />
         {showReset && (
           <button
             onClick={onReset}
-            className="text-xs text-white/25 hover:text-white/50 transition-colors"
+            className="glossy-black-cta px-4 py-2 type-caption text-xs text-white/50 hover:text-white/80"
           >
             {resetLabel}
           </button>
         )}
-        <ScoreTracker correct={correctCount} total={totalGuesses} />
       </div>
     </header>
   )

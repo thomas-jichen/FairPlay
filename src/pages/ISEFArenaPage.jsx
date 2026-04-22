@@ -62,7 +62,7 @@ export default function ISEFArenaPage() {
     <ArenaLayout
       onReset={selectedCategory ? resetCategoryProgress : resetGame}
       resetLabel={selectedCategory ? `Reset ${selectedCategory}` : 'Reset All'}
-      showReset={seen > 0 && gamePhase !== 'complete'}
+      showReset={gamePhase !== 'complete'}
     >
       <CategoryFilter selected={selectedCategory} onSelect={setCategory} />
       <ProgressBar seen={seen} total={total} />
@@ -105,26 +105,34 @@ export default function ISEFArenaPage() {
 
 function CompletionScreen({ correct, total, onReset, categoryLabel }) {
   const pct = total > 0 ? Math.round((correct / total) * 100) : 0
+  const qualifier =
+    pct >= 80 ? 'Sharper than most ISEF judges.'
+    : pct >= 60 ? 'Solid judging instincts.'
+    : pct >= 40 ? 'A respectable read on the room.'
+    : 'The panel is a tougher call than it looks.'
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="text-center py-16"
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      className="text-center pt-10 pb-4"
     >
-      <div className="text-5xl mb-4">
-        {pct >= 70 ? '🏆' : pct >= 50 ? '👏' : '💪'}
+      <div className="type-caption text-[10px] text-white/35 mb-5">
+        {categoryLabel ? `${categoryLabel} · Complete` : 'Round Complete'}
       </div>
-      <h2 className="text-2xl font-bold text-white/90 mb-2">
-        {categoryLabel ? `All ${categoryLabel} projects reviewed!` : 'All projects reviewed!'}
-      </h2>
-      <p className="text-white/40 mb-6">
-        You got <span className="text-white/70 font-semibold">{correct}</span> out of{' '}
-        <span className="text-white/70 font-semibold">{total}</span> correct ({pct}%)
+      <div className="type-display text-7xl sm:text-8xl text-white tabular-nums mb-3">
+        {pct}%
+      </div>
+      <p className="type-body text-base text-white/55 mb-1">
+        {qualifier}
+      </p>
+      <p className="type-caption text-[10px] text-white/35 mb-8 tabular-nums">
+        {correct} of {total} correct
       </p>
       <button
         onClick={onReset}
-        className="px-6 py-3 rounded-xl font-medium text-sm bg-white/[0.08] border border-white/[0.1] text-white/70 hover:bg-white/[0.12] hover:text-white/90 transition-colors"
+        className="glossy-black-cta px-7 py-3 rounded-2xl type-cta text-sm text-white/85 hover:text-white"
       >
         Start Over
       </button>

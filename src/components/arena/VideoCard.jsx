@@ -199,7 +199,7 @@ function YouTubePlayer({ videoId, autoplay }) {
         >
           {/* Progress bar */}
           <div
-            className="w-full h-6 flex items-end px-3 cursor-pointer group"
+            className="w-full h-6 flex items-center px-3 cursor-pointer group"
             onClick={handleSeek}
           >
             <div className="w-full h-1 group-hover:h-1.5 bg-white/20 rounded-full transition-all relative">
@@ -208,8 +208,8 @@ function YouTubePlayer({ videoId, autoplay }) {
                 style={{ width: `${progress * 100}%` }}
               />
               <div
-                className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                style={{ left: `${progress * 100}%`, transform: `translate(-50%, -50%)` }}
+                className="absolute top-1/2 w-3 h-3 bg-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                style={{ left: `${progress * 100}%`, transform: 'translate(-50%, -50%)' }}
               />
             </div>
           </div>
@@ -393,21 +393,22 @@ export default function VideoCard({ project, autoplay = false }) {
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
     >
-      <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-white/[0.04] border border-white/[0.06]">
+      <div className="stage-card relative w-full aspect-video overflow-hidden">
         {renderVideo()}
       </div>
 
-      <div className="mt-4 flex flex-col gap-1.5">
-        <div className="flex items-center gap-2">
-          <span className="px-2 py-0.5 rounded-md text-xs font-medium bg-white/[0.06] text-white/50 border border-white/[0.06]">
-            {project.category}
-          </span>
-          <span className="text-xs text-white/25">{project.year}</span>
+      <div className="mt-5 flex flex-col gap-2">
+        <div className="flex items-center gap-2 type-caption text-xs sm:text-sm text-white/40">
+          <span>{project.category}</span>
+          <span className="text-white/20">·</span>
+          <span>{project.year}</span>
+          <span className="text-white/20">·</span>
+          <span className="tabular-nums">{project.id}</span>
         </div>
-        <h2 className="text-lg sm:text-xl font-semibold text-white/90 leading-snug">
-          {project.id} &mdash; {project.title}
+        <h2 className="type-title text-xl sm:text-2xl text-white/95 leading-tight">
+          {project.title}
         </h2>
       </div>
     </motion.div>

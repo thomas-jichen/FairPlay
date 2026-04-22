@@ -1,6 +1,7 @@
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
 import { fadeInUp, scaleIn, staggerContainer } from './animations'
+import posterImg from '../../assets/images/misc/poster.png'
 
 function FeatureCard({ index, title, description, children, reverse }) {
   const ref = useRef(null)
@@ -57,10 +58,14 @@ function JudgeMock() {
   return (
     <div className="glass-panel rounded-2xl p-3 shadow-xl relative overflow-hidden">
       {/* Webcam placeholder */}
-      <div className="rounded-xl bg-black/90 h-[80px] relative overflow-hidden mb-2.5">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20" />
-        </div>
+      <div className="rounded-xl bg-black/90 h-[160px] relative overflow-hidden mb-2.5">
+        <iframe
+          className="absolute inset-0 w-full h-full pointer-events-none scale-150"
+          src="https://www.youtube.com/embed/VI3dyqnUlFw?start=1&end=31&autoplay=1&loop=1&playlist=VI3dyqnUlFw&mute=1&controls=0&modestbranding=1"
+          title="YouTube video player"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        />
         {/* Simulated feedback pills */}
         <div className="absolute top-2 right-2 flex gap-1.5">
           <span className="type-caption rounded-full bg-emerald-500/20 border border-emerald-500/30 px-2 py-0.5 text-[11px] text-emerald-400">
@@ -104,10 +109,8 @@ function ContextMock() {
           </div>
           <span className="type-caption text-[11px] text-text-muted">Abstract</span>
         </div>
-        <div className="space-y-1">
-          <div className="h-1 bg-black/[0.06] rounded-full w-full" />
-          <div className="h-1 bg-black/[0.06] rounded-full w-[90%]" />
-          <div className="h-1 bg-black/[0.06] rounded-full w-[75%]" />
+        <div className="text-[7px] text-text-secondary leading-tight opacity-75 line-clamp-4">
+          Chiral orbital currents (COC) circulating along the edges of the crystal unit cells underpin an array of novel phenomena in ferrimagnetic Mn3Si2Te6. Two types of inductances are well known, namely, geometrical and kinetic inductance. The former arises from a changing magnetic flux inside a coil that generates an electromotive force (emf) to oppose the change; the latter results from the kinetic energy needed by each electron that contributes to a current flowing in a superconductor...
         </div>
       </div>
 
@@ -121,8 +124,8 @@ function ContextMock() {
           </div>
           <span className="type-caption text-[11px] text-text-muted">Poster</span>
         </div>
-        <div className="rounded bg-surface-tertiary/60 aspect-[2/1] flex items-center justify-center">
-          <div className="w-4 h-4 rounded bg-black/[0.06]" />
+        <div className="rounded overflow-hidden flex items-center justify-center border border-black/5 bg-white">
+          <img src={posterImg} alt="Poster" className="w-full h-auto object-cover" />
         </div>
       </div>
 

@@ -663,3 +663,166 @@
 .arena-theme .scrollbar-none::-webkit-scrollbar {
   display: none;
 }
+
+/* Dark backdrop: near-black with warm amber radial glow up top,
+   echoing the landing hero glow but tuned for dark mode. */
+.arena-backdrop {
+  position: relative;
+  background-color: #08080c;
+  isolation: isolate;
+}
+
+.arena-backdrop::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(245, 197, 66, 0.2) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 50% 100%, rgba(123, 164, 217, 0.12) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.arena-backdrop > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Dark glass panel — the dark-mode sibling of .glass-panel. No shimmer. */
+.glass-panel-dark {
+  position: relative;
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.02) 0%,
+      rgba(255, 255, 255, 0.005) 50%,
+      rgba(255, 255, 255, 0.015) 100%);
+  backdrop-filter: blur(40px) saturate(1.4);
+  -webkit-backdrop-filter: blur(40px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 2px 8px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 0 20px rgba(255, 255, 255, 0.015);
+  transition:
+    box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-panel-dark:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.5),
+    0 4px 12px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    inset 0 0 30px rgba(255, 255, 255, 0.03);
+}
+
+/* Dark glass pill — the dark-mode sibling of .glass-pill. */
+.glass-pill-dark {
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.05) 0%,
+      rgba(255, 255, 255, 0.025) 100%);
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  box-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition:
+    box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-pill-dark:hover {
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 4px 14px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Stage card — the theatrical video frame. Rounded, dark-glass border,
+   subtle inner vignette. Amber glow ring appears on hover. */
+.stage-card {
+  position: relative;
+  border-radius: 1rem;
+  background: rgba(10, 10, 15, 0.4);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.6),
+    0 8px 24px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 0 80px rgba(0, 0, 0, 0.4);
+  transition:
+    box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glossy-gold-cta {
+  background: linear-gradient(165deg, rgba(255,160,60,0.95) 0%, rgba(220,120,20,0.98) 40%, rgba(180,80,0,0.98) 100%);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.35),
+      0 2px 8px rgba(0, 0, 0, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.45),
+      inset 0 2px 4px rgba(255, 255, 255, 0.15),
+      inset 0 0 24px rgba(255, 255, 255, 0.1);
+  color: white;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glossy-gold-cta:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow:
+      0 12px 40px rgba(0, 0, 0, 0.40),
+      0 4px 12px rgba(0, 0, 0, 0.30),
+      inset 0 1px 0 rgba(255, 255, 255, 0.55),
+      inset 0 2px 6px rgba(255, 255, 255, 0.2),
+      inset 0 0 30px rgba(255, 255, 255, 0.15),
+      0 0 0 1px rgba(255, 255, 255, 0.2);
+  transform: scale(1.02);
+}
+.glossy-gold-cta:active { transform: scale(0.98); }
+
+.glossy-purple-cta {
+  background: linear-gradient(165deg, rgba(168,85,247,0.95) 0%, rgba(147,51,234,0.98) 40%, rgba(126,34,206,0.98) 100%);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.35),
+      0 2px 8px rgba(0, 0, 0, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.45),
+      inset 0 2px 4px rgba(255, 255, 255, 0.15),
+      inset 0 0 24px rgba(255, 255, 255, 0.1);
+  color: white;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glossy-purple-cta:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow:
+      0 12px 40px rgba(0, 0, 0, 0.40),
+      0 4px 12px rgba(0, 0, 0, 0.30),
+      inset 0 1px 0 rgba(255, 255, 255, 0.55),
+      inset 0 2px 6px rgba(255, 255, 255, 0.2),
+      inset 0 0 30px rgba(255, 255, 255, 0.15),
+      0 0 0 1px rgba(255, 255, 255, 0.2);
+  transform: scale(1.02);
+}
+.glossy-purple-cta:active { transform: scale(0.98); }
+
+
+.stage-card:hover {
+  border-color: rgba(245, 197, 66, 0.18);
+  box-shadow:
+    0 24px 72px rgba(0, 0, 0, 0.65),
+    0 10px 28px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 0 80px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(245, 197, 66, 0.1);
+}
