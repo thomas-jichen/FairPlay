@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router'
 import { motion, AnimatePresence } from 'framer-motion'
 import useSessionStore from '../stores/useSessionStore'
 import useAuthStore from '../stores/useAuthStore'
+import { preloadMediaPipeAssets, preloadJudgeContext } from '../services/preloadService'
 import DurationSlider from '../components/settings/DurationSlider'
 import CategorySelect from '../components/settings/CategorySelect'
 import FileUpload from '../components/settings/FileUpload'
@@ -27,6 +28,8 @@ export default function SettingsPage() {
   const setUploadedFile = useSessionStore((s) => s.setUploadedFile)
   const abstractText = useSessionStore((s) => s.abstractText)
   const setAbstractText = useSessionStore((s) => s.setAbstractText)
+  const posterBase64 = useSessionStore((s) => s.posterBase64)
+  const posterMimeType = useSessionStore((s) => s.posterMimeType)
   const scriptText = useSessionStore((s) => s.scriptText)
   const setScriptText = useSessionStore((s) => s.setScriptText)
   const interruptDuringPitch = useSessionStore((s) => s.interruptDuringPitch)
@@ -53,6 +56,22 @@ export default function SettingsPage() {
   useEffect(() => {
     restoreSession()
   }, [restoreSession])
+
+  // Preload MediaPipe WASM + pose model into HTTP cache so the first
+  // COUNTDOWN → PITCHING transition isn't stalled by a cold network fetch.
+  useEffect(() => {
+    preloadMediaPipeAssets()
+  }, [])
+
+  // Preload Gemini context summary once the user has supplied abstract/poster.
+  // Debounced so rapid edits don't spam the API. Deduped by input fingerprint.
+  useEffect(() => {
+    if (!abstractText && !posterBase64) return
+    const t = setTimeout(() => {
+      preloadJudgeContext({ abstractText, posterBase64, posterMimeType })
+    }, 500)
+    return () => clearTimeout(t)
+  }, [abstractText, posterBase64, posterMimeType])
 
   // If user is already signed in on mount, skip to step 2
   useEffect(() => {

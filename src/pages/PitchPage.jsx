@@ -107,9 +107,9 @@ export default function PitchPage() {
       const store = useSessionStore.getState()
 
       const buildPrompt = async () => {
-        let contextSummary = null
+        let contextSummary = store.contextSummary
 
-        if (store.abstractText || store.posterBase64) {
+        if (!contextSummary && (store.abstractText || store.posterBase64)) {
           try {
             contextSummary = await summarizeJudgeContext({
               abstractText: store.abstractText,

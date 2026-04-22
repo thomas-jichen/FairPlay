@@ -2,7 +2,7 @@ import { Link } from 'react-router'
 
 export default function ArenaFooterCTA() {
   return (
-    <section className="max-w-4xl mx-auto px-4 sm:px-6 pt-16 pb-6">
+    <section className="max-w-4xl mx-auto px-4 sm:px-6 pt-5 pb-6">
 
 
       {/* Tagline */}
