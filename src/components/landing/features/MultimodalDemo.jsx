@@ -38,12 +38,12 @@ export default function MultimodalDemo() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: '-40px' }}
-        className="relative h-[420px] w-full max-w-[520px] ml-auto"
+        className="relative h-[400px] w-full max-w-[560px] ml-auto"
       >
         {/* Abstract card — medium, top-left area */}
         <motion.div
           variants={fadeInUp}
-          className="glass-panel rounded-2xl p-4 shadow-lg absolute top-0 left-[2%] w-[62%] z-10 opacity-95"
+          className="glass-panel rounded-2xl p-4 shadow-lg absolute top-[40px] left-[0%] w-[66%] z-10 opacity-95"
           style={{ animation: 'float-a 6s ease-in-out infinite' }}
         >
           <CardHeader
@@ -62,7 +62,7 @@ export default function MultimodalDemo() {
         {/* Poster card — largest, right-center area */}
         <motion.div
           variants={fadeInUp}
-          className="glass-panel rounded-2xl p-3 shadow-xl absolute top-[90px] right-0 w-[68%] z-20"
+          className="glass-panel rounded-2xl p-3 shadow-xl absolute top-[85px] right-[3%] w-[74%] z-20"
           style={{ animation: 'float-b 7s ease-in-out 1s infinite' }}
         >
           <CardHeader
@@ -81,7 +81,7 @@ export default function MultimodalDemo() {
         {/* Analysis card — smallest, bottom-left */}
         <motion.div
           variants={fadeInUp}
-          className="glass-panel rounded-xl p-3 shadow-lg absolute bottom-0 left-[8%] w-[52%] z-30"
+          className="glass-panel rounded-xl p-3 shadow-lg absolute bottom-0 left-[4%] w-[52%] z-30"
           style={{ animation: 'float-c 5s ease-in-out 2s infinite' }}
         >
           <CardHeader

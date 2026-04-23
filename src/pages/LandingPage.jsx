@@ -43,8 +43,7 @@ function LivePitchFeature() {
           className="type-body text-base md:text-lg text-text-secondary mt-4 leading-relaxed"
         >
           An adaptive AI judge reads your abstract, analyzes your poster, and asks
-          critical questions in real time: just like a panel of ISEF judges would
-          during your presentation.
+          critical questions in real time, just like a panel of ISEF judges during your presentation.
         </motion.p>
       </motion.div>
     </div>
@@ -54,28 +53,28 @@ function LivePitchFeature() {
 export default function LandingPage() {
   return (
     <main className="overflow-x-hidden w-full">
-      <section className="pt-28 pb-6 flex items-center justify-center">
+      <section className="pt-28 pb-10 flex items-center justify-center">
         <Hero />
       </section>
 
-      <section id="features" className="pt-8 pb-14 w-full scroll-mt-20">
+      <section id="features" className="pt-6 pb-12 w-full scroll-mt-20">
         <LivePitchFeature />
       </section>
 
-      <section className="py-14 w-full">
+      <section className="py-12 w-full">
         <FeatureRow
           index={2}
           title="Full Multimodal Context"
-          description="Your pitch, abstract, poster, body language, pace, mannerisms, and more are all analyzed simultaneously. The AI judge considers everything a real judge would."
+          description="Your pitch, abstract, poster, body language, pace, and more are all analyzed simultaneously. The AI judge considers everything a real judge would."
         >
           <MultimodalDemo />
         </FeatureRow>
       </section>
 
-      <section className="pt-14 pb-24 w-full">
+      <section className="pt-12 pb-24 w-full">
         <FeatureRow
           index={3}
-          title="ISEF Rubric Tailored Feedback"
+          title="Rubric Tailored Feedback"
           description="After your session, receive detailed scoring aligned to official ISEF judging criteria with specific, actionable feedback on every dimension of your pitch."
           reverse
         >
@@ -83,11 +82,11 @@ export default function LandingPage() {
         </FeatureRow>
       </section>
 
-      <section id="team" className="py-14 w-full scroll-mt-8">
+      <section id="team" className="pt-16 pb-12 w-full scroll-mt-8">
         <WinnersMarquee />
       </section>
 
-      <section className="py-14 flex flex-col items-center justify-center w-full">
+      <section className="pt-12 pb-16 flex flex-col items-center justify-center w-full">
         <BuiltByFounders />
       </section>
 

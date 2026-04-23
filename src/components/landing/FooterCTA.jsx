@@ -37,9 +37,6 @@ export default function FooterCTA() {
         <div className="max-w-7xl mx-auto px-12 flex items-center justify-between">
           <span className="type-wordmark text-sm text-text-primary">FAIRPLAY</span>
           <div className="flex items-center gap-4">
-            <Link to="/privacy" onClick={() => window.scrollTo(0, 0)} className="text-xs font-light text-text-muted hover:text-text-primary transition-colors duration-300" style={{ letterSpacing: '0.04em' }}>
-              Privacy Policy
-            </Link>
             <span className="text-xs font-light text-text-muted" style={{ letterSpacing: '0.04em' }}>&copy; {new Date().getFullYear()} Fairplay.</span>
           </div>
         </div>

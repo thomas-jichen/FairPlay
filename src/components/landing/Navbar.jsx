@@ -33,17 +33,16 @@ export default function Navbar() {
             >
               Team
             </button>
+            <Link
+              to="/privacy"
+              onClick={() => window.scrollTo(0, 0)}
+              className="text-sm font-light text-text-secondary hover:text-text-primary transition-colors duration-300" style={{ fontFamily: '"Söhne", "Helvetica Neue", -apple-system, sans-serif' }}
+            >
+              Privacy
+            </Link>
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <a
-            href="/app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="type-cta rounded-full glossy-black-cta px-5 py-2.5 text-sm"
-          >
-            TRY PITCHING
-          </a>
           <Link
             to="/isefarena"
             target="_blank"
@@ -57,6 +56,14 @@ export default function Navbar() {
           >
             TRY JUDGING
           </Link>
+          <a
+            href="/app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="type-cta rounded-full glossy-black-cta px-5 py-2.5 text-sm"
+          >
+            TRY PITCHING
+          </a>
         </div>
       </div>
     </nav>

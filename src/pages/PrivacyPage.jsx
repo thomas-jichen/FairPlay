@@ -219,7 +219,7 @@ export default function PrivacyPage() {
                                     Intellectual Property &amp; Privacy
                                 </h1>
                                 <p className="type-body text-base text-text-secondary leading-relaxed max-w-lg mb-6">
-                                    Your research stays yours. We never store, train on, or distribute your uploaded materials. This policy details exactly how your data is handled.
+                                    Your research stays yours. We never store, train on, or distribute your uploaded materials. This policy details how your data is handled.
                                 </p>
                                 <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
                                     <span className="glass-pill px-4 py-1.5 text-xs font-medium tracking-tight text-text-secondary border-white/40">

@@ -226,7 +226,7 @@ export default function SessionReviewDemo() {
   }
 
   return (
-    <div className="glass-panel rounded-[28px] p-5 md:p-6 shadow-2xl w-full max-w-[540px] h-[370px] flex flex-col">
+    <div className="glass-panel rounded-[28px] p-5 md:p-6 shadow-2xl w-full max-w-[540px] h-[370px] flex flex-col lg:-translate-x-4">
       {/* Tabs */}
       <div className="flex items-center gap-1 mb-4 relative">
         {TABS.map((tab) => (

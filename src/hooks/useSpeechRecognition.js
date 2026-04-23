@@ -38,17 +38,34 @@ export default function useSpeechRecognition() {
       recognition.continuous = true
       recognition.interimResults = true
       recognition.lang = 'en-US'
-      recognition.maxAlternatives = 1
+      recognition.maxAlternatives = 3
 
       recognition.onresult = (event) => {
         let interim = ''
         for (let i = event.resultIndex; i < event.results.length; i++) {
           const result = event.results[i]
           if (result.isFinal) {
-            const text = result[0].transcript.trim()
-            if (text) {
+            let best = result[0]
+            for (let j = 1; j < result.length; j++) {
+              const alt = result[j]
+              if (
+                typeof alt.confidence === 'number' &&
+                typeof best.confidence === 'number' &&
+                alt.confidence > best.confidence
+              ) {
+                best = alt
+              }
+            }
+            const text = best.transcript.trim()
+            const confidence =
+              typeof best.confidence === 'number' ? best.confidence : null
+            // Drop likely-garbage segments only when the engine actually reports
+            // confidence — Safari often returns 0/undefined for everything.
+            const tooLowConfidence = confidence !== null && confidence < 0.3
+            if (text && !tooLowConfidence) {
               addTranscriptSegment({
                 text,
+                confidence,
                 timestamp: (Date.now() - sessionStartTime.current) / 1000,
                 phase: phaseRef.current,
               })

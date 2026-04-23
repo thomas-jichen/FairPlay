@@ -104,6 +104,8 @@ function PaceBar() {
 export default function LivePitchDemo() {
   const [questionIdx, setQuestionIdx] = useState(0)
   const [metricIdx, setMetricIdx] = useState(0)
+  const [videoReady, setVideoReady] = useState(false)
+  const videoRef = useRef(null)
 
   useEffect(() => {
     const qTimer = setInterval(() => {
@@ -119,17 +121,52 @@ export default function LivePitchDemo() {
     return () => clearInterval(mTimer)
   }, [])
 
+  // Kick playback as soon as the component mounts; some browsers stall autoplay
+  // until an explicit play() even for muted inline video.
+  useEffect(() => {
+    const v = videoRef.current
+    if (!v) return
+    const tryPlay = () => {
+      const p = v.play()
+      if (p && typeof p.catch === 'function') p.catch(() => { })
+    }
+    tryPlay()
+
+    // Seamlessly loop the first minute only: when playback crosses 60s, snap
+    // back to the start without pausing. The file is preloaded so the seek
+    // is effectively instant and playback continues uninterrupted.
+    const LOOP_END = 60
+    const onTimeUpdate = () => {
+      if (v.currentTime >= LOOP_END) {
+        v.currentTime = 0
+      }
+    }
+    v.addEventListener('timeupdate', onTimeUpdate)
+    return () => v.removeEventListener('timeupdate', onTimeUpdate)
+  }, [])
+
   const metrics = METRIC_CYCLE[metricIdx]
 
   return (
-    <div className="relative w-full max-w-[920px] aspect-video rounded-3xl overflow-hidden bg-black shadow-2xl ring-1 ring-white/10">
+    <div className="relative mx-auto w-full max-w-[820px] aspect-[16/11] rounded-3xl overflow-hidden bg-black shadow-2xl ring-1 ring-white/10">
       {/* Video */}
-      <iframe
-        className="absolute inset-0 w-full h-full pointer-events-none"
-        src="https://www.youtube.com/embed/VI3dyqnUlFw?start=1&end=31&autoplay=1&loop=1&playlist=VI3dyqnUlFw&mute=1&controls=0&modestbranding=1&playsinline=1"
-        title="Live pitch demo"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        style={{ border: 0 }}
+      <video
+        ref={videoRef}
+        className="absolute inset-0 w-full h-full object-cover pointer-events-none scale-[1.10] origin-center translate-x-5"
+        src="/demo.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        disablePictureInPicture
+        onCanPlay={() => setVideoReady(true)}
+      />
+
+      {/* Startup cover: masks the first-frame flash until the video has buffered enough to play */}
+      <div
+        className="pointer-events-none absolute inset-0 bg-black transition-opacity duration-500"
+        style={{ opacity: videoReady ? 0 : 1 }}
       />
 
       {/* Subtle vignette for overlay legibility */}

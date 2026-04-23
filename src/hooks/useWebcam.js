@@ -15,7 +15,13 @@ export default function useWebcam() {
           width: { ideal: 1280 },
           height: { ideal: 720 },
         },
-        audio: true,
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+          sampleRate: 48000,
+          channelCount: 1,
+        },
       })
       streamRef.current = stream
       if (videoRef.current) {
