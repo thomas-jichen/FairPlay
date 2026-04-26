@@ -12,28 +12,30 @@ export default function Hero() {
         variants={staggerContainer}
         initial="hidden"
         animate="visible"
-        className="relative max-w-6xl mx-auto text-center pt-16 pb-4 px-6"
+        className="relative max-w-6xl mx-auto text-center pt-12 sm:pt-16 pb-4 px-6"
       >
         {/* Headline */}
         <motion.h1
           variants={fadeInUp}
-          className="type-display text-4xl md:text-5xl lg:text-6xl text-text-primary whitespace-nowrap"
+          className="type-display text-[2rem] sm:text-4xl md:text-5xl lg:text-6xl leading-[1.05] md:leading-none text-text-primary md:whitespace-nowrap"
         >
-          FAIRPLAY: Sci-Fair Playground
+          <span className="block md:inline">FAIRPLAY:</span>
+          <span className="block md:inline md:ml-3">Sci-Fair Playground</span>
         </motion.h1>
 
         {/* Subheading */}
         <motion.p
           variants={fadeInUp}
-          className="type-body text-lg md:text-xl text-text-secondary max-w-2xl mx-auto mt-8"
+          className="type-body text-base sm:text-lg md:text-xl text-text-secondary max-w-2xl mx-auto mt-5 sm:mt-8"
         >
           Personalized, realistic AI judging designed by ISEF winners.
-          <br />
+          <br className="hidden sm:block" />
+          <span className="sm:hidden"> </span>
           Insights from competing at the biggest stage, democratized.
         </motion.p>
 
         {/* CTA */}
-        <motion.div variants={fadeInUp} className="mt-10 flex items-center justify-center gap-3">
+        <motion.div variants={fadeInUp} className="mt-7 sm:mt-10 flex items-center justify-center gap-3">
           <Link
             to="/isefarena"
             target="_blank"

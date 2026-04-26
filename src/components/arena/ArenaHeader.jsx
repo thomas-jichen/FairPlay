@@ -16,12 +16,12 @@ export default function ArenaHeader({ onReset, resetLabel, showReset }) {
         <span className="type-caption normal-case text-[11px] text-white/30 hidden sm:inline">by Fairplay</span>
       </Link>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3">
         <ScoreTracker correct={correctCount} total={totalGuesses} />
         {showReset && (
           <button
             onClick={onReset}
-            className="glossy-black-cta px-4 py-2 type-caption text-xs text-white/50 hover:text-white/80"
+            className="glossy-black-cta px-2.5 py-1.5 sm:px-4 sm:py-2 type-caption text-[10px] sm:text-xs text-white/50 hover:text-white/80"
           >
             {resetLabel}
           </button>

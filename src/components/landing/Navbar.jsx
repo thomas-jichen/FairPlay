@@ -20,7 +20,7 @@ export default function Navbar() {
           >
             FAIRPLAY
           </button>
-          <div className="flex items-center gap-6">
+          <div className="hidden md:flex items-center gap-6">
             <button
               onClick={() => scrollTo('features')}
               className="text-sm font-light text-text-secondary hover:text-text-primary transition-colors duration-300" style={{ fontFamily: '"Söhne", "Helvetica Neue", -apple-system, sans-serif' }}
@@ -42,7 +42,7 @@ export default function Navbar() {
             </Link>
           </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-3">
           <Link
             to="/isefarena"
             target="_blank"

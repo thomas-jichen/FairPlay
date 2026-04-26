@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 
 const BASE =
-  'flex-1 py-3 px-3 rounded-full type-cta text-sm ' +
+  'flex-1 min-w-0 py-3 px-2 sm:px-3 rounded-full type-cta text-[11px] sm:text-sm whitespace-nowrap ' +
   'transition-all duration-300 ' +
   'disabled:opacity-40 disabled:pointer-events-none ' +
   'flex items-center justify-center'

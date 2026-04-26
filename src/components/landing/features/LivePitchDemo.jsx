@@ -54,10 +54,12 @@ function PaceBar() {
     let raf
     const tick = () => {
       const elapsed = (Date.now() - startRef.current) / 1000
-      const base = 50 + Math.sin(elapsed * 0.7) * 8
-      const burst = Math.sin(elapsed * 0.25) > 0.92
-      const pos = burst ? 50 + Math.sin(elapsed * 0.7) * 18 : base
-      const isIdeal = !burst
+      const burstSignal = Math.sin(elapsed * 0.25)
+      const t = Math.max(0, Math.min(1, (burstSignal - 0.85) / 0.1))
+      const burstIntensity = t * t * (3 - 2 * t)
+      const amplitude = 8 + burstIntensity * 10
+      const pos = 50 + Math.sin(elapsed * 0.7) * amplitude
+      const isIdeal = burstIntensity < 0.5
       const color = isIdeal ? '#34D399' : '#FBBF24'
 
       if (thumbRef.current) {
@@ -148,11 +150,11 @@ export default function LivePitchDemo() {
   const metrics = METRIC_CYCLE[metricIdx]
 
   return (
-    <div className="relative mx-auto w-full max-w-[820px] aspect-[16/11] rounded-3xl overflow-hidden bg-black shadow-2xl ring-1 ring-white/10">
+    <div className="relative mx-auto w-full max-w-[820px] aspect-[4/5] sm:aspect-[16/11] rounded-3xl overflow-hidden bg-black shadow-2xl ring-1 ring-white/10">
       {/* Video */}
       <video
         ref={videoRef}
-        className="absolute inset-0 w-full h-full object-cover pointer-events-none scale-[1.10] origin-center translate-x-5"
+        className="absolute inset-0 w-full h-full object-cover pointer-events-none sm:scale-[1.10] sm:origin-center sm:translate-x-5"
         src="/demo.mp4"
         autoPlay
         muted
@@ -173,8 +175,8 @@ export default function LivePitchDemo() {
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/35 via-transparent to-black/45" />
 
       {/* Top overlay: AI judge question */}
-      <div className="absolute top-4 md:top-6 left-4 right-4 flex justify-center pointer-events-none">
-        <div className="w-full max-w-xl rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl px-5 py-3.5">
+      <div className="absolute top-3 md:top-6 left-3 right-3 md:left-4 md:right-4 flex justify-center pointer-events-none">
+        <div className="w-full max-w-xl rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl px-3.5 py-2.5 md:px-5 md:py-3.5">
           <div className="flex items-center justify-between mb-1.5">
             <div className="flex items-center gap-2">
               <div className="flex h-5 w-5 items-center justify-center rounded-full bg-white/15 border border-white/25">
@@ -204,9 +206,9 @@ export default function LivePitchDemo() {
       </div>
 
       {/* Bottom overlay: metric pills + pace bar */}
-      <div className="absolute bottom-4 md:bottom-6 left-4 right-4 flex justify-center pointer-events-none">
-        <div className="rounded-full bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl px-5 py-3 flex flex-col items-center gap-2.5 min-w-[320px]">
-          <div className="flex items-center gap-2">
+      <div className="absolute bottom-3 md:bottom-6 left-3 right-3 md:left-4 md:right-4 flex justify-center pointer-events-none">
+        <div className="w-full sm:w-auto rounded-3xl sm:rounded-full bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl px-4 py-2.5 md:px-5 md:py-3 flex flex-col items-center gap-2 md:gap-2.5 sm:min-w-[320px]">
+          <div className="hidden sm:flex items-center gap-2">
             <MetricPill label="Confidence" tone={metrics.confidence} />
             <MetricPill label="Engagement" tone={metrics.engagement} />
             <MetricPill label="Approachability" tone={metrics.approachability} />
