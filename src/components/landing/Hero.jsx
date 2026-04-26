@@ -17,10 +17,9 @@ export default function Hero() {
         {/* Headline */}
         <motion.h1
           variants={fadeInUp}
-          className="type-display text-[2rem] sm:text-4xl md:text-5xl lg:text-6xl leading-[1.05] md:leading-none text-text-primary md:whitespace-nowrap"
+          className="type-display text-[2rem] sm:text-4xl md:text-4xl lg:text-5xl xl:text-6xl leading-[1.05] md:leading-none text-text-primary md:whitespace-nowrap"
         >
-          <span className="block md:inline">FAIRPLAY:</span>
-          <span className="block md:inline md:ml-3">Sci-Fair Playground</span>
+          FAIRPLAY:<br className="md:hidden" /><span className="hidden md:inline"> </span>Sci-Fair Playground
         </motion.h1>
 
         {/* Subheading */}
