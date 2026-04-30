@@ -1,4 +1,4 @@
-const ENGINEERING_CODES = ['ENBM', 'EBED', 'EGSD', 'ETSD', 'ENEV', 'MATS', 'ROBO', 'SFTD', 'TECA']
+const ENGINEERING_CODES = ['ENBM', 'EBED', 'EGSD', 'ETSD', 'ENEV', 'MATS', 'ROBO', 'SOFT', 'TECA']
 
 export function getRubricType(categoryCode) {
   return ENGINEERING_CODES.includes(categoryCode) ? 'engineering' : 'science'

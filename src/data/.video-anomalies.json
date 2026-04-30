@@ -1,121 +1,177 @@
 [
   {
-    "id": "PHYS039",
-    "reason": "slug not found in API"
-  },
-  {
-    "id": "PHYS037T",
-    "reason": "slug not found in API"
-  },
-  {
-    "id": "PHYS032",
-    "reason": "slug not found in API"
-  },
-  {
-    "id": "PHYS021",
-    "reason": "slug not found in API"
-  },
-  {
-    "id": "PHYS019T",
-    "reason": "slug not found in API"
-  },
-  {
-    "id": "PHYS017",
-    "reason": "slug not found in API"
-  },
-  {
-    "id": "PLNT026",
-    "reason": "slug not found in API"
-  },
-  {
-    "id": "PLNT025",
-    "reason": "slug not found in API"
-  },
-  {
-    "id": "PLNT021",
-    "reason": "slug not found in API"
-  },
-  {
-    "id": "ROBO030T",
-    "reason": "slug not found in API"
-  },
-  {
-    "id": "ROBO022T",
-    "reason": "slug not found in API"
-  },
-  {
-    "id": "ROBO015",
-    "reason": "slug not found in API"
-  },
-  {
-    "id": "TMED023T",
-    "reason": "slug not found in API"
-  },
-  {
-    "id": "TMED020",
-    "reason": "slug not found in API"
-  },
-  {
-    "id": "TMED013",
-    "reason": "slug not found in API"
-  },
-  {
-    "id": "TMED004",
-    "reason": "slug not found in API"
-  },
-  {
     "id": "ANIM030",
-    "slug": "anim030-dont-sweat-the-small-stuff",
-    "reason": "no video thumbnail"
+    "title": "Don't Sweat the Small Stuff",
+    "categoryCode": "ANIM",
+    "url": "https://isef.net/project/anim030-dont-sweat-the-small-stuff",
+    "reason": "no media URL even with firecrawl"
   },
   {
     "id": "BMED088",
-    "slug": "bmed088-unique-markers-and-origins-of-tnbc",
-    "reason": "no video thumbnail"
+    "title": "Unique Markers and Origins of TNBC",
+    "categoryCode": "BMED",
+    "url": "https://isef.net/project/bmed088-unique-markers-and-origins-of-tnbc",
+    "reason": "no media URL even with firecrawl"
   },
   {
     "id": "BMED081",
-    "slug": "bmed081-glp-1-effects-on-type-1-diabetes-in-vitro",
-    "reason": "no video thumbnail"
+    "title": "GLP-1 Effects on Type 1 Diabetes in-vitro",
+    "categoryCode": "BMED",
+    "url": "https://isef.net/project/bmed081-glp-1-effects-on-type-1-diabetes-in-vitro",
+    "reason": "no media URL even with firecrawl"
   },
   {
     "id": "BMED064",
-    "slug": "bmed064-an-ai-approach-to-ibd-using-the-gut-meta-axis",
-    "reason": "no video thumbnail"
+    "title": "An AI Approach to IBD Using the Gut-Meta Axis",
+    "categoryCode": "BMED",
+    "url": "https://isef.net/project/bmed064-an-ai-approach-to-ibd-using-the-gut-meta-axis",
+    "reason": "no media URL even with firecrawl"
+  },
+  {
+    "id": "BMED016T",
+    "title": "Role of VEGF-B/VEGF-A in Heart Disease",
+    "categoryCode": "BMED",
+    "url": "https://isef.net/project/bmed016t-role-of-vegf-b-vegf-a-in-heart-disease",
+    "reason": "no media URL even with firecrawl"
+  },
+  {
+    "id": "BMED007",
+    "title": "Improving the Hydrophilicity of Dental Composite",
+    "categoryCode": "BMED",
+    "url": "https://isef.net/project/bmed007-improving-the-hydrophilicity-of-dental-composite",
+    "reason": "no media URL even with firecrawl"
+  },
+  {
+    "id": "ENBM014",
+    "title": "ML-Based WBC Monitoring for Chemotherapy",
+    "categoryCode": "ENBM",
+    "url": "https://isef.net/project/enbm014-ml-based-wbc-monitoring-for-chemotherapy",
+    "reason": "no media URL even with firecrawl"
   },
   {
     "id": "CELL045",
-    "slug": "cell045-tak1-signaling-controls-muscle-fibroblast-secretio",
-    "reason": "no video thumbnail"
+    "title": "TAK1 Signaling Controls Muscle Fibroblast Secretio",
+    "categoryCode": "CELL",
+    "url": "https://isef.net/project/cell045-tak1-signaling-controls-muscle-fibroblast-secretio",
+    "reason": "no media URL even with firecrawl"
   },
   {
     "id": "CBIO070",
-    "slug": "cbio070-an-ai-driven-approach-for-enhancing-adhd-diagnosis",
-    "reason": "no video thumbnail"
+    "title": "An AI-Driven Approach for Enhancing ADHD Diagnosis",
+    "categoryCode": "CBIO",
+    "url": "https://isef.net/project/cbio070-an-ai-driven-approach-for-enhancing-adhd-diagnosis",
+    "reason": "no media URL even with firecrawl"
   },
   {
-    "id": "MATH026",
-    "slug": "math026-killing-killer-psudoku",
-    "reason": "no video thumbnail"
+    "id": "CBIO051",
+    "title": "Epigenetic Analysis for Diabetes",
+    "categoryCode": "CBIO",
+    "url": "https://isef.net/project/cbio051-epigenetic-analysis-for-diabetes",
+    "reason": "no media URL even with firecrawl"
+  },
+  {
+    "id": "CBIO031",
+    "title": "Molecular Docking With LYASE",
+    "categoryCode": "CBIO",
+    "url": "https://isef.net/project/cbio031-molecular-docking-with-lyase",
+    "reason": "no media URL even with firecrawl"
+  },
+  {
+    "id": "CBIO012",
+    "title": "The Usage of Gene Synergy to Predict Drug Synergy",
+    "categoryCode": "CBIO",
+    "url": "https://isef.net/project/cbio012-the-usage-of-gene-synergy-to-predict-drug-synergy",
+    "reason": "no media URL even with firecrawl"
+  },
+  {
+    "id": "EAEV026T",
+    "title": "Relationship of Aurora and TIMt Layers",
+    "categoryCode": "EAEV",
+    "url": "https://isef.net/project/eaev026t-relationship-of-aurora-and-timt-layers",
+    "reason": "no media URL even with firecrawl"
+  },
+  {
+    "id": "ENEV030",
+    "title": "Aiptasia Decontamination",
+    "categoryCode": "ENEV",
+    "url": "https://isef.net/project/enev030-aiptasia-decontamination",
+    "reason": "no media URL even with firecrawl"
+  },
+  {
+    "id": "MATH008",
+    "title": "Roots of Unity and Polygons",
+    "categoryCode": "MATH",
+    "url": "https://isef.net/project/math008-roots-of-unity-and-polygons",
+    "reason": "no media URL even with firecrawl"
   },
   {
     "id": "MCRO044",
-    "slug": "mcro044-piperine-inhibitor-against-staphlococcus-aureus",
-    "reason": "no video thumbnail"
+    "title": "Piperine Inhibitor Against Staphlococcus aureus",
+    "categoryCode": "MCRO",
+    "url": "https://isef.net/project/mcro044-piperine-inhibitor-against-staphlococcus-aureus",
+    "reason": "no media URL even with firecrawl"
   },
   {
     "id": "MCRO040",
-    "slug": "mcro040-antimicrobial-effect-of-copper-alloys-on-bacteria",
-    "reason": "no video thumbnail"
+    "title": "Antimicrobial Effect of Copper Alloys on Bacteria",
+    "categoryCode": "MCRO",
+    "url": "https://isef.net/project/mcro040-antimicrobial-effect-of-copper-alloys-on-bacteria",
+    "reason": "no media URL even with firecrawl"
   },
   {
     "id": "MCRO036T",
-    "slug": "mcro036t-artificial-sweetener-resistance-in-probiotics",
-    "reason": "no video thumbnail"
+    "title": "Artificial Sweetener Resistance in Probiotics",
+    "categoryCode": "MCRO",
+    "url": "https://isef.net/project/mcro036t-artificial-sweetener-resistance-in-probiotics",
+    "reason": "no media URL even with firecrawl"
   },
   {
-    "id": "TECA011T",
-    "slug": "teca011t-s-m-a-r-t-device",
-    "reason": "no video thumbnail"
+    "id": "MCRO010",
+    "title": "Cryo-EM Structural Characterization of Cutavirus",
+    "categoryCode": "MCRO",
+    "url": "https://isef.net/project/mcro010-cryo-em-structural-characterization-of-cutavirus",
+    "reason": "no media URL even with firecrawl"
+  },
+  {
+    "id": "MCRO003",
+    "title": "Effects of Feminine Deodorants on Lactobacillus",
+    "categoryCode": "MCRO",
+    "url": "https://isef.net/project/mcro003-effects-of-feminine-deodorants-on-lactobacillus",
+    "reason": "no media URL even with firecrawl"
+  },
+  {
+    "id": "PHYS039",
+    "title": "Theory and Experiments of Damped Oscillation",
+    "categoryCode": "PHYS",
+    "url": "https://isef.net/project/phys039-theory-and-experiments-of-damped-oscillation",
+    "reason": "no media URL even with firecrawl"
+  },
+  {
+    "id": "PHYS017",
+    "title": "Gearin' Up",
+    "categoryCode": "PHYS",
+    "url": "https://isef.net/project/phys017-gearin-up",
+    "reason": "no media URL even with firecrawl"
+  },
+  {
+    "id": "PHYS016",
+    "title": "Optimal Pump Source for Type-1 SPDC",
+    "categoryCode": "PHYS",
+    "url": "https://isef.net/project/phys016-optimal-pump-source-for-type-1-spdc",
+    "reason": "no media URL even with firecrawl"
+  },
+  {
+    "id": "SOFT039",
+    "title": "EnAct: AI-Guides, Vision-Impaired Reach",
+    "categoryCode": "SOFT",
+    "url": "https://isef.net/project/soft039-enact-ai-guides-vision-impaired-reach",
+    "reason": "no media URL captured"
+  },
+  {
+    "id": "SOFT037",
+    "title": "Tuning Whisper ASR for Developmental Disabilities",
+    "categoryCode": "SOFT",
+    "url": "https://isef.net/project/soft037-tuning-whisper-asr-for-developmental-disabilities",
+    "reason": "no media URL captured"
   }
 ]

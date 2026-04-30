@@ -21,7 +21,7 @@ export const CATEGORY_EXPERTISE = {
   PHYS: 'physicist',
   PLNT: 'plant scientist',
   ROBO: 'robotics and intelligent systems engineer',
-  SFTD: 'computer scientist and software engineer',
+  SOFT: 'computer scientist and software engineer',
   TECA: 'technology and creative arts researcher',
   TMED: 'translational medical scientist',
 }

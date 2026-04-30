@@ -7,7 +7,9 @@ import ResultReveal from '../components/arena/ResultReveal'
 import CategoryFilter from '../components/arena/CategoryFilter'
 import ProgressBar from '../components/arena/ProgressBar'
 import useArenaStore from '../stores/useArenaStore'
-import projects from '../data/isef-projects.json'
+import allProjectsData from '../data/isef-projects.json'
+
+const playableProjects = allProjectsData.filter(p => p.videoUrl)
 
 export default function ISEFArenaPage() {
   const currentProject = useArenaStore(s => s.currentProject)
@@ -31,7 +33,7 @@ export default function ISEFArenaPage() {
 
   useEffect(() => {
     document.title = 'ISEF Arena'
-    initGame(projects)
+    initGame(playableProjects)
     return () => { document.title = 'Fairplay' }
   }, [initGame])
 

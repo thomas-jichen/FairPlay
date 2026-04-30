@@ -18,7 +18,7 @@ export const ISEF_CATEGORIES = [
   { value: 'PHYS', label: 'Physics and Astronomy' },
   { value: 'PLNT', label: 'Plant Sciences' },
   { value: 'ROBO', label: 'Robotics and Intelligent Machines' },
-  { value: 'SFTD', label: 'Software Design' },
+  { value: 'SOFT', label: 'Systems Software' },
   { value: 'TECA', label: 'Technology Enhances the Arts' },
   { value: 'TMED', label: 'Translational Medical Science' },
 ]

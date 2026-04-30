@@ -62,6 +62,7 @@ function YouTubePlayer({ videoId, autoplay }) {
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
   const [ready, setReady] = useState(false)
+  const [hasPlayed, setHasPlayed] = useState(false)
   const [showControls, setShowControls] = useState(true)
 
   useEffect(() => {
@@ -71,6 +72,7 @@ function YouTubePlayer({ videoId, autoplay }) {
       if (destroyed || !containerRef.current) return
 
       playerRef.current = new window.YT.Player(containerRef.current, {
+        host: 'https://www.youtube-nocookie.com',
         videoId,
         playerVars: {
           controls: 0,
@@ -81,6 +83,7 @@ function YouTubePlayer({ videoId, autoplay }) {
           iv_load_policy: 3,
           fs: 0,
           playsinline: 1,
+          cc_load_policy: 0,
           origin: window.location.origin,
           autoplay: autoplay ? 1 : 0,
         },
@@ -96,6 +99,7 @@ function YouTubePlayer({ videoId, autoplay }) {
             const isPlaying = e.data === window.YT.PlayerState.PLAYING
             setPlaying(isPlaying)
             if (isPlaying) {
+              setHasPlayed(true)
               setDuration(e.target.getDuration())
             }
           },
@@ -164,16 +168,30 @@ function YouTubePlayer({ videoId, autoplay }) {
 
   return (
     <div className="absolute inset-0" onMouseMove={resetHideTimer}>
-      <div ref={containerRef} className="absolute inset-0 w-full h-full" />
+      {/* iframe wrapper: pointer-events:none on the iframe stops YouTube's
+          hover UI (title bar, channel name, "Watch on YouTube" overlay) from
+          ever firing — our overlay handles all clicks via the IFrame API. */}
+      <div
+        ref={containerRef}
+        className="absolute inset-0 w-full h-full [&>iframe]:pointer-events-none"
+      />
 
-      {/* Black cover to hide YouTube title/channel flashes */}
+      {/* Black cover hides the YouTube poster/thumbnail before first play.
+          Once the user has played the video at least once, the cover stays
+          off — pausing mid-video shows the paused frame, not a black square. */}
       <div
         className="absolute inset-0 bg-black pointer-events-none"
         style={{
-          opacity: playing ? 0 : 1,
-          transition: playing ? 'opacity 0.15s ease' : 'none',
+          opacity: hasPlayed ? 0 : 1,
+          transition: 'opacity 0.15s ease',
         }}
       />
+
+      {/* Persistent masks for YouTube branding that the iframe always shows
+          (title bar at top, YouTube logo at bottom-right). pointer-events:none
+          so our progress/play overlay still receives clicks. */}
+      <div className="absolute top-0 inset-x-0 h-14 bg-black pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-28 h-10 bg-black pointer-events-none" />
 
       {/* Full overlay for custom controls */}
       <div

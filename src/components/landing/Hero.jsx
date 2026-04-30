@@ -6,7 +6,7 @@ export default function Hero() {
   return (
     <section className="relative overflow-visible w-full">
       {/* Subtle warm radial glow behind hero */}
-      <div className="absolute top-[10%] left-1/2 -translate-x-1/2 w-[90%] h-[70%] bg-gradient-radial from-amber-100/25 via-orange-50/10 to-transparent blur-[100px] pointer-events-none" />
+      <div className="absolute top-[10%] left-1/2 -translate-x-1/2 w-[90%] h-[70%] bg-gradient-radial from-amber-100/80 via-orange-50/50 to-transparent blur-[100px] pointer-events-none" />
 
       <motion.div
         variants={staggerContainer}
