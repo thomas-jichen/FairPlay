@@ -40,7 +40,7 @@
   }
 
   html {
-    scrollbar-gutter: stable both-edges;
+    background-color: var(--color-surface-primary);
   }
 
   /* ── Söhne (Sans) ── */

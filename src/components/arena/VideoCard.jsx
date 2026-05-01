@@ -62,7 +62,6 @@ function YouTubePlayer({ videoId, autoplay }) {
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
   const [ready, setReady] = useState(false)
-  const [hasPlayed, setHasPlayed] = useState(false)
   const [showControls, setShowControls] = useState(true)
 
   useEffect(() => {
@@ -99,7 +98,6 @@ function YouTubePlayer({ videoId, autoplay }) {
             const isPlaying = e.data === window.YT.PlayerState.PLAYING
             setPlaying(isPlaying)
             if (isPlaying) {
-              setHasPlayed(true)
               setDuration(e.target.getDuration())
             }
           },
@@ -167,31 +165,16 @@ function YouTubePlayer({ videoId, autoplay }) {
   const progress = duration > 0 ? currentTime / duration : 0
 
   return (
-    <div className="absolute inset-0" onMouseMove={resetHideTimer}>
-      {/* iframe wrapper: pointer-events:none on the iframe stops YouTube's
-          hover UI (title bar, channel name, "Watch on YouTube" overlay) from
-          ever firing — our overlay handles all clicks via the IFrame API. */}
-      <div
-        ref={containerRef}
-        className="absolute inset-0 w-full h-full [&>iframe]:pointer-events-none"
-      />
-
-      {/* Black cover hides the YouTube poster/thumbnail before first play.
-          Once the user has played the video at least once, the cover stays
-          off — pausing mid-video shows the paused frame, not a black square. */}
-      <div
-        className="absolute inset-0 bg-black pointer-events-none"
-        style={{
-          opacity: hasPlayed ? 0 : 1,
-          transition: 'opacity 0.15s ease',
-        }}
-      />
-
-      {/* Persistent masks for YouTube branding that the iframe always shows
-          (title bar at top, YouTube logo at bottom-right). pointer-events:none
-          so our progress/play overlay still receives clicks. */}
-      <div className="absolute top-0 inset-x-0 h-14 bg-black pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-28 h-10 bg-black pointer-events-none" />
+    <div className="absolute inset-0 overflow-hidden" onMouseMove={resetHideTimer}>
+      {/* Scale the iframe slightly larger than the visible area so YouTube's
+          title bar (top edge) and "Watch on YouTube" watermark (bottom-right)
+          sit outside the container's overflow clip. The YT IFrame API replaces
+          our targeted div with an iframe, so the [&>iframe] selectors below
+          apply to the resulting iframe. pointer-events:none on the iframe
+          keeps YouTube's hover UI from firing — our overlay handles clicks. */}
+      <div className="absolute inset-0 [&>iframe]:absolute [&>iframe]:top-[-12%] [&>iframe]:left-[-12%] [&>iframe]:w-[124%] [&>iframe]:h-[124%] [&>iframe]:pointer-events-none [&>iframe]:border-0">
+        <div ref={containerRef} />
+      </div>
 
       {/* Full overlay for custom controls */}
       <div
