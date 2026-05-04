@@ -35,6 +35,7 @@ const hlsPreloadCache = new Map()
 // user clicks play, that gesture unlocks the tab, and every subsequent
 // video in the session autoplays normally with sound.
 let hasUserPlayedAVideo = false
+let userPrefersUnmuted = false
 
 function getYouTubeVideoId(url) {
   if (!url) return null
@@ -71,6 +72,7 @@ function YouTubePlayer({ videoId, autoplay }) {
   const [showControls, setShowControls] = useState(true)
   const [iframeMounted, setIframeMounted] = useState(autoplay && hasUserPlayedAVideo)
   const [showPoster, setShowPoster] = useState(true)
+  const [muted, setMuted] = useState(false)
 
   // Reset transient state when the video changes
   useEffect(() => {
@@ -80,6 +82,7 @@ function YouTubePlayer({ videoId, autoplay }) {
     setPlaying(false)
     setCurrentTime(0)
     setDuration(0)
+    setMuted(false)
   }, [videoId, autoplay])
 
   // YouTube serves thumbnails at a few resolutions; maxres isn't always present,
@@ -201,6 +204,17 @@ function YouTubePlayer({ videoId, autoplay }) {
       playerRef.current.pauseVideo()
     } else {
       playerRef.current.playVideo()
+    }
+  }
+
+  const toggleMute = () => {
+    if (!playerRef.current) return
+    if (muted) {
+      playerRef.current.unMute()
+      setMuted(false)
+    } else {
+      playerRef.current.mute()
+      setMuted(true)
     }
   }
 
