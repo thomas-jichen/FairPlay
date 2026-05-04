@@ -30,6 +30,12 @@ for (const domain of ['https://www.youtube.com', 'https://i.ytimg.com', 'https:/
 // --- HLS preload cache ---
 const hlsPreloadCache = new Map()
 
+// Browsers block unmuted autoplay before the first user gesture in the tab.
+// Rather than muting the first video, we skip its autoplay entirely — the
+// user clicks play, that gesture unlocks the tab, and every subsequent
+// video in the session autoplays normally with sound.
+let hasUserPlayedAVideo = false
+
 function getYouTubeVideoId(url) {
   if (!url) return null
   if (url.includes('/embed/')) {
@@ -63,8 +69,32 @@ function YouTubePlayer({ videoId, autoplay }) {
   const [duration, setDuration] = useState(0)
   const [ready, setReady] = useState(false)
   const [showControls, setShowControls] = useState(true)
+  const [iframeMounted, setIframeMounted] = useState(autoplay && hasUserPlayedAVideo)
+  const [showPoster, setShowPoster] = useState(true)
+
+  // Reset transient state when the video changes
+  useEffect(() => {
+    setIframeMounted(autoplay && hasUserPlayedAVideo)
+    setShowPoster(true)
+    setReady(false)
+    setPlaying(false)
+    setCurrentTime(0)
+    setDuration(0)
+  }, [videoId, autoplay])
+
+  // YouTube serves thumbnails at a few resolutions; maxres isn't always present,
+  // so fall back to sd → hq when the higher-res variant 404s.
+  const handlePosterError = (e) => {
+    const src = e.target.src
+    if (src.includes('maxresdefault')) {
+      e.target.src = `https://i.ytimg.com/vi/${videoId}/sddefault.jpg`
+    } else if (src.includes('sddefault')) {
+      e.target.src = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`
+    }
+  }
 
   useEffect(() => {
+    if (!iframeMounted) return
     let destroyed = false
 
     loadYouTubeAPI().then(() => {
@@ -84,21 +114,33 @@ function YouTubePlayer({ videoId, autoplay }) {
           playsinline: 1,
           cc_load_policy: 0,
           origin: window.location.origin,
-          autoplay: autoplay ? 1 : 0,
+          // Always autoplay: the iframe is only mounted on user intent (or
+          // round autoplay after the first gesture has unlocked the tab).
+          // Starting in PLAYING also prevents YouTube's title-bar splash.
+          autoplay: 1,
         },
         events: {
           onReady: (e) => {
             if (destroyed) return
             setReady(true)
             setDuration(e.target.getDuration())
-            if (autoplay) e.target.playVideo()
+            e.target.playVideo()
           },
           onStateChange: (e) => {
             if (destroyed) return
-            const isPlaying = e.data === window.YT.PlayerState.PLAYING
+            const state = e.data
+            const isPlaying = state === window.YT.PlayerState.PLAYING
             setPlaying(isPlaying)
             if (isPlaying) {
               setDuration(e.target.getDuration())
+              setShowPoster(false)
+            } else if (
+              state === window.YT.PlayerState.PAUSED ||
+              state === window.YT.PlayerState.ENDED
+            ) {
+              // Re-cover with the poster so YouTube's title bar / related-videos
+              // grid never gets a chance to flash on pause or end.
+              setShowPoster(true)
             }
           },
         },
@@ -112,8 +154,9 @@ function YouTubePlayer({ videoId, autoplay }) {
       if (playerRef.current?.destroy) {
         try { playerRef.current.destroy() } catch {}
       }
+      playerRef.current = null
     }
-  }, [videoId, autoplay])
+  }, [iframeMounted, videoId])
 
   // Poll current time while playing
   useEffect(() => {
@@ -146,6 +189,13 @@ function YouTubePlayer({ videoId, autoplay }) {
   }, [playing])
 
   const togglePlay = () => {
+    if (!iframeMounted) {
+      // First click in the session = the gesture that unlocks autoplay
+      // for every subsequent video.
+      hasUserPlayedAVideo = true
+      setIframeMounted(true)
+      return
+    }
     if (!playerRef.current) return
     if (playing) {
       playerRef.current.pauseVideo()
@@ -163,26 +213,69 @@ function YouTubePlayer({ videoId, autoplay }) {
   }
 
   const progress = duration > 0 ? currentTime / duration : 0
+  const showBigPlay = showPoster
+  const controlsAvailable = ready && !showPoster
 
   return (
-    <div className="absolute inset-0 overflow-hidden" onMouseMove={resetHideTimer}>
-      {/* Scale the iframe slightly larger than the visible area so YouTube's
-          title bar (top edge) and "Watch on YouTube" watermark (bottom-right)
-          sit outside the container's overflow clip. The YT IFrame API replaces
-          our targeted div with an iframe, so the [&>iframe] selectors below
-          apply to the resulting iframe. pointer-events:none on the iframe
-          keeps YouTube's hover UI from firing — our overlay handles clicks. */}
-      <div className="absolute inset-0 [&>iframe]:absolute [&>iframe]:top-[-12%] [&>iframe]:left-[-12%] [&>iframe]:w-[124%] [&>iframe]:h-[124%] [&>iframe]:pointer-events-none [&>iframe]:border-0">
-        <div ref={containerRef} />
-      </div>
+    <div className="absolute inset-0 overflow-hidden bg-black" onMouseMove={resetHideTimer}>
+      {/* iframe at natural size — no scale, no offset, so video content is
+          never cropped on any viewport. pointer-events:none keeps YouTube's
+          hover UI from firing; our overlay handles all clicks. */}
+      {iframeMounted && (
+        <div className="absolute inset-0 [&>iframe]:absolute [&>iframe]:inset-0 [&>iframe]:w-full [&>iframe]:h-full [&>iframe]:pointer-events-none [&>iframe]:border-0">
+          <div ref={containerRef} />
+        </div>
+      )}
+
+      {/* Custom poster — covers the YouTube splash before play and re-covers
+          on pause/end so the title bar and related-videos grid never appear. */}
+      <img
+        src={`https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`}
+        onError={handlePosterError}
+        alt=""
+        aria-hidden="true"
+        draggable="false"
+        className="absolute inset-0 w-full h-full object-cover pointer-events-none transition-opacity duration-200"
+        style={{ opacity: showPoster ? 1 : 0 }}
+      />
+
+      {/* Persistent top mask — fully opaque across the full top edge so
+          YouTube's title bar, channel name, and avatar are never visible at
+          any point during playback (start, mid-video, on hover, on resume).
+          Solid black for the upper portion, then a soft fade so the
+          transition into the video frame isn't a hard line. */}
+      {iframeMounted && !showPoster && (
+        <div
+          className="absolute top-0 left-0 right-0 h-[16%] pointer-events-none"
+          style={{
+            background:
+              'linear-gradient(to bottom, #000 0%, #000 65%, rgba(0,0,0,0.7) 85%, rgba(0,0,0,0) 100%)',
+          }}
+        />
+      )}
+
+      {/* Persistent bottom mask — fully opaque across the full bottom edge
+          so the "Watch on YouTube" badge, end-screen credits, and presenter
+          credit overlays are never visible. The custom controls bar renders
+          above this and is fully readable against the dark backing. */}
+      {iframeMounted && !showPoster && (
+        <div
+          className="absolute bottom-0 left-0 right-0 h-[14%] pointer-events-none"
+          style={{
+            background:
+              'linear-gradient(to top, #000 0%, #000 60%, rgba(0,0,0,0.7) 85%, rgba(0,0,0,0) 100%)',
+          }}
+        />
+      )}
 
       {/* Full overlay for custom controls */}
       <div
         className="absolute inset-0 flex flex-col justify-end cursor-pointer"
         onClick={togglePlay}
       >
-        {/* Center play button when paused */}
-        {ready && !playing && (
+        {/* Center play button — shown whenever the poster is up
+            (initial state, paused, ended) */}
+        {showBigPlay && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <div className="w-16 h-16 rounded-full bg-black/50 flex items-center justify-center">
               <svg className="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
@@ -192,50 +285,70 @@ function YouTubePlayer({ videoId, autoplay }) {
           </div>
         )}
 
-        {/* Bottom controls bar */}
-        <div
-          className="transition-opacity duration-300 pointer-events-auto"
-          style={{ opacity: showControls ? 1 : 0 }}
-          onClick={(e) => e.stopPropagation()}
-        >
-          {/* Progress bar */}
+        {/* Bottom controls bar — only meaningful once the player is ready
+            and we're past the poster state */}
+        {controlsAvailable && (
           <div
-            className="w-full h-6 flex items-center px-3 cursor-pointer group"
-            onClick={handleSeek}
+            className="transition-opacity duration-300 pointer-events-auto relative z-10"
+            style={{ opacity: showControls ? 1 : 0 }}
+            onClick={(e) => e.stopPropagation()}
           >
-            <div className="w-full h-1 group-hover:h-1.5 bg-white/20 rounded-full transition-all relative">
-              <div
-                className="absolute inset-y-0 left-0 bg-red-500 rounded-full"
-                style={{ width: `${progress * 100}%` }}
-              />
-              <div
-                className="absolute top-1/2 w-3 h-3 bg-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                style={{ left: `${progress * 100}%`, transform: 'translate(-50%, -50%)' }}
-              />
+            {/* Progress bar */}
+            <div
+              className="w-full h-6 flex items-center px-3 cursor-pointer group"
+              onClick={handleSeek}
+            >
+              <div className="w-full h-1 group-hover:h-1.5 bg-white/20 rounded-full transition-all relative">
+                <div
+                  className="absolute inset-y-0 left-0 bg-red-500 rounded-full"
+                  style={{ width: `${progress * 100}%` }}
+                />
+                <div
+                  className="absolute top-1/2 w-3 h-3 bg-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                  style={{ left: `${progress * 100}%`, transform: 'translate(-50%, -50%)' }}
+                />
+              </div>
+            </div>
+
+            {/* Time display */}
+            <div className="flex items-center justify-between px-3 pb-2 pt-1">
+              <div className="flex items-center gap-3">
+                <button
+                  className="text-white/80 hover:text-white"
+                  onClick={(e) => { e.stopPropagation(); togglePlay() }}
+                >
+                  {playing ? (
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  )}
+                </button>
+                <button
+                  className="text-white/80 hover:text-white"
+                  onClick={(e) => { e.stopPropagation(); toggleMute() }}
+                  aria-label={muted ? 'Unmute' : 'Mute'}
+                >
+                  {muted ? (
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                    </svg>
+                  )}
+                </button>
+              </div>
+              <span className="text-xs text-white/60 font-mono">
+                {formatTime(currentTime)} / {formatTime(duration)}
+              </span>
             </div>
           </div>
-
-          {/* Time display */}
-          <div className="flex items-center justify-between px-3 pb-2 pt-1">
-            <button
-              className="text-white/80 hover:text-white"
-              onClick={(e) => { e.stopPropagation(); togglePlay() }}
-            >
-              {playing ? (
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-                </svg>
-              ) : (
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-              )}
-            </button>
-            <span className="text-xs text-white/60 font-mono">
-              {formatTime(currentTime)} / {formatTime(duration)}
-            </span>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   )
@@ -256,6 +369,16 @@ function HLSPlayer({ src, title, autoplay }) {
   useEffect(() => {
     const video = videoRef.current
     if (!video || !src) return
+
+    // Mirror the YouTube muted-autoplay default so HLS videos also start
+    // reliably. Native <video controls> exposes a mute toggle, and we
+    // listen for the user toggling it to update the session preference.
+    video.muted = !userPrefersUnmuted
+    const handleVolumeChange = () => {
+      if (!video.muted) userPrefersUnmuted = true
+      else userPrefersUnmuted = false
+    }
+    video.addEventListener('volumechange', handleVolumeChange)
 
     if (Hls.isSupported()) {
       // Check if we have a preloaded instance
@@ -298,6 +421,7 @@ function HLSPlayer({ src, title, autoplay }) {
     }
 
     return () => {
+      video.removeEventListener('volumechange', handleVolumeChange)
       if (hlsRef.current) {
         hlsRef.current.destroy()
         hlsRef.current = null
