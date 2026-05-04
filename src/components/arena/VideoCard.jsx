@@ -19,23 +19,89 @@ function loadYouTubeAPI() {
 // Eagerly load YouTube API on module import
 loadYouTubeAPI()
 
-// Preconnect to YouTube domains for faster iframe creation
-for (const domain of ['https://www.youtube.com', 'https://i.ytimg.com', 'https://yt3.ggpht.com']) {
-  const link = document.createElement('link')
-  link.rel = 'preconnect'
-  link.href = domain
-  document.head.appendChild(link)
+// Preconnect + dns-prefetch to all YouTube / Google-video CDN domains so
+// TLS handshakes and DNS lookups happen well before we need them.
+const preconnectDomains = [
+  'https://www.youtube.com',
+  'https://www.youtube-nocookie.com',   // actual embed host
+  'https://i.ytimg.com',                // thumbnails
+  'https://yt3.ggpht.com',              // channel avatars
+  'https://www.google.com',             // consent / cookies
+  'https://googleads.g.doubleclick.net', // ad infra (speeds up player init)
+  'https://static.doubleclick.net',
+]
+for (const domain of preconnectDomains) {
+  const pc = document.createElement('link')
+  pc.rel = 'preconnect'
+  pc.href = domain
+  pc.crossOrigin = 'anonymous'
+  document.head.appendChild(pc)
+  const dp = document.createElement('link')
+  dp.rel = 'dns-prefetch'
+  dp.href = domain
+  document.head.appendChild(dp)
+}
+
+// --- YouTube preload cache ---
+// Pre-creates a hidden YT player so the next video is already buffering
+// when the user navigates to it.
+const ytPreloadCache = new Map()
+
+function preloadYouTubeVideo(videoId) {
+  if (!videoId || ytPreloadCache.has(videoId)) return () => {}
+
+  const container = document.createElement('div')
+  container.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;overflow:hidden;pointer-events:none'
+  document.body.appendChild(container)
+
+  let player = null
+  let destroyed = false
+
+  loadYouTubeAPI().then(() => {
+    if (destroyed) { container.remove(); return }
+    player = new window.YT.Player(container, {
+      host: 'https://www.youtube-nocookie.com',
+      videoId,
+      playerVars: {
+        controls: 0,
+        disablekb: 1,
+        modestbranding: 1,
+        rel: 0,
+        showinfo: 0,
+        iv_load_policy: 3,
+        fs: 0,
+        playsinline: 1,
+        cc_load_policy: 0,
+        origin: window.location.origin,
+        autoplay: 0,  // don't play yet, just buffer
+      },
+      events: {
+        onReady: () => {
+          // Player is ready and has buffered initial data.
+          // We don't play — the visible player will take over.
+        },
+      },
+    })
+    ytPreloadCache.set(videoId, { player, container })
+  })
+
+  return () => {
+    destroyed = true
+    const cached = ytPreloadCache.get(videoId)
+    if (cached?.player === player) {
+      ytPreloadCache.delete(videoId)
+    }
+    try { player?.destroy() } catch {}
+    container.remove()
+  }
 }
 
 // --- HLS preload cache ---
 const hlsPreloadCache = new Map()
 
-// Browsers block unmuted autoplay before the first user gesture in the tab.
-// Rather than muting the first video, we skip its autoplay entirely — the
-// user clicks play, that gesture unlocks the tab, and every subsequent
-// video in the session autoplays normally with sound.
-let hasUserPlayedAVideo = false
-let userPrefersUnmuted = false
+// We always attempt unmuted autoplay. If the browser blocks it (no user
+// gesture yet), the player falls back to muted autoplay so the video still
+// starts immediately.
 
 function getYouTubeVideoId(url) {
   if (!url) return null
@@ -70,19 +136,19 @@ function YouTubePlayer({ videoId, autoplay }) {
   const [duration, setDuration] = useState(0)
   const [ready, setReady] = useState(false)
   const [showControls, setShowControls] = useState(true)
-  const [iframeMounted, setIframeMounted] = useState(autoplay && hasUserPlayedAVideo)
+  const [iframeMounted, setIframeMounted] = useState(!!autoplay)
   const [showPoster, setShowPoster] = useState(true)
   const [muted, setMuted] = useState(false)
 
   // Reset transient state when the video changes
   useEffect(() => {
-    setIframeMounted(autoplay && hasUserPlayedAVideo)
+    setIframeMounted(!!autoplay)
     setShowPoster(true)
     setReady(false)
     setPlaying(false)
     setCurrentTime(0)
     setDuration(0)
-    setMuted(false)
+    setMuted(false)  // always start unmuted
   }, [videoId, autoplay])
 
   // YouTube serves thumbnails at a few resolutions; maxres isn't always present,
@@ -127,7 +193,24 @@ function YouTubePlayer({ videoId, autoplay }) {
             if (destroyed) return
             setReady(true)
             setDuration(e.target.getDuration())
+            // Try unmuted playback first; if browser blocks it, mute and retry
+            e.target.unMute()
+            e.target.setVolume(100)
             e.target.playVideo()
+            // YT API playVideo doesn't return a promise, so we detect muting
+            // via a short timeout — if the player hasn't started, fall back.
+            setTimeout(() => {
+              if (destroyed) return
+              try {
+                const state = e.target.getPlayerState()
+                // -1 = unstarted, 3 = buffering are OK — only worry if truly stuck
+                if (state === window.YT.PlayerState.UNSTARTED || state === window.YT.PlayerState.CUED) {
+                  e.target.mute()
+                  setMuted(true)
+                  e.target.playVideo()
+                }
+              } catch {}
+            }, 500)
           },
           onStateChange: (e) => {
             if (destroyed) return
@@ -193,9 +276,6 @@ function YouTubePlayer({ videoId, autoplay }) {
 
   const togglePlay = () => {
     if (!iframeMounted) {
-      // First click in the session = the gesture that unlocks autoplay
-      // for every subsequent video.
-      hasUserPlayedAVideo = true
       setIframeMounted(true)
       return
     }
@@ -252,35 +332,6 @@ function YouTubePlayer({ videoId, autoplay }) {
         className="absolute inset-0 w-full h-full object-cover pointer-events-none transition-opacity duration-200"
         style={{ opacity: showPoster ? 1 : 0 }}
       />
-
-      {/* Persistent top mask — fully opaque across the full top edge so
-          YouTube's title bar, channel name, and avatar are never visible at
-          any point during playback (start, mid-video, on hover, on resume).
-          Solid black for the upper portion, then a soft fade so the
-          transition into the video frame isn't a hard line. */}
-      {iframeMounted && !showPoster && (
-        <div
-          className="absolute top-0 left-0 right-0 h-[16%] pointer-events-none"
-          style={{
-            background:
-              'linear-gradient(to bottom, #000 0%, #000 65%, rgba(0,0,0,0.7) 85%, rgba(0,0,0,0) 100%)',
-          }}
-        />
-      )}
-
-      {/* Persistent bottom mask — fully opaque across the full bottom edge
-          so the "Watch on YouTube" badge, end-screen credits, and presenter
-          credit overlays are never visible. The custom controls bar renders
-          above this and is fully readable against the dark backing. */}
-      {iframeMounted && !showPoster && (
-        <div
-          className="absolute bottom-0 left-0 right-0 h-[14%] pointer-events-none"
-          style={{
-            background:
-              'linear-gradient(to top, #000 0%, #000 60%, rgba(0,0,0,0.7) 85%, rgba(0,0,0,0) 100%)',
-          }}
-        />
-      )}
 
       {/* Full overlay for custom controls */}
       <div
@@ -384,15 +435,8 @@ function HLSPlayer({ src, title, autoplay }) {
     const video = videoRef.current
     if (!video || !src) return
 
-    // Mirror the YouTube muted-autoplay default so HLS videos also start
-    // reliably. Native <video controls> exposes a mute toggle, and we
-    // listen for the user toggling it to update the session preference.
-    video.muted = !userPrefersUnmuted
-    const handleVolumeChange = () => {
-      if (!video.muted) userPrefersUnmuted = true
-      else userPrefersUnmuted = false
-    }
-    video.addEventListener('volumechange', handleVolumeChange)
+    // Start unmuted — we want sound from the start.
+    video.muted = false
 
     if (Hls.isSupported()) {
       // Check if we have a preloaded instance
@@ -405,7 +449,13 @@ function HLSPlayer({ src, title, autoplay }) {
         hls.detachMedia()
         hls.attachMedia(video)
         if (autoplay) {
-          hls.on(Hls.Events.MEDIA_ATTACHED, () => video.play().catch(() => {}))
+          hls.on(Hls.Events.MEDIA_ATTACHED, () => {
+            video.play().catch(() => {
+              // Browser blocked unmuted autoplay — mute and retry
+              video.muted = true
+              video.play().catch(() => {})
+            })
+          })
         }
       } else {
         const hls = new Hls({
@@ -423,19 +473,27 @@ function HLSPlayer({ src, title, autoplay }) {
         hls.attachMedia(video)
         if (autoplay) {
           hls.on(Hls.Events.MANIFEST_PARSED, () => {
-            video.play().catch(() => {})
+            video.play().catch(() => {
+              // Browser blocked unmuted autoplay — mute and retry
+              video.muted = true
+              video.play().catch(() => {})
+            })
           })
         }
       }
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
       video.src = src
       if (autoplay) {
-        video.addEventListener('loadedmetadata', () => video.play().catch(() => {}), { once: true })
+        video.addEventListener('loadedmetadata', () => {
+          video.play().catch(() => {
+            video.muted = true
+            video.play().catch(() => {})
+          })
+        }, { once: true })
       }
     }
 
     return () => {
-      video.removeEventListener('volumechange', handleVolumeChange)
       if (hlsRef.current) {
         hlsRef.current.destroy()
         hlsRef.current = null
@@ -458,11 +516,8 @@ export function preloadVideo(url) {
   if (!url) return null
 
   if (isYouTube(url)) {
-    const link = document.createElement('link')
-    link.rel = 'preconnect'
-    link.href = 'https://www.youtube-nocookie.com'
-    document.head.appendChild(link)
-    return () => link.remove()
+    const videoId = getYouTubeVideoId(url)
+    return preloadYouTubeVideo(videoId)
   }
 
   if (isHLS(url) && Hls.isSupported()) {
