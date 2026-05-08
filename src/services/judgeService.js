@@ -184,7 +184,7 @@ Respond with EXACTLY ONE JSON object and nothing else:
   const messages = buildMessages(systemPrompt, conversationHistory, userContent)
 
   const { content } = await chatCompletion({
-    model: MODELS.KIMI_K2,
+    model: MODELS.GPT_OSS_120B,
     messages,
     temperature: 0.5,
     maxTokens: 128,
@@ -212,7 +212,7 @@ Respond with just the acknowledgment text, no JSON. DO NOT invent or hallucinate
   const messages = buildMessages(systemPrompt, conversationHistory, userContent)
 
   const { content } = await chatCompletion({
-    model: MODELS.KIMI_K2,
+    model: MODELS.GPT_OSS_120B,
     messages,
     temperature: 0.7,
     maxTokens: 256,
@@ -264,7 +264,7 @@ Respond with EXACTLY ONE JSON object and nothing else (do not output multiple qu
   const messages = buildMessages(systemPrompt, conversationHistory, userContent)
 
   const { content } = await chatCompletion({
-    model: MODELS.KIMI_K2,
+    model: MODELS.GPT_OSS_120B,
     messages,
     temperature: 0.7,
     maxTokens: 512,
@@ -287,7 +287,7 @@ Respond with just the closing text, no JSON.`
   const messages = buildMessages(systemPrompt, conversationHistory, userContent)
 
   const { content } = await chatCompletion({
-    model: MODELS.KIMI_K2,
+    model: MODELS.GPT_OSS_120B,
     messages,
     temperature: 0.7,
     maxTokens: 128,

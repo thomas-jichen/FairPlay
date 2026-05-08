@@ -1,7 +1,7 @@
 const GROQ_BASE_URL = 'https://api.groq.com/openai/v1/chat/completions'
 
 const ALLOWED_MODELS = [
-  'moonshotai/kimi-k2-instruct',
+  'openai/gpt-oss-120b',
   'qwen/qwen3-32b',
 ]
 

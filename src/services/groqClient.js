@@ -1,7 +1,7 @@
 const GROQ_DIRECT_URL = 'https://api.groq.com/openai/v1/chat/completions'
 
 export const MODELS = {
-  KIMI_K2: 'moonshotai/kimi-k2-instruct',
+  GPT_OSS_120B: 'openai/gpt-oss-120b',
   QWEN3_32B: 'qwen/qwen3-32b',
 }
 

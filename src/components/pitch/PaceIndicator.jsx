@@ -57,24 +57,32 @@ export default function PaceIndicator({ wpm: score }) {
         <span className="text-[9px] font-medium text-white/30 uppercase tracking-wider">Fast</span>
       </div>
 
-      {/* Track */}
-      <div className="relative w-full h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.08)' }}>
-        {/* Sweet spot zone (-0.26 to 0.26 out of [-1, 1]) translates to (0.74/2 to 1.26/2) */}
+      {/* Track + thumb wrapper — thumb is a sibling of the track so the
+          track's overflow-hidden (needed to clip the sweet-spot rounding)
+          doesn't clip the thumb circle, which is taller than the track. */}
+      <div className="relative w-full h-1.5">
+        {/* Track */}
         <div
-          className="absolute top-0 h-full rounded-full"
-          style={{
-            left: `${((-0.26 + 1) / 2) * 100}%`,
-            width: `${((0.26 - -0.26) / 2) * 100}%`,
-            background: 'rgba(52, 211, 153, 0.12)',
-          }}
-        />
+          className="relative w-full h-full rounded-full overflow-hidden"
+          style={{ background: 'rgba(255,255,255,0.08)' }}
+        >
+          {/* Sweet spot zone (-0.26 to 0.26 out of [-1, 1]) translates to (0.74/2 to 1.26/2) */}
+          <div
+            className="absolute top-0 h-full rounded-full"
+            style={{
+              left: `${((-0.26 + 1) / 2) * 100}%`,
+              width: `${((0.26 - -0.26) / 2) * 100}%`,
+              background: 'rgba(52, 211, 153, 0.12)',
+            }}
+          />
+        </div>
 
         {/* Thumb */}
         <div
-          className="absolute top-1/2 -translate-y-1/2 transition-all duration-[800ms] ease-out"
+          className="absolute top-1/2 transition-all duration-[800ms] ease-out"
           style={{
             left: `${position * 100}%`,
-            transform: `translateX(-50%) translateY(-50%)`,
+            transform: 'translate(-50%, -50%)',
           }}
         >
           <div
