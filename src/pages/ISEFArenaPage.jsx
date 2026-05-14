@@ -6,6 +6,7 @@ import GuessButtons from '../components/arena/GuessButtons'
 import ResultReveal from '../components/arena/ResultReveal'
 import CategoryFilter from '../components/arena/CategoryFilter'
 import ProgressBar from '../components/arena/ProgressBar'
+import ArenaShutdownModal from '../components/arena/ArenaShutdownModal'
 import useArenaStore from '../stores/useArenaStore'
 import allProjectsData from '../data/isef-projects.json'
 
@@ -61,6 +62,7 @@ export default function ISEFArenaPage() {
   const seen = pool.filter(p => seenProjectIds.has(p.id)).length
 
   return (
+    <>
     <ArenaLayout
       onReset={selectedCategory ? resetCategoryProgress : resetGame}
       resetLabel={selectedCategory ? `Reset ${selectedCategory}` : 'Reset All'}
@@ -82,7 +84,6 @@ export default function ISEFArenaPage() {
             <VideoCard
               key={currentProject.id}
               project={currentProject}
-              autoplay
             />
           </AnimatePresence>
 
@@ -102,6 +103,8 @@ export default function ISEFArenaPage() {
         </div>
       ) : null}
     </ArenaLayout>
+    <ArenaShutdownModal />
+    </>
   )
 }
 
