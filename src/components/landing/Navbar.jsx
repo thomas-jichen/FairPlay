@@ -43,6 +43,14 @@ export default function Navbar() {
           </div>
         </div>
         <div className="hidden md:flex items-center gap-3">
+          <a
+            href="/app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="type-cta rounded-full glossy-black-cta px-5 py-2.5 text-sm"
+          >
+            TRY PITCHING
+          </a>
           <Link
             to="/isefarena"
             target="_blank"
@@ -56,14 +64,6 @@ export default function Navbar() {
           >
             TRY JUDGING
           </Link>
-          <a
-            href="/app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="type-cta rounded-full glossy-black-cta px-5 py-2.5 text-sm"
-          >
-            TRY PITCHING
-          </a>
         </div>
       </div>
     </nav>
