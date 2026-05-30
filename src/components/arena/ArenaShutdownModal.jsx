@@ -35,9 +35,10 @@ export default function ArenaShutdownModal() {
             ISEF Arena is on pause.
           </h2>
           <p className="type-body text-[15px] text-white/65 leading-relaxed">
-            Thank you for your interest in ISEF Arena. The Society for Science
-            has asked us to take the game offline indefinitely while we work
-            towards a partnership to continue ISEF Arena.
+            Thank you for your interest in ISEF Arena. After reaching 10,000+
+            users within a month, the Society for Science has asked us to take
+            the game offline indefinitely while we work towards a partnership to
+            continue ISEF Arena.
           </p>
         </div>
 
