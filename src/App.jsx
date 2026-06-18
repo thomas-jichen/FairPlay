@@ -27,6 +27,7 @@ export default function App() {
           {element}
         </motion.div>
       </AnimatePresence>
+      <Analytics />
     </div>
   )
 }
